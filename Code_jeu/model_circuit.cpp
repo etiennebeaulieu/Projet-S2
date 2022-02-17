@@ -1,4 +1,4 @@
-#include "model_cricuit.h"
+#include "model_circuit.h"
 
 
 
