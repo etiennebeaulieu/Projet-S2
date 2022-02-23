@@ -15,6 +15,7 @@ public:
 	void setCircuit(ModelCircuit pCircuit);
 	ModelCircuit getCircuit();
 
+	void startRace();
 	void move(float pAngle, int pMovement);
 
 	void updateScreenConsole();

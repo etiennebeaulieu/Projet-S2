@@ -40,6 +40,14 @@ ModelCircuit Controller_course::getCircuit()
 	return circuit;
 }
 
+void Controller_course::startRace()
+{
+	Position start =  circuit.getStart();
+	car.setPostion(start);
+
+	demoConsole();
+}
+
 void Controller_course::move(float pAngle, int pMovement)
 {
 	Position temp = car.move(pAngle, pMovement);

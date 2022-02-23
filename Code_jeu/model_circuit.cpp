@@ -3,7 +3,17 @@
 
 
 ModelCircuit::ModelCircuit(){
+    startingPoint = Position{ 0, 0, 0 };
+}
 
+Position ModelCircuit::getStart()
+{
+    return startingPoint;
+}
+
+void ModelCircuit::setStart(Position pStart)
+{
+    startingPoint = pStart;
 }
 
 /**

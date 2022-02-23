@@ -16,7 +16,7 @@ class Model_auto {
 
 
 public :
-	Model_auto();
+	Model_auto() : Model_auto(DEFAULT_SPEED, DEFAULT_HANDLING, DEFAULT_NAME) {};
 	Model_auto(int pSpeed, int pHandling, string pName);
 	~Model_auto();
 

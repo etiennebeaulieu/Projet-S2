@@ -11,6 +11,9 @@ class ModelCircuit {
 public:
     ModelCircuit();
 
+    Position getStart();
+    void setStart(Position pStart);
+
     bool positionIsActive(Position);
 
     void generateBorders();
@@ -20,6 +23,7 @@ public:
 private:
     vector<vector<int>> positions;
     bool bordersGenerated = false;
+    Position startingPoint;
 };
 
 

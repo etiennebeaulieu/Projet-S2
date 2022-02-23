@@ -2,7 +2,6 @@
 
 Model_auto::Model_auto()
 {
-	Model_auto(DEFAULT_SPEED, DEFAULT_HANDLING, DEFAULT_NAME);
 }
 
 Model_auto::Model_auto(int pSpeed, int pHandling, string pName)
@@ -54,6 +53,7 @@ void Model_auto::setPostion(Position pPosition)
 {
 	position.x = pPosition.x;
 	position.y = pPosition.y;
+	position.angle = pPosition.angle;
 }
 
 Position Model_auto::getPosition()
