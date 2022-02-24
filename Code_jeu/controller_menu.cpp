@@ -15,7 +15,7 @@ void ControllerMenu::printMenu()
 	cout << "CLASSEMENT\n" << printLeaderboard() << endl;
 	cout << "VOITURE\nNom : "<<carList[currentCar].getName()<< "\nVitesse :" << carList[currentCar].getSpeed() << "\nVirage : " << carList[currentCar].getHandling() << endl;
 	cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit].getName() << endl;
-	cout << "1. Play\n2. Réglages\n3. Prochaine voiture\n4. Voiture précédente\n5. Prochain circuit\n6. Circuit précédent" << endl;
+	cout << "1. Play\n2. Rï¿½glages\n3. Prochaine voiture\n4. Voiture prï¿½cï¿½dente\n5. Prochain circuit\n6. Circuit prï¿½cï¿½dent" << endl;
 	cout << "Entrez le chiffre de l'option choisie" << endl;
 	cin >> option;
 
@@ -54,7 +54,7 @@ void ControllerMenu::printMenu()
 void ControllerMenu::openSettings()
 {
 	int option;
-	cout << "Ceci sont les réglages" << endl;
+	cout << "Ceci sont les rï¿½glages" << endl;
 	cout << "Appuyer sur 9 pour retourner au menu" << endl;
 	cin >> option;
 

@@ -7,6 +7,10 @@ ModelCircuit::ModelCircuit(){
     name = "Circuit par défaut";
 }
 
+ModelCircuit::ModelCircuit(string name) : ModelCircuit() {
+    this->name = name;
+}
+
 Position ModelCircuit::getStart() {
     return startingPoint;
 }
@@ -51,7 +55,7 @@ string ModelCircuit::getName(){
 /**
  * Lit une map à partir d'un fichier
  * 
- * 1 = piste, 0 = hors piste
+ * 0 = hors piste, 1 = piste, 2 = bordure, 3 = point de départ
  */
 istream& operator>>(istream& i, ModelCircuit& c) {
     Position currentPos;

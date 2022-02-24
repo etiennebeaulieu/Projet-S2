@@ -18,6 +18,7 @@ using namespace std;
 class ModelCircuit {
 public:
     ModelCircuit();
+    ModelCircuit(string name);
 
     Position getStart();
 
