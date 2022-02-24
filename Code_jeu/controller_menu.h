@@ -1,6 +1,7 @@
 #include "model_auto.h"
 #include "model_circuit.h"
 #include "best_time.h"
+#include "controller_course.h"
 #include <fstream>
 
 
@@ -27,6 +28,8 @@ private:
 	ModelCircuit circuitList[5];
 	int currentCar;
 	int currentCircuit;
+	Controller_course controllerCourse;
+	
 
 
 };

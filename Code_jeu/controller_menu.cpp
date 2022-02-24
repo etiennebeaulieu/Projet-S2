@@ -64,6 +64,7 @@ void ControllerMenu::openSettings()
 
 void ControllerMenu::startGame()
 {
+	controllerCourse = Controller_course(&carList[currentCar], &circuitList[currentCircuit]);
 }
 
 void ControllerMenu::nextCar()

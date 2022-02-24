@@ -7,7 +7,7 @@ class Controller_course {
 
 public:
 	Controller_course();
-	Controller_course(Model_auto pCar, ModelCircuit pCircuit);
+	Controller_course(Model_auto* pCar, ModelCircuit* pCircuit);
 	~Controller_course();
 
 	void setAuto(Model_auto pCar);
