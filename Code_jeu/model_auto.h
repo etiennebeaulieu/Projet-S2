@@ -1,5 +1,6 @@
 #include <string>
 #include <math.h>
+#include <iostream>
 #include "position.h"
 using namespace std;
 
@@ -34,12 +35,12 @@ public :
 	Position move(float pAngle, int pMovement);
 
 	
-
+	friend istream& operator>>(istream&, Model_auto&);
 
 private:
+	string name;
 	int speed;
 	int handling;
-	string name;
 
 	Position position;
 

@@ -72,3 +72,14 @@ Position Model_auto::move(float pAngle, int pMovement)
 
 	return temp;
 }
+
+
+/**
+ * Lit l'auto dans à partir d'un stream
+ * Format: Name speed handling
+ */
+istream& operator>>(istream& i, Model_auto& c){
+	i >> c.name >> c.speed >> c.handling;
+
+	return i;
+}
