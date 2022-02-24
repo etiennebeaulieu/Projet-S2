@@ -3,13 +3,15 @@
 
 Controller_course::Controller_course()
 {
-	Controller_course(Model_auto(), ModelCircuit());
+	Model_auto* car = new Model_auto();
+	ModelCircuit* circuit = new ModelCircuit();
+	Controller_course(car, circuit);
 }
 
-Controller_course::Controller_course(Model_auto pCar, ModelCircuit pCircuit)
+Controller_course::Controller_course(Model_auto* pCar, ModelCircuit* pCircuit)
 {
-	car = pCar;
-	circuit = pCircuit;
+	car = *pCar;
+	circuit = *pCircuit;
 
 
 	cout << circuit;

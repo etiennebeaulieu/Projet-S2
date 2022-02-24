@@ -1,6 +1,7 @@
 #include "model_auto.h"
 #include "model_circuit.h"
 #include "best_time.h"
+#include "controller_course.h"
 #include <fstream>
 #include <iostream>
 #include <filesystem>
@@ -32,6 +33,8 @@ private:
 	vector<ModelCircuit*> circuitList;
 	int currentCar;
 	int currentCircuit;
+	Controller_course controllerCourse;
+	
 
 
 };
