@@ -2,6 +2,11 @@
 #include "model_circuit.h"
 #include "best_time.h"
 #include <fstream>
+#include <iostream>
+#include <filesystem>
+#include <vector>
+using namespace std;
+namespace fs = std::filesystem;
 
 
 class ControllerMenu {
@@ -23,8 +28,8 @@ public:
 
 private:
 	BestTime leaderboard[5];
-	Model_auto carList[5];
-	ModelCircuit circuitList[5];
+	Model_auto* carList[5];
+	vector<ModelCircuit*> circuitList;
 	int currentCar;
 	int currentCircuit;
 

@@ -13,8 +13,8 @@ void ControllerMenu::printMenu()
 	int option;
 	cout << "Bienvenue sur SparkUS racing" << endl;
 	cout << "CLASSEMENT\n" << printLeaderboard() << endl;
-	cout << "VOITURE\nNom : "<<carList[currentCar].getName()<< "\nVitesse :" << carList[currentCar].getSpeed() << "\nVirage : " << carList[currentCar].getHandling() << endl;
-	cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit].getName() << endl;
+	cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << endl;
+	cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit]->getName() << endl;
 	cout << "1. Play\n2. R�glages\n3. Prochaine voiture\n4. Voiture pr�c�dente\n5. Prochain circuit\n6. Circuit pr�c�dent" << endl;
 	cout << "Entrez le chiffre de l'option choisie" << endl;
 	cin >> option;
@@ -100,12 +100,23 @@ void ControllerMenu::updateData()
 	}
 
 	//lire fichier autos et mettre dans le tableau
-	for (Model_auto car : carList)
+	for (Model_auto* car : carList)
 	{
-		sCar >> car;
+		sCar >> *car;
 	}
 
 	//lire fichier circuits et mettre dans le tableau
+
+	string path("maps/");
+    string ext(".gamemap");
+    for (auto &p : fs::recursive_directory_iterator(path)) {
+        if (p.path().extension() == ext){
+			circuitList.push_back(new ModelCircuit(p.path().filename().string()));
+			ifstream sCircuit;
+			sCircuit.open(p.path().string());
+            sCircuit >> *circuitList[circuitList.size() - 1];
+		}
+    }
 }
 
 string ControllerMenu::printLeaderboard()
