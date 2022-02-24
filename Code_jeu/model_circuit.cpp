@@ -4,16 +4,11 @@
 
 ModelCircuit::ModelCircuit(){
     startingPoint = Position{ 0, 0, 0 };
+    name = "Circuit par défaut";
 }
 
-Position ModelCircuit::getStart()
-{
+Position ModelCircuit::getStart() {
     return startingPoint;
-}
-
-void ModelCircuit::setStart(Position pStart)
-{
-    startingPoint = pStart;
 }
 
 /**
@@ -47,6 +42,13 @@ void ModelCircuit::generateBorders(){
 }
 
 /**
+ * Retourne le nom de la map
+ */
+string ModelCircuit::getName(){
+    return name;
+}
+
+/**
  * Lit une map à partir d'un fichier
  * 
  * 1 = piste, 0 = hors piste
@@ -64,8 +66,10 @@ istream& operator>>(istream& i, ModelCircuit& c) {
     for (int x = 0; x < width; x++) {
         c.positions.push_back(vector<int>());
         for (int y = 0; y < height; y++) {
-            int isActive;
             i >> c.positions[x][y];
+            if (c.positions[x][y] == 3) { //Si la case est la starting position
+                c.startingPoint = Position{x, y, 0};
+            }
         }
     }
     
