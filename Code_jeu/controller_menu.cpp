@@ -90,6 +90,9 @@ void ControllerMenu::updateData()
 {
 	ifstream sLeaderboard;
 	sLeaderboard.open("leaderboard.lb");
+
+	ifstream sCar;
+	sCar.open("carList.car");
 	//lire fichier leaderboard et mettre dans le tableau
 	for (BestTime bestTime : leaderboard)
 	{
@@ -97,6 +100,11 @@ void ControllerMenu::updateData()
 	}
 
 	//lire fichier autos et mettre dans le tableau
+	for (Model_auto car : carList)
+	{
+		sCar >> car;
+	}
+
 	//lire fichier circuits et mettre dans le tableau
 }
 
