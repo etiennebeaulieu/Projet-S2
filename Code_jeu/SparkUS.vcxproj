@@ -147,9 +147,9 @@
     <ClCompile Include="model_circuit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="best_time.h" />
     <ClInclude Include="controller_course.h" />
     <ClInclude Include="controller_menu.h" />
-    <ClInclude Include="best_time.h" />
     <ClInclude Include="model_auto.h" />
     <ClInclude Include="model_circuit.h" />
     <ClInclude Include="position.h" />

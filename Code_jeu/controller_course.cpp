@@ -3,31 +3,29 @@
 
 Controller_course::Controller_course()
 {
-	Model_auto* car = new Model_auto();
+	ModelAuto* car = new ModelAuto();
 	ModelCircuit* circuit = new ModelCircuit();
 	Controller_course(car, circuit);
 }
 
-Controller_course::Controller_course(Model_auto* pCar, ModelCircuit* pCircuit)
+Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit)
 {
 	car = *pCar;
 	circuit = *pCircuit;
 
-
-	cout << circuit;
-	demoConsole();
+	circuit.generateBorders();
 }
 
 Controller_course::~Controller_course()
 {
 }
 
-void Controller_course::setAuto(Model_auto pCar)
+void Controller_course::setAuto(ModelAuto pCar)
 {
 	car = pCar;
 }
 
-Model_auto Controller_course::getAuto()
+ModelAuto Controller_course::getAuto()
 {
 	return car;
 }
@@ -45,7 +43,9 @@ ModelCircuit Controller_course::getCircuit()
 void Controller_course::startRace()
 {
 	Position start =  circuit.getStart();
+	std::cout << circuit << std::endl;
 	car.setPostion(start);
+	updateScreenConsole();
 
 	demoConsole();
 }
@@ -55,8 +55,8 @@ void Controller_course::move(float pAngle, int pMovement)
 	Position temp = car.move(pAngle, pMovement);
 
 	if (circuit.positionIsActive(temp)) {
-		
-		cout << " ";
+		gotoXY(car.getPosition().x, car.getPosition().y);
+		std::cout << " ";
 		car.setPostion(temp);
 	}
 		
@@ -67,7 +67,7 @@ void Controller_course::move(float pAngle, int pMovement)
 void Controller_course::updateScreenConsole()
 {
 	gotoXY(car.getPosition().x, car.getPosition().y);
-	cout << "$";
+	std::cout << "*";
 }
 
 void Controller_course::updateScreenGUI()
@@ -86,114 +86,345 @@ void Controller_course::gotoXY(int x, int y)
 void Controller_course::demoConsole()
 {
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+
+	move(-45, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(-45, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
 
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+
+	move(-45, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(-45, 1);
+	Sleep(100);
+
 
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+
+	move(-45, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(-45, 1);
+	Sleep(100);
+
 
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
-
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
-
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
-
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
-	move(0, 1);
+	Sleep(100);
 	move(0, 1);
 
+	move(-45, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
+	move(-45, 1);
+	Sleep(100);
+
+
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
 	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(5000);
+	
+
 }
 
 

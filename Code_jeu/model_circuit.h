@@ -5,20 +5,20 @@
 #include "position.h"
 #include <iostream>
 #include <vector>
+#include <fstream>
 
-using namespace std;
 
-#define VIDE 0
-#define PARCOUR 1
-#define BORDURE 2
-#define STARTPOSITION 3
+
+#define VIDE = 0;
+#define PARCOUR = 1;
+#define BORDURE = 2;
+#define STARTPOSITION = 3;
   
-using namespace std;
 
 class ModelCircuit {
 public:
     ModelCircuit();
-    ModelCircuit(string name);
+    ModelCircuit(std::string name);
 
     Position getStart();
 
@@ -26,15 +26,15 @@ public:
 
     void generateBorders();
 
-    string getName();
+    std::string getName();
 
-    friend istream& operator>>(istream&, ModelCircuit&);
-    friend ostream& operator<<(ostream&, const ModelCircuit&);
+    friend std::istream& operator>>(std::istream&, ModelCircuit&);
+    friend std::ostream& operator<<(std::ostream&, const ModelCircuit&);
 private:
-    vector<vector<int>> positions;
+    std::vector<std::vector<int>> positions;
     bool bordersGenerated = false;
     Position startingPoint;
-    string name;
+    std::string name;
 };
 
 

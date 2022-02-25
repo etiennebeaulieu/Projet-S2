@@ -1,3 +1,6 @@
+#ifndef CONTROLLER_MENU_H
+#define CONTROLLER_MENU_H
+
 #include "model_auto.h"
 #include "model_circuit.h"
 #include "best_time.h"
@@ -6,7 +9,7 @@
 #include <iostream>
 #include <filesystem>
 #include <vector>
-using namespace std;
+
 namespace fs = std::filesystem;
 
 
@@ -24,17 +27,19 @@ public:
 	void nextCircuit();
 	void previousCircuit();
 	void updateData();
-	string printLeaderboard();
+	std::string printLeaderboard();
 
 
 private:
 	BestTime leaderboard[5];
-	Model_auto* carList[5];
-	vector<ModelCircuit*> circuitList;
+	ModelAuto* carList[5];
+	std::vector<ModelCircuit*> circuitList;
 	int currentCar;
 	int currentCircuit;
-	Controller_course controllerCourse;
+	Controller_course* controllerCourse;
 	
 
 
 };
+
+#endif

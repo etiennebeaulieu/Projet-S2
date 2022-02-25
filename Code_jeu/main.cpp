@@ -1,7 +1,8 @@
 #include "controller_menu.h"
 
-ControllerMenu controllerMenu;
+ControllerMenu* controllerMenu;
 
 int main() {
-	controllerMenu = ControllerMenu();
+	controllerMenu = new ControllerMenu();
+	return 0;
 }

@@ -1,10 +1,12 @@
 #include "model_auto.h"
 
-Model_auto::Model_auto()
-{
+
+ModelAuto::ModelAuto() : ModelAuto(DEFAULT_SPEED, DEFAULT_HANDLING, DEFAULT_NAME) {
+
 }
 
-Model_auto::Model_auto(int pSpeed, int pHandling, string pName)
+
+ModelAuto::ModelAuto(int pSpeed, int pHandling, std::string pName)
 {
 	speed = pSpeed;
 	handling = pHandling;
@@ -15,60 +17,61 @@ Model_auto::Model_auto(int pSpeed, int pHandling, string pName)
 	position.angle = 0;
 }
 
-Model_auto::~Model_auto()
+ModelAuto::~ModelAuto()
 {
 }
 
-void Model_auto::setSpeed(int pSpeed)
+void ModelAuto::setSpeed(int pSpeed)
 {
 	speed = pSpeed;
 }
 
-int Model_auto::getSpeed()
+int ModelAuto::getSpeed()
 {
 	return speed;
 }
 
-void Model_auto::setHandling(int pHandling)
+void ModelAuto::setHandling(int pHandling)
 {
 	handling = pHandling;
 }
 
-int Model_auto::getHandling()
+int ModelAuto::getHandling()
 {
 	return handling;
 }
 
-void Model_auto::setName(string pName)
+void ModelAuto::setName(std::string pName)
 {
 	name = pName;
 }
 
-string Model_auto::getName()
+std::string ModelAuto::getName()
 {
 	return name;
 }
 
-void Model_auto::setPostion(Position pPosition)
+void ModelAuto::setPostion(Position pPosition)
 {
 	position.x = pPosition.x;
 	position.y = pPosition.y;
 	position.angle = pPosition.angle;
 }
 
-Position Model_auto::getPosition()
+Position ModelAuto::getPosition()
 {
 	return position;
 }
 
 
-Position Model_auto::move(float pAngle, int pMovement)
+Position ModelAuto::move(float pAngle, int pMovement)
 {
 	Position temp;
 
+	
 	temp.angle = TURNING_RATIO*handling * pAngle + position.angle;
-	temp.x = round(sin(pAngle * PI / 180) * pMovement * MOVEMENT_RATIO * speed) + position.x;
-	temp.y = round(cos(pAngle * PI / 180) * pMovement * MOVEMENT_RATIO * speed) + position.y;
+	temp.x = round(sin(temp.angle * PI / 180) * pMovement * MOVEMENT_RATIO * speed) + position.x;
+	temp.y = round(cos(temp.angle * PI / 180) * pMovement * MOVEMENT_RATIO * speed) + position.y;
 
 	return temp;
 }
@@ -78,8 +81,14 @@ Position Model_auto::move(float pAngle, int pMovement)
  * Lit l'auto dans à partir d'un stream
  * Format: Name speed handling
  */
-istream& operator>>(istream& i, Model_auto& c){
-	i >> c.name >> c.speed >> c.handling;
+std::istream& operator>>(std::istream& i, ModelAuto& c){
+	std::string pName;
+	int pSpeed, pHandling;
+	i >> pName >> pSpeed >> pHandling;
+
+	c.setName(pName);
+	c.setSpeed(pSpeed);
+	c.setHandling(pHandling);
 
 	return i;
 }

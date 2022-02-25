@@ -5,9 +5,14 @@
 ModelCircuit::ModelCircuit(){
     startingPoint = Position{ 0, 0, 0 };
     name = "Circuit par défaut";
+
+    std::ifstream is;
+    is.open(".\\maps\\map1.gamemap");
+
+    is >> *this;
 }
 
-ModelCircuit::ModelCircuit(string name) : ModelCircuit() {
+ModelCircuit::ModelCircuit(std::string name) : ModelCircuit() {
     this->name = name;
 }
 
@@ -19,7 +24,7 @@ Position ModelCircuit::getStart() {
  * Retourne vrai si la position est sur la route
  */
 bool ModelCircuit::positionIsActive(Position position){
-    return (positions[position.x][position.y] == 1);
+    return (positions[position.y][position.x] == 1);
 }
 
 
@@ -48,7 +53,7 @@ void ModelCircuit::generateBorders(){
 /**
  * Retourne le nom de la map
  */
-string ModelCircuit::getName(){
+std::string ModelCircuit::getName(){
     return name;
 }
 
@@ -57,22 +62,23 @@ string ModelCircuit::getName(){
  * 
  * 0 = hors piste, 1 = piste, 2 = bordure, 3 = point de départ
  */
-istream& operator>>(istream& i, ModelCircuit& c) {
-    Position currentPos;
-
+std::istream& operator>>(std::istream& i, ModelCircuit& c) {
     int width;
     int height;
     i >> width >> height;
+    c.positions.resize(width);
 
     c.positions.clear();
     c.bordersGenerated = false;
 
     for (int x = 0; x < width; x++) {
-        c.positions.push_back(vector<int>());
+        c.positions.push_back(std::vector<int>());
+        c.positions[x].resize(height);
         for (int y = 0; y < height; y++) {
             i >> c.positions[x][y];
             if (c.positions[x][y] == 3) { //Si la case est la starting position
-                c.startingPoint = Position{x, y, 0};
+                c.startingPoint = Position{y, x, 0};
+                c.positions[x][y] = 1;
             }
         }
     }
@@ -85,7 +91,7 @@ istream& operator>>(istream& i, ModelCircuit& c) {
  * 
  * Bien s'assurer de généré les borders avant
  */
-ostream& operator<<(ostream& o, const ModelCircuit& c) {
+std::ostream& operator<<(std::ostream& o, const ModelCircuit& c) {
 
     for (int x = 0; x < c.positions.size(); x++) {
         for (int y = 0; y < c.positions[x].size(); y++) {
@@ -95,7 +101,7 @@ ostream& operator<<(ostream& o, const ModelCircuit& c) {
                 o << " ";
             }
         }
-        o << endl;
+        o << std::endl;
     }
     
     return o;

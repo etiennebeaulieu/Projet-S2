@@ -1,17 +1,22 @@
+#ifndef CONTROLLER_COURSE_H
+#define CONTROLER_COURSE_H
+#include <Windows.h>
 #include "model_auto.h"
 #include "model_circuit.h"
-#include <Windows.h>
+#include "position.h"
+
+
 
 
 class Controller_course {
 
 public:
 	Controller_course();
-	Controller_course(Model_auto* pCar, ModelCircuit* pCircuit);
+	Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit);
 	~Controller_course();
 
-	void setAuto(Model_auto pCar);
-	Model_auto getAuto();
+	void setAuto(ModelAuto pCar);
+	ModelAuto getAuto();
 	void setCircuit(ModelCircuit pCircuit);
 	ModelCircuit getCircuit();
 
@@ -26,10 +31,12 @@ public:
 
 	
 private:
-	Model_auto car;
+	ModelAuto car;
 	ModelCircuit circuit;
 
 
 
 
 };
+
+#endif
