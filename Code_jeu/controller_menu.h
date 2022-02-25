@@ -17,6 +17,7 @@ class ControllerMenu {
 
 public:
 	ControllerMenu();
+	~ControllerMenu();
 
 	void printMenu();
 

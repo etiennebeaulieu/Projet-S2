@@ -9,6 +9,21 @@ ControllerMenu::ControllerMenu()
 	printMenu();
 }
 
+/**
+ * Destructeur du controlleur de menu
+ */
+ControllerMenu::~ControllerMenu(){
+	for (int i = 0; i < circuitList.size(); i++) {
+		delete circuitList[i];
+	}
+
+	for (int i = 0; i < 5; i++) {
+		delete carList[i];
+	}
+	
+	delete controllerCourse;
+}
+
 void ControllerMenu::printMenu()
 {
 	int option;
