@@ -1,12 +1,19 @@
 ﻿  Generate moc_predefs.h
   controller_course.cpp
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(58,44): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(58,16): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(70,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(70,14): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): warning C4200: nonstandard extension used: zero-sized array in struct/union
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(68,44): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(68,16): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(80,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(80,14): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(102,17): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   controller_menu.cpp
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): warning C4200: nonstandard extension used: zero-sized array in struct/union
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
 C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_menu.cpp(118,104): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   main.cpp
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): warning C4200: nonstandard extension used: zero-sized array in struct/union
+C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
   model_auto.cpp
   model_circuit.cpp
 C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(27,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data

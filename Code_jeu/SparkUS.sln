@@ -3,18 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SparkUS", "SparkUS.vcxproj", "{F9BCFBA2-8522-361E-989D-FBC8A0768070}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SparkUS", "SparkUS.vcxproj", "{32B14572-9779-316D-91C7-CA3BAABF8DA1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitmapToGamemap", "..\BitmapToGamemap\BitmapToGamemap.vcxproj", "{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F9BCFBA2-8522-361E-989D-FBC8A0768070}.Debug|x64.ActiveCfg = Debug|x64
-		{F9BCFBA2-8522-361E-989D-FBC8A0768070}.Debug|x64.Build.0 = Debug|x64
-		{F9BCFBA2-8522-361E-989D-FBC8A0768070}.Release|x64.ActiveCfg = Release|x64
-		{F9BCFBA2-8522-361E-989D-FBC8A0768070}.Release|x64.Build.0 = Release|x64
+		{32B14572-9779-316D-91C7-CA3BAABF8DA1}.Debug|x64.ActiveCfg = Debug|x64
+		{32B14572-9779-316D-91C7-CA3BAABF8DA1}.Debug|x64.Build.0 = Debug|x64
+		{32B14572-9779-316D-91C7-CA3BAABF8DA1}.Debug|x86.ActiveCfg = Debug|x64
+		{32B14572-9779-316D-91C7-CA3BAABF8DA1}.Release|x64.ActiveCfg = Release|x64
+		{32B14572-9779-316D-91C7-CA3BAABF8DA1}.Release|x64.Build.0 = Release|x64
+		{32B14572-9779-316D-91C7-CA3BAABF8DA1}.Release|x86.ActiveCfg = Release|x64
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Debug|x64.ActiveCfg = Debug|x64
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Debug|x64.Build.0 = Debug|x64
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Debug|x86.ActiveCfg = Debug|Win32
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Debug|x86.Build.0 = Debug|Win32
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Release|x64.ActiveCfg = Release|x64
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Release|x64.Build.0 = Release|x64
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Release|x86.ActiveCfg = Release|Win32
+		{2E38F1D6-7583-4E3F-90DF-210A514AAD5B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
