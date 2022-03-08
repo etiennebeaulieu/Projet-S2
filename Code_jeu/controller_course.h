@@ -33,6 +33,8 @@ public:
 private:
 	ModelAuto car;
 	ModelCircuit circuit;
+	long time;
+	int demo[][2];
 };
 
 #endif
