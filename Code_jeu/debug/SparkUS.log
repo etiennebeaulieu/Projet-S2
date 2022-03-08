@@ -1,6 +1,5 @@
-﻿  controller_course.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(58,44): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(58,16): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(70,42): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(70,14): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+﻿  controller_menu.cpp
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.h(37,6): warning C4200: extension non standard utilisée : tableau de taille zéro dans un struct/union
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.h(37,6): message : Ce membre va être ignoré par un constructeur par défaut, ou par un opérateur d'assignation de copie/déplacement
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(118,104): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
   SparkUS.vcxproj -> C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\debug\SparkUS.exe
