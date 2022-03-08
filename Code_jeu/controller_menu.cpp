@@ -42,6 +42,7 @@ void ControllerMenu::printMenu()
 		printMenu();
 		break;
 	case 2:
+		system("CLS");
 		openSettings();
 		break;
 	case 3:
