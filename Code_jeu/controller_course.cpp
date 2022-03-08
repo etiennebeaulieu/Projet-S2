@@ -53,11 +53,12 @@ void Controller_course::startRace()
 void Controller_course::move(float pAngle, int pMovement)
 {
 	Position temp = car.move(pAngle, pMovement);
-
-	if (circuit.positionIsActive(temp)) {
-		gotoXY(car.getPosition().x, car.getPosition().y);
-		std::cout << " ";
-		car.setPostion(temp);
+	if (temp.x <= circuit.getWidth() && temp.y <= circuit.getHeight()) {
+		if (circuit.positionIsActive(temp)) {
+			gotoXY(round(car.getPosition().x), round(car.getPosition().y));
+			std::cout << " ";
+			car.setPostion(temp);
+		}
 	}
 		
 
@@ -66,7 +67,7 @@ void Controller_course::move(float pAngle, int pMovement)
 
 void Controller_course::updateScreenConsole()
 {
-	gotoXY(car.getPosition().x, car.getPosition().y);
+	gotoXY(round(car.getPosition().x), round(car.getPosition().y));
 	std::cout << "*";
 }
 
@@ -78,7 +79,7 @@ void Controller_course::gotoXY(int x, int y)
 {
 	COORD scrn;
 	HANDLE houtput = GetStdHandle(STD_OUTPUT_HANDLE);
-	scrn.X = x;
+	scrn.X = 2*x;
 	scrn.Y = y;
 	SetConsoleCursorPosition(houtput, scrn);
 }
@@ -123,6 +124,10 @@ void Controller_course::demoConsole()
 	Sleep(100);
 	move(0, 1);
 	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	
+	
 
 	move(-45, 1);
 	Sleep(100);
@@ -135,87 +140,6 @@ void Controller_course::demoConsole()
 	move(0, 1);
 	Sleep(100);
 
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-
-	move(-45, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(-45, 1);
-	Sleep(100);
-
-
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
-	move(0, 1);
-	Sleep(100);
 	move(0, 1);
 	Sleep(100);
 	move(0, 1);
@@ -354,6 +278,102 @@ void Controller_course::demoConsole()
 	move(0, 1);
 	Sleep(100);
 	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	
+
+	move(-45, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(-45, 1);
+	Sleep(100);
+
+
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+	move(0, 1);
+	Sleep(100);
+
 
 	move(-45, 1);
 	Sleep(100);

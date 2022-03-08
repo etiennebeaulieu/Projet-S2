@@ -33,10 +33,6 @@ public:
 private:
 	ModelAuto car;
 	ModelCircuit circuit;
-
-
-
-
 };
 
 #endif

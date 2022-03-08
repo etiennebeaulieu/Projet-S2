@@ -70,8 +70,8 @@ Position ModelAuto::move(float pAngle, int pMovement)
 
 	
 	temp.angle = TURNING_RATIO*handling * pAngle + position.angle;
-	temp.x = round(sin(temp.angle * PI / 180) * pMovement * MOVEMENT_RATIO * speed) + position.x;
-	temp.y = round(cos(temp.angle * PI / 180) * pMovement * MOVEMENT_RATIO * speed) + position.y;
+	temp.x = sin(temp.angle * PI / 180) * pMovement * MOVEMENT_RATIO * speed + position.x;
+	temp.y = cos(temp.angle * PI / 180) * pMovement * MOVEMENT_RATIO * speed + position.y;
 
 	return temp;
 }

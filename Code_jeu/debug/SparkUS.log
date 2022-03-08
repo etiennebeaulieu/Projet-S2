@@ -1,2 +1,6 @@
-﻿  model_circuit.cpp
+﻿  controller_course.cpp
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(58,44): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(58,16): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(70,42): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(70,14): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
   SparkUS.vcxproj -> C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\debug\SparkUS.exe

@@ -28,6 +28,11 @@ public:
 
     std::string getName();
 
+    void setWidth(int pWidth);
+    int getWidth();
+    void setHeight(int pHeight);
+    int getHeight();
+
     friend std::istream& operator>>(std::istream&, ModelCircuit&);
     friend std::ostream& operator<<(std::ostream&, const ModelCircuit&);
 private:
@@ -35,6 +40,8 @@ private:
     bool bordersGenerated = false;
     Position startingPoint;
     std::string name;
+    int width;
+    int height;
 };
 
 

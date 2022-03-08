@@ -57,6 +57,26 @@ std::string ModelCircuit::getName(){
     return name;
 }
 
+void ModelCircuit::setWidth(int pWidth)
+{
+    width = pWidth;
+}
+
+int ModelCircuit::getWidth()
+{
+    return width;
+}
+
+void ModelCircuit::setHeight(int pHeight)
+{
+    height = pHeight;
+}
+
+int ModelCircuit::getHeight()
+{
+    return height;
+}
+
 /**
  * Lit une map à partir d'un fichier
  * 
@@ -66,15 +86,17 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
     int width;
     int height;
     i >> width >> height;
+    c.setWidth(width);
+    c.setHeight(height);
     c.positions.resize(width);
 
     c.positions.clear();
     c.bordersGenerated = false;
 
-    for (int x = 0; x < width; x++) {
+    for (float x = 0; x < width; x++) {
         c.positions.push_back(std::vector<int>());
         c.positions[x].resize(height);
-        for (int y = 0; y < height; y++) {
+        for (float y = 0; y < height; y++) {
             i >> c.positions[x][y];
             if (c.positions[x][y] == 3) { //Si la case est la starting position
                 c.startingPoint = Position{y, x, 0};
@@ -96,9 +118,9 @@ std::ostream& operator<<(std::ostream& o, const ModelCircuit& c) {
     for (int x = 0; x < c.positions.size(); x++) {
         for (int y = 0; y < c.positions[x].size(); y++) {
             if (c.positions[x][y] == 2) {
-                o << "x";
+                o << "x ";
             } else {
-                o << " ";
+                o << "  ";
             }
         }
         o << std::endl;
