@@ -122,10 +122,10 @@ void ControllerMenu::previousCircuit()
 void ControllerMenu::updateData()
 {
 	std::ifstream sLeaderboard;
-	sLeaderboard.open("leaderboard.lb");
+	sLeaderboard.open("../leaderboard.lb");
 
 	std::ifstream sCar;
-	sCar.open("carList.car");
+	sCar.open("../carList.car");
 	//lire fichier leaderboard et mettre dans le tableau
 	for (int i = 0; i < 5; i++)
 	{
@@ -139,7 +139,7 @@ void ControllerMenu::updateData()
 
 	//lire fichier circuits et mettre dans le tableau
 
-	std::string path("maps/");
+	std::string path("../maps/");
     std::string ext(".gamemap");
     for (auto &p : fs::recursive_directory_iterator(path)) {
         if (p.path().extension() == ext){
