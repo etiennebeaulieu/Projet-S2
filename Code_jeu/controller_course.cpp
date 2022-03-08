@@ -102,11 +102,10 @@ void Controller_course::demoConsole()
 		move(demo[i][0], demo[i][1]);
 
 		gotoXY(50, 50);
-		std::cout << time / 1000 << ":" << (time/100)%10;
+		std::cout << time / 1000 << ":" << (time/10)%100;
 		Sleep(100);
 	}
 	Sleep(5000);
-
 }
 
 
