@@ -1,29 +1,5 @@
-﻿  Generate moc_predefs.h
-  controller_course.cpp
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): warning C4200: nonstandard extension used: zero-sized array in struct/union
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(68,44): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(68,16): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(80,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(80,14): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.cpp(102,17): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  controller_menu.cpp
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): warning C4200: nonstandard extension used: zero-sized array in struct/union
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_menu.cpp(118,104): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  main.cpp
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): warning C4200: nonstandard extension used: zero-sized array in struct/union
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\controller_course.h(37,15): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
-  model_auto.cpp
-  model_circuit.cpp
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(27,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(27,43): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(98,21): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(100,30): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(100,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(101,29): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(101,32): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(103,29): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\model_circuit.cpp(103,32): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-  Generating Code...
-  SparkUS.vcxproj -> C:\Users\techn\OneDrive - USherbrooke\S2\projet\Projet-S2\Code_jeu\debug\SparkUS.exe
+﻿  controller_menu.cpp
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.h(37,6): warning C4200: extension non standard utilisée : tableau de taille zéro dans un struct/union
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.h(37,6): message : Ce membre va être ignoré par un constructeur par défaut, ou par un opérateur d'assignation de copie/déplacement
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(119,104): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
+  SparkUS.vcxproj -> C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\debug\SparkUS.exe
