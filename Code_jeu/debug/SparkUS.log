@@ -1,5 +1,2 @@
-﻿  controller_menu.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.h(37,6): warning C4200: extension non standard utilisée : tableau de taille zéro dans un struct/union
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.h(37,6): message : Ce membre va être ignoré par un constructeur par défaut, ou par un opérateur d'assignation de copie/déplacement
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(119,104): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
-  SparkUS.vcxproj -> C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\debug\SparkUS.exe
+﻿  Generate moc_predefs.h
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(238,5): error MSB8066: Custom build for 'debug\moc_predefs.h.cbt' exited with code 2.

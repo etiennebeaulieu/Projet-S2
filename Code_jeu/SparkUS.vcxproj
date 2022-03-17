@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="controller_course.cpp" />
     <ClCompile Include="controller_menu.cpp" />
+    <ClCompile Include="course_record.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_auto.cpp" />
     <ClCompile Include="model_circuit.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="best_time.h" />
     <ClInclude Include="controller_course.h" />
     <ClInclude Include="controller_menu.h" />
+    <ClInclude Include="course_record.h" />
     <ClInclude Include="model_auto.h" />
     <ClInclude Include="model_circuit.h" />
     <ClInclude Include="position.h" />

@@ -42,6 +42,9 @@
     <ClCompile Include="model_circuit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="course_record.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="best_time.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="position.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="course_record.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,8 +4,7 @@
 #include "model_auto.h"
 #include "model_circuit.h"
 #include "position.h"
-
-
+#include "timer.h"
 
 
 class Controller_course {
@@ -35,6 +34,7 @@ private:
 	ModelCircuit circuit;
 	long time;
 	int demo[][2];
+	Timer timer;
 };
 
 #endif
