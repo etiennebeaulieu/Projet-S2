@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_COURSE_H
 #define CONTROLER_COURSE_H
 #include <Windows.h>
+#include <thread>
 #include "model_auto.h"
 #include "model_circuit.h"
 #include "position.h"
@@ -28,13 +29,20 @@ public:
 	void gotoXY(int x, int y);
 	void demoConsole();
 
+
+	void execute();
 	
 private:
 	ModelAuto car;
 	ModelCircuit circuit;
-	long time;
+	bool sorteControle = true;
+	unsigned long time;
 	int demo[][2];
+<<<<<<< Updated upstream
 	Timer timer;
+=======
+	
+>>>>>>> Stashed changes
 };
 
 #endif

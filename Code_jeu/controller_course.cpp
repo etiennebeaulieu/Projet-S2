@@ -108,6 +108,44 @@ void Controller_course::demoConsole()
 	Sleep(5000);
 }
 
+void Controller_course::execute()
+{
+	bool btn1 = 0;	//Avant gauche
+	bool btn2 = 0;	//Avant droit
+	bool btn3 = 0;	//Gachette gauche
+	bool btn4 = 0;	//Gacehtte droite
+	float x = 0;	//Joystick axe X
+	float y = 0;	//Joystick axe y
+	float acc = 0;	//Angle acceleromètre
+
+
+	while (1) {
+
+		//Lecture JSON Arduino et split dans les différentes variables
+
+
+
+
+
+
+		if (btn1 == 1)		//Bouton pause
+			break;
+
+
+		//Envoyer time au Arduino
+		//timer.get()
+
+		if (sorteControle == true)
+			move(x, btn4 - btn3);
+		else
+			move(acc, btn4 - btn3);
+		
+		Sleep(30);
+	}
+
+
+}
+
 
 
 
