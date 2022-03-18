@@ -10,6 +10,8 @@ public:
 	void start();
 	void stop();
 
+	void reset();
+
 	unsigned long get();
 
 	bool isStarted();
