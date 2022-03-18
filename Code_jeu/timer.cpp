@@ -26,9 +26,13 @@ void Timer::stop() {
 	stopTime = current_time_ms;
 }
 
-void Timer::reset()
-{
+void Timer::reset() {
 	startTime = 0;
+	stopTime = 0;
+}
+
+void Timer::resetAndStart() {
+	startTime = current_time_ms;
 	stopTime = 0;
 }
 

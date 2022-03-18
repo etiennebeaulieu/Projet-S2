@@ -12,6 +12,8 @@ public:
 
 	void reset();
 
+	void resetAndStart();
+
 	unsigned long get();
 
 	bool isStarted();
