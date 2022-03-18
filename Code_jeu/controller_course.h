@@ -38,11 +38,7 @@ private:
 	bool sorteControle = true;
 	unsigned long time;
 	int demo[][2];
-<<<<<<< Updated upstream
 	Timer timer;
-=======
-	
->>>>>>> Stashed changes
 };
 
 #endif
