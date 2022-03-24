@@ -37,7 +37,7 @@ void Timer::resetAndStart() {
 }
 
 unsigned long Timer::get(){
-	if (stopTime == 0) {
+	if (isStarted()) {
 		return current_time_ms - startTime;
 	}
 
