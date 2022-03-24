@@ -10,12 +10,14 @@
 using namespace std;
 
 /*-------------------------- Librairies externes ----------------------------*/
-#include "include/serial/SerialPort.hpp"
-#include "include/json.hpp"
+//#include "include/serial/SerialPort.hpp"
+//#include "include/json.hpp"
+#include "C:/Users/Wbouc/Downloads/Code_Arduino_PC/Code_Arduino_PC/PC/include/serial/SerialPort.hpp"
+#include "C:/Users/Wbouc/Downloads/Code_Arduino_PC/Code_Arduino_PC/PC/include/json.hpp"
 using json = nlohmann::json;
 
 /*------------------------------ Constantes ---------------------------------*/
-#define BAUD 9600           // Frequence de transmission serielle
+#define BAUD 115200           // Frequence de transmission serielle
 #define MSG_MAX_SIZE 1024   // Longueur maximale d'un message
 
 
@@ -42,14 +44,31 @@ int main() {
         exit(1);
     }
     
-    // Structure de donnees JSON pour envoie et reception
-    int led_state = 1;
+    // Structure de donnees JSON pour reception
     int pot_value = 0;
+    bool bouton1 = 0;
+    bool bouton2 = 0;
+    bool bouton3 = 0;
+    bool bouton4 = 0;
+    float joyStick_Value = 0;
+    float joyStickY = 0;
+    int acc_Value = 0;
+    // Structure de donnees pour Envoie JSON
+    int led_state_GREEN = 0;
+    int led_state_RED1 = 0;
+    int led_state_RED2 = 0;
+    int led_state_RED3 = 0;
+    int segment_Value = 0;
+
     json j_msg_send, j_msg_rcv;
 
     // Boucle infinie pour la communication bidirectionnelle Arduino-PC
     while(1) {
-        j_msg_send["led"] = led_state;      // Création du message à envoyer
+        j_msg_send["G"] = led_state_GREEN;      // Création du message à envoyer
+        j_msg_send["1"] = led_state_RED1;
+        j_msg_send["2"] = led_state_RED2;
+        j_msg_send["3"] = led_state_RED3;
+        j_msg_send["7"] = segment_Value;
 
         if(!SendToSerial(arduino, j_msg_send)) {    //Envoie au Arduino
             cerr << "Erreur lors de l'envoie du message. " << endl;
@@ -63,15 +82,39 @@ int main() {
         
         // Impression du message de l'Arduino, si valide
         if(raw_msg.size()>0) {
-             j_msg_rcv = json::parse(raw_msg);       // Transfert du message en json
-            pot_value = j_msg_rcv["analog"];        // Transfert dans la variable pot_value
-            cout << "Message de l'Arduino: " << j_msg_rcv << endl;
+            j_msg_rcv = json::parse(raw_msg);       // Transfert du message en json
+            pot_value = j_msg_rcv["X"];        // Transfert dans la variable pot_value
+            acc_Value = j_msg_rcv["A"];
+            if(j_msg_rcv.contains("1"))
+                led_state_GREEN = j_msg_rcv["1"];
+            if(j_msg_rcv.contains("2"))
+                led_state_RED1 = j_msg_rcv["2"];
+            if(j_msg_rcv.contains("3"))
+                led_state_RED2 = j_msg_rcv["3"];
+            if(j_msg_rcv.contains("4"))
+                led_state_RED3 = j_msg_rcv["4"];
+            segment_Value = j_msg_rcv["Y"];
+            /*pot_value = j_msg_rcv["analog"];        // Transfert dans la variable pot_value
+            acc_Value = j_msg_rcv["ACC"];
+            led_state_GREEN = j_msg_rcv["BTN1"];
+            led_state_RED1 = j_msg_rcv["BTN2"];
+            led_state_RED2 = j_msg_rcv["BTN3"];
+            led_state_RED3 = j_msg_rcv["BTN4"];
+            segment_Value = j_msg_rcv["analog"];*/
+            //cout<<pot_value<<endl;
+            cout << /*"Message de l'Arduino: " <<*/ j_msg_rcv << endl;
         }
         
-        led_state = !led_state;     //Changement de l'etat led
+        //led_state = !led_state;     //Changement de l'etat led
+        //led_state_sec = !led_state_sec;
+        /*led_state_GREEN = !led_state_GREEN;
+        led_state_RED1 = !led_state_RED1;
+        led_state_RED2 = !led_state_RED2;
+        led_state_RED3 = !led_state_RED3;
+        segment_Value = !segment_Value;*/
 
         // Bloquer le fil pour environ 1 sec
-        Sleep(1000); // 1000ms
+        Sleep(5); // 1000ms
     }
     return 0;
 }
