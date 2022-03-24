@@ -1,9 +1,265 @@
+/* 
+ * Auteurs: Jean-Samuel Lauzon    
+ * Date: Fevrier 2022
+*/
+
+/*------------------------------ Librairies ---------------------------------*/
 #include <Arduino.h>
+#include <ArduinoJson.h>
+#include <TM1637Display.h>
+
+/*------------------------------ Constantes ---------------------------------*/
+
+#define BAUD 115200        // Frequence de transmission serielle
+TM1637Display display(12,13);
+/*---------------------------- Variables globales ---------------------------*/
+
+volatile bool shouldSend_ = false;  // Drapeau prêt à envoyer un message
+volatile bool shouldRead_ = false;  // Drapeau prêt à lire un message
+
+int ledState_GREEN = 0;
+int ledState_RED1 = 0;
+int ledState_RED2 = 0;
+int ledState_RED3 = 0;
+
+int BTN1_val = 0;
+int BTN2_val = 0;
+int BTN3_val = 0;
+int BTN4_val = 0;
+
+int PAST_BTN1_val = 0;
+int PAST_BTN2_val = 0;
+int PAST_BTN3_val = 0;
+int PAST_BTN4_val = 0;
+
+/*int BTN_TEST = 0;
+int PAST_BTN_TEST = 0;
+#define pinBTN_TEST 2*/
+
+int potValue = 0;
+int accVal = 0;
+int joyYVal = 0;
+
+#define pinLED_GREEN 7
+#define pinLED_RED1 8
+#define pinLED_RED2 9
+#define pinLED_RED3 10
+
+#define pinBTN_1 3
+#define pinBTN_2 4
+#define pinBTN_3 5
+#define pinBTN_4 6 
+
+#define pinPOT A0
+#define pinpotY A1
+#define pinACC A2
+
+unsigned long startMillis;
+
+int lastSecondes = 0;
+
+/*------------------------- Prototypes de fonctions -------------------------*/
+void sendMsg(); 
+void readMsg();
+void serialEvent();
+void showTimeFromMs(unsigned long ms);
+void checkRising();
+/*---------------------------- Fonctions "Main" -----------------------------*/
 
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(BAUD);               // Initialisation de la communication serielle
+  
+  display.setBrightness(2);
+  startMillis = millis();
+
+  pinMode(pinLED_GREEN, OUTPUT);
+  digitalWrite(pinLED_GREEN, ledState_GREEN);
+
+  pinMode(pinLED_RED1,OUTPUT);
+  digitalWrite(pinLED_RED1, ledState_RED1);
+
+  pinMode(pinLED_RED2, OUTPUT);
+  digitalWrite(pinLED_RED2, ledState_RED2);
+
+  pinMode(pinLED_RED3, OUTPUT);
+  digitalWrite(pinLED_RED3, ledState_RED3);
+
+  pinMode(pinBTN_1, INPUT);
+  pinMode(pinBTN_2, INPUT);
+  pinMode(pinBTN_3, INPUT);
+  pinMode(pinBTN_4, INPUT);
+  pinMode(pinPOT, INPUT);
+  pinMode(pinpotY, INPUT);
+  pinMode(pinACC, INPUT);
+
+  //pinMode(pinBTN_TEST,INPUT);
 }
 
+/* Boucle principale (infinie) */
 void loop() {
-  // put your main code here, to run repeatedly:
+
+  if(shouldRead_){
+    readMsg();
+    sendMsg();
+  }
+
+  potValue = analogRead(pinPOT);
+  joyYVal = analogRead(pinpotY);
+
+  /*BTN1_val = digitalRead(pinBTN_1);
+  BTN2_val = digitalRead(pinBTN_2);
+  BTN3_val = digitalRead(pinBTN_3);
+  BTN4_val = digitalRead(pinBTN_4);*/
+
+  if(PAST_BTN1_val != digitalRead(pinBTN_1))
+  {
+    BTN1_val = digitalRead(pinBTN_1);
+  }
+  if(PAST_BTN2_val != digitalRead(pinBTN_2))
+  {
+    BTN2_val = digitalRead(pinBTN_2);
+  }
+  if(PAST_BTN3_val != digitalRead(pinBTN_3))
+  {
+    BTN3_val = digitalRead(pinBTN_3);
+  }
+  if(PAST_BTN4_val != digitalRead(pinBTN_4))
+  {
+    BTN4_val = digitalRead(pinBTN_4);
+  }
+  /*if(PAST_BTN_TEST != digitalRead(pinBTN_TEST))
+  {
+    BTN_TEST = digitalRead(pinBTN_TEST);
+  }*/
+
+  accVal = (analogRead(pinACC))*5/3.3;
+  //Serial.println(potValue);          // debug
+  unsigned long time = (millis() - startMillis);
+  //showTimeFromMs(time);
+  //checkRising();
+  delay(1);  // delais de 10 ms
+}
+
+/*---------------------------Definition de fonctions ------------------------*/
+
+void serialEvent() { shouldRead_ = true; }
+
+
+/*void checkRising()
+{
+
+}*/
+
+/*---------------------------Definition de fonctions ------------------------
+Fonction d'envoi
+Entrée : Aucun
+Sortie : Aucun
+Traitement : Envoi du message
+-----------------------------------------------------------------------------*/
+void sendMsg() {
+  StaticJsonDocument<500> doc;
+  // Elements du message
+  doc["T"] = millis();
+  doc["X"] = potValue;
+  doc["A"] = accVal;
+  /*doc["1"] = BTN1_val;
+  doc["2"] = BTN2_val;
+  doc["3"] = BTN3_val;
+  doc["4"] = BTN4_val;*/
+  doc["Y"] = joyYVal;
+  /*if(BTN_TEST!=PAST_BTN_TEST)
+  {
+    PAST_BTN_TEST=BTN_TEST;
+    doc["TEST"] = BTN_TEST;
+    
+  }*/
+  if(BTN1_val!=PAST_BTN1_val)
+  {
+    PAST_BTN1_val=BTN1_val;
+    doc["1"] = BTN1_val;
+  }
+  if(BTN2_val!=PAST_BTN2_val)
+  {
+    PAST_BTN2_val=BTN2_val;
+    doc["2"] = BTN2_val;
+  }  
+  if(BTN3_val!=PAST_BTN3_val)
+  {
+    PAST_BTN3_val=BTN3_val;
+    doc["3"] = BTN3_val;
+  }
+  if(BTN4_val!=PAST_BTN4_val)
+  {
+    PAST_BTN4_val=BTN4_val;
+    doc["4"] = BTN4_val;
+  }
+  // Serialisation
+  serializeJson(doc, Serial);
+
+  // Envoie
+  Serial.println();
+  shouldSend_ = false;
+}
+
+void showTimeFromMs(unsigned long ms){
+
+  uint8_t centaines = ms % 100;
+  int secondes = (ms/1000)%100;
+
+  display.showNumberDecEx((secondes * 100) + centaines, 0/*0b01100000*/);
+}
+
+/*---------------------------Definition de fonctions ------------------------
+Fonction de reception
+Entrée : Aucun
+Sortie : Aucun
+Traitement : Réception du message
+-----------------------------------------------------------------------------*/
+void readMsg(){
+  // Lecture du message Json
+  StaticJsonDocument<500> doc;
+  JsonVariant parse_msg;
+
+  // Lecture sur le port Seriel
+  DeserializationError error = deserializeJson(doc, Serial);
+  shouldRead_ = false;
+
+  // Si erreur dans le message
+  if (error) {
+    Serial.print("deserialize() failed: ");
+    Serial.println(error.c_str());
+    return;
+  }
+  
+  // Analyse des éléments du message message
+  parse_msg = doc["G"];
+  if (!parse_msg.isNull()) {
+    // mettre la led a la valeur doc["led"]
+    digitalWrite(pinLED_GREEN,doc["G"].as<bool>());
+  }
+
+  parse_msg = doc["1"];
+  if (!parse_msg.isNull()) {
+    // mettre la led a la valeur doc["led"]
+    digitalWrite(pinLED_RED1,doc["1"].as<bool>());
+  }
+
+  parse_msg = doc["2"];
+  if (!parse_msg.isNull()) {
+    // mettre la led a la valeur doc["led"]
+    digitalWrite(pinLED_RED2,doc["2"].as<bool>());
+  }
+
+  parse_msg = doc["3"];
+  if (!parse_msg.isNull()) {
+    // mettre la led a la valeur doc["led"]
+    digitalWrite(pinLED_RED3,doc["3"].as<bool>());
+  }
+  parse_msg = doc["7"];
+  if (!parse_msg.isNull()) {
+    // mettre la led a la valeur doc["led"]
+    //digitalWrite(pinLED_RED3,doc["7seg"].as<bool>());
+    display.showNumberDecEx(doc["7"], 0/*0b01100000*/);
+  }
+  
 }
