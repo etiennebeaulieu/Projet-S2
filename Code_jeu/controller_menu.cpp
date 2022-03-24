@@ -31,9 +31,17 @@ void ControllerMenu::printMenu()
 	std::cout << "CLASSEMENT\n" << printLeaderboard() << std::endl;
 	std::cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << std::endl;
 	std::cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit]->getName() << std::endl;
-	std::cout << "1. Play\n2. Reglages\n3. Prochaine voiture\n4. Voiture precedente\n5. Prochain circuit\n6. Circuit precedent\n9. Quitter" << std::endl;
-	std::cout << "Entrez le chiffre de l'option choisie" << std::endl;
-	std::cin >> option;
+	std::cout << "1. Play\n2. Reglages\n3. Prochaine voiture\n4. Voiture precedente\n5. Prochain circuit\n6. Circuit precedent\n7. Quitter" << std::endl;
+	//std::cout << "Entrez le chiffre de l'option choisie" << std::endl;
+	//std::cin >> option;
+
+
+	std::promise<int> promiseObj;
+	std::future<int> futureObj = promiseObj.get_future();
+	std::thread menu(&menuThread, &promiseObj);
+	option = futureObj.get();
+	menu.join();
+
 
 	switch (option) {
 	case 1:
@@ -65,7 +73,7 @@ void ControllerMenu::printMenu()
 		system("CLS");
 		printMenu();
 		break;
-	case 9:
+	case 7:
 		exit(1);
 		break;
 	default:
@@ -95,7 +103,7 @@ void ControllerMenu::openSettings()
 void ControllerMenu::startGame()
 {
 	system("CLS");
-	controllerCourse = new Controller_course(carList[currentCar], circuitList[currentCircuit]);
+	controllerCourse = new Controller_course(carList[currentCar], circuitList[currentCircuit], this);
 	controllerCourse->startRace();
 }
 
@@ -163,4 +171,58 @@ std::string ControllerMenu::printLeaderboard()
 		retour += entry.name + "..............." + entry.time + "\n";
 	}
 	return retour;
+}
+
+void ControllerMenu::gotoXY(int x, int y)
+{
+	COORD scrn;
+	HANDLE houtput = GetStdHandle(STD_OUTPUT_HANDLE);
+	scrn.X = 2 * x;
+	scrn.Y = y;
+	SetConsoleCursorPosition(houtput, scrn);
+}
+
+void ControllerMenu::menuThread(int selected)
+{
+	bool btn1 = 0;	//Avant gauche
+	bool btn2 = 0;	//Avant droit
+	bool btn3 = 0;	//Gachette gauche
+	bool btn4 = 0;	//Gacehtte droite
+	float x = 0;	//Joystick axe X
+	int y = 0;		//Joystick axe y
+	float acc = 0;	//Angle acceleromètre
+	int optionSelected = 1;		//Bouton surligné dans le menu
+	//0 = Resume
+	//1 = Options
+	//2 = Quit
+
+	int previousBtn1 = 0;
+	int previousY = 0;
+
+
+	gotoXY(0, 1);
+
+	while (1) {
+		//TODO Lire JSON Arduino
+
+
+
+
+		if (y == -1 && previousY == 0 && optionSelected < 7) {
+			optionSelected++;
+			gotoXY(0, optionSelected);
+		}
+		else if (y == 1 && previousY == 0 && optionSelected > 1) {
+			optionSelected--;
+			gotoXY(0, optionSelected);
+		}
+		else if (btn1 == 1 && previousBtn1 == 0) {
+			selected = optionSelected;
+			std::abort();
+		}
+
+
+
+		Sleep(30);
+	}
 }

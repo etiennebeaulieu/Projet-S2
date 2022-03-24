@@ -30,6 +30,10 @@ public:
 	void updateData();
 	std::string printLeaderboard();
 
+	void gotoXY(int x, int y);
+
+	void menuThread(int selected);
+
 
 private:
 	BestTime leaderboard[5];
