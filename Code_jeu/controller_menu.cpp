@@ -1,4 +1,4 @@
-#include "controller_menu.h"
+#include "controllers.h"
 
 ControllerMenu::ControllerMenu()
 {
@@ -26,7 +26,7 @@ ControllerMenu::~ControllerMenu(){
 
 void ControllerMenu::printMenu()
 {
-	int option;
+	//int option;
 	std::cout << "Bienvenue sur SparkUS racing" << std::endl;
 	std::cout << "CLASSEMENT\n" << printLeaderboard() << std::endl;
 	std::cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << std::endl;
@@ -36,47 +36,53 @@ void ControllerMenu::printMenu()
 	//std::cin >> option;
 
 
-	std::promise<int> promiseObj;
-	std::future<int> futureObj = promiseObj.get_future();
-	std::thread menu(&menuThread, &promiseObj);
-	option = futureObj.get();
+	
+	std::thread menu(&ControllerMenu::menuThread, this);
 	menu.join();
 
 
-	switch (option) {
+	switch (optionSelected) {
 	case 1:
+		optionSelected = 0;
 		startGame();
 		system("CLS");
 		printMenu();
 		break;
 	case 2:
+		optionSelected = 0;
 		system("CLS");
 		openSettings();
 		break;
 	case 3:
+		optionSelected = 0;
 		nextCar();
 		system("CLS");
 		printMenu();
 		break;
 	case 4:
+		optionSelected = 0;
 		previousCar();
 		system("CLS");
 		printMenu();
 		break;
 	case 5:
+		optionSelected = 0;
 		nextCircuit();
 		system("CLS");
 		printMenu();
 		break;
 	case 6:
+		optionSelected = 0;
 		previousCircuit();
 		system("CLS");
 		printMenu();
 		break;
 	case 7:
+		optionSelected = 0;
 		exit(1);
 		break;
 	default:
+		optionSelected = 0;
 		system("CLS");
 		printMenu();
 		break;
@@ -182,7 +188,7 @@ void ControllerMenu::gotoXY(int x, int y)
 	SetConsoleCursorPosition(houtput, scrn);
 }
 
-void ControllerMenu::menuThread(int selected)
+void ControllerMenu::menuThread(ControllerMenu* controller)
 {
 	bool btn1 = 0;	//Avant gauche
 	bool btn2 = 0;	//Avant droit
@@ -200,25 +206,46 @@ void ControllerMenu::menuThread(int selected)
 	int previousY = 0;
 
 
-	gotoXY(0, 1);
+
+	//Pour contrôle clavier seulement
+	SHORT up = 0;
+	SHORT down = 0;
+	SHORT previousUp = 0;
+	SHORT previousDown = 0;
+	SHORT enter = 0;
+
+
+	controller->gotoXY(0, 15);
+
+	Sleep(100);
 
 	while (1) {
 		//TODO Lire JSON Arduino
 
 
+		//Contôle au clavier
+		previousUp = up;
+		previousDown = down;
+
+		up = GetKeyState(VK_UP);
+		down = GetKeyState(VK_DOWN);
+		enter = GetKeyState(VK_RETURN);
 
 
-		if (y == -1 && previousY == 0 && optionSelected < 7) {
+		
+
+
+		if (((y == -1 && previousY == 0) || (down < 0 && previousDown >= 0)) && optionSelected < 7) {
 			optionSelected++;
-			gotoXY(0, optionSelected);
+			controller->gotoXY(0, optionSelected+14);
 		}
-		else if (y == 1 && previousY == 0 && optionSelected > 1) {
+		else if (((y == 1 && previousY == 0) || (up < 0 && previousUp >= 0)) && optionSelected > 1) {
 			optionSelected--;
-			gotoXY(0, optionSelected);
+			controller->gotoXY(0, optionSelected+14);
 		}
-		else if (btn1 == 1 && previousBtn1 == 0) {
-			selected = optionSelected;
-			std::abort();
+		else if ((btn1 == 1 && previousBtn1 == 0) || enter < 0) {
+			controller->optionSelected = optionSelected;
+			break;
 		}
 
 

@@ -53,10 +53,7 @@
     <ClInclude Include="best_time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="controller_course.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="controller_menu.h">
+    <ClInclude Include="controllers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="course_record.h">

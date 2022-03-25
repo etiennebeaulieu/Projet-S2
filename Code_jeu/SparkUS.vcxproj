@@ -150,8 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="best_time.h" />
-    <ClInclude Include="controller_course.h" />
-    <ClInclude Include="controller_menu.h" />
+    <ClInclude Include="controllers.h" />
     <ClInclude Include="course_record.h" />
     <ClInclude Include="model_auto.h" />
     <ClInclude Include="model_circuit.h" />
