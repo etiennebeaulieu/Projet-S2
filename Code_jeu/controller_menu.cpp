@@ -2,7 +2,19 @@
 
 ControllerMenu::ControllerMenu()
 {
-	
+	// Initialisation du port de communication
+	std::string com;
+	std::cout << "Entrer le port de communication du Arduino: ";
+	std::cin >> com;
+	arduino = new SerialPort(com.c_str(), BAUD);
+
+	if (!arduino->isConnected()) {
+		std::cerr << "Impossible de se connecter au port " << std::string(com) << ". Fermeture du programme!" << std::endl;
+		exit(1);
+	}
+
+	system("CLS");
+
 	updateData();
 
 	
@@ -190,21 +202,15 @@ void ControllerMenu::gotoXY(int x, int y)
 
 void ControllerMenu::menuThread(ControllerMenu* controller)
 {
-	bool btn1 = 0;	//Avant gauche
-	bool btn2 = 0;	//Avant droit
-	bool btn3 = 0;	//Gachette gauche
-	bool btn4 = 0;	//Gacehtte droite
-	float x = 0;	//Joystick axe X
-	int y = 0;		//Joystick axe y
-	float acc = 0;	//Angle acceleromètre
 	int optionSelected = 1;		//Bouton surligné dans le menu
 	//0 = Resume
 	//1 = Options
 	//2 = Quit
 
 	int previousBtn1 = 0;
+	int previousBtn2 = 0;
 	int previousY = 0;
-
+	std::string raw_msg;
 
 
 	//Pour contrôle clavier seulement
@@ -222,34 +228,58 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	while (1) {
 		//TODO Lire JSON Arduino
 
+		previousY = controller->joyStickY;
+		previousBtn1 = controller->bouton1;
+		previousBtn2 = controller->bouton2;
 
-		//Contôle au clavier
-		previousUp = up;
-		previousDown = down;
-
-		up = GetKeyState(VK_UP);
-		down = GetKeyState(VK_DOWN);
-		enter = GetKeyState(VK_RETURN);
-
-
+		controller->j_msg_rcv.clear();
+		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
+			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+		}
+		
 		
 
-
-		if (((y == -1 && previousY == 0) || (down < 0 && previousDown >= 0)) && optionSelected < 7) {
-			optionSelected++;
-			controller->gotoXY(0, optionSelected+14);
-		}
-		else if (((y == 1 && previousY == 0) || (up < 0 && previousUp >= 0)) && optionSelected > 1) {
-			optionSelected--;
-			controller->gotoXY(0, optionSelected+14);
-		}
-		else if ((btn1 == 1 && previousBtn1 == 0) || enter < 0) {
-			controller->optionSelected = optionSelected;
-			break;
+		// Impression du message de l'Arduino, si valide
+		if (raw_msg.size() > 0) {
+			controller->j_msg_rcv = json::parse(raw_msg);       // Transfert du message en json
+			if (controller->j_msg_rcv.contains("Y"))
+				controller->joyStickY = controller->j_msg_rcv["Y"];
+			if (controller->j_msg_rcv.contains("1"))
+				controller->bouton1 = controller->j_msg_rcv["1"];
+			if (controller->j_msg_rcv.contains("2"))
+				controller->bouton2 = controller->j_msg_rcv["2"];
 		}
 
 
 
-		Sleep(30);
+			//Contôle au clavier
+			previousUp = up;
+			previousDown = down;
+
+			up = GetKeyState(VK_UP);
+			down = GetKeyState(VK_DOWN);
+			enter = GetKeyState(VK_RETURN);
+
+
+
+
+
+			if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && optionSelected < 7) {
+				optionSelected++;
+				controller->gotoXY(0, optionSelected + 14);
+			}
+			else if (((controller->joyStickY == 1 && previousY != 1) || (up < 0 && previousUp >= 0)) && optionSelected > 1) {
+				optionSelected--;
+				controller->gotoXY(0, optionSelected + 14);
+			}
+			else if ((controller->bouton1 == 1 && previousBtn1 == 0) || enter < 0) {
+				controller->optionSelected = optionSelected;
+				break;
+			}
+
+
+
+			Sleep(30);
 	}
+	
 }

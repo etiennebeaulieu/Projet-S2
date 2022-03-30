@@ -14,6 +14,7 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	car = *pCar;
 	circuit = *pCircuit;
 	menuControleur = pControllerMenu;
+	arduino = menuControleur->arduino;
 
 	circuit.generateBorders();
 
@@ -59,8 +60,27 @@ void Controller_course::startRace()
 	car.setPostion(start);
 	updateScreenConsole();
 
-	//TODO Lights sequence on controller
+	int sequenceGreen[5] = { 0, 0, 0, 0, 1 };
+	int sequenceR1[5] = { 0, 1, 1, 1, 1 };
+	int sequenceR2[5] = { 0, 0, 1, 1, 1 };
+	int sequenceR3[5] = { 0, 0, 0, 1, 1 };
+	int sequenceMoteur[5] = { 0, 0, 0, 0, 1 };
 
+	//TODO Lights sequence on controller
+	for (int i = 0; i < 5; i++) {
+		
+		Sleep(500);
+		
+		j_msg_send["G"] = sequenceGreen[i];      // Création du message à envoyer
+		j_msg_send["1"] = sequenceR1[i];
+		j_msg_send["2"] = sequenceR2[i];
+		j_msg_send["3"] = sequenceR3[i];
+		j_msg_send["M"] = sequenceMoteur[i];
+
+		if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {    //Envoie au Arduino
+			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		}
+	}
 
 	timer.start();
 	std::thread course(&Controller_course::courseThread, this);
@@ -71,7 +91,7 @@ void Controller_course::startRace()
 	//demoConsole();
 }
 
-void Controller_course::move(float pAngle, int pMovement)
+bool Controller_course::move(float pAngle, int pMovement)
 {
 	Position temp = car.move(pAngle, pMovement);
 	if (temp.x <= circuit.getWidth() && temp.y <= circuit.getHeight()) {
@@ -80,7 +100,12 @@ void Controller_course::move(float pAngle, int pMovement)
 			std::cout << " ";
 			car.setPostion(temp);
 		}
+		else
+			return false;
 	}
+
+
+	return true;
 }
 
 void Controller_course::updateScreenConsole()
@@ -128,20 +153,15 @@ void Controller_course::saveLeaderboard()
 
 void Controller_course::menuThread(Controller_course* controller)
 {
-	bool btn1 = 0;	//Avant gauche
-	bool btn2 = 0;	//Avant droit
-	bool btn3 = 0;	//Gachette gauche
-	bool btn4 = 0;	//Gacehtte droite
-	float x = 0;	//Joystick axe X
-	int y = 0;		//Joystick axe y
-	float acc = 0;	//Angle acceleromètre
 	int optionSelected = 1;		//Bouton surligné dans le menu
 	//0 = Resume
 	//1 = Options
 	//2 = Quit
 
 	int previousBtn1 = 0;
+	int previousBtn2 = 0;
 	int previousY = 0;
+	std::string raw_msg;
 
 	//Pour contrôle clavier seulement
 	SHORT up = 0;
@@ -161,6 +181,28 @@ void Controller_course::menuThread(Controller_course* controller)
 
 	while (1) {
 		//TODO Lire JSON Arduino
+		previousY = controller->joyStickY;
+		previousBtn1 = controller->bouton1;
+		previousBtn2 = controller->bouton2;
+
+		controller->j_msg_rcv.clear();
+		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
+			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+		}
+
+
+
+		// Impression du message de l'Arduino, si valide
+		if (raw_msg.size() > 0) {
+			controller->j_msg_rcv = json::parse(raw_msg);       // Transfert du message en json
+			if (controller->j_msg_rcv.contains("Y"))
+				controller->joyStickY = controller->j_msg_rcv["Y"];
+			if (controller->j_msg_rcv.contains("1"))
+				controller->bouton1 = controller->j_msg_rcv["1"];
+			if (controller->j_msg_rcv.contains("2"))
+				controller->bouton2 = controller->j_msg_rcv["2"];
+		}
+
 
 
 		//Contôle au clavier seulement
@@ -172,37 +214,34 @@ void Controller_course::menuThread(Controller_course* controller)
 		enter = GetKeyState(VK_RETURN);
 
 
-		if (((y == -1 && previousY == 0) || (down < 0 && previousDown >= 0)) && optionSelected < 3) {
+		if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && optionSelected < 3) {
 			optionSelected++;
 			controller->gotoXY(0, optionSelected);
 		}
-		else if (((y == 1 && previousY == 0) || (up < 0 && previousUp >= 0)) && optionSelected > 1) {
+		else if (((controller->joyStickY == 1 && previousY != 1) || (up < 0 && previousUp >= 0)) && optionSelected > 1) {
 			optionSelected--;
 			controller->gotoXY(0, optionSelected);
 		}
-		else if ((btn1 == 1 && previousBtn1 == 0) || enter < 0) {
-			controller->optionSelected = optionSelected-1;
+		else if ((controller->bouton1 == 1 && previousBtn1 == 0) || enter < 0) {
+			controller->optionSelected = optionSelected;
 			break;
 		}
-			
+
 
 
 		Sleep(30);
 	}
+	
 }
 
 
-void Controller_course::courseThread()
+
+
+void Controller_course::courseThread(Controller_course* controller)
 {
-	bool btn1 = 0;	//Avant gauche
-	bool btn2 = 0;	//Avant droit
-	bool btn3 = 0;	//Gachette gauche
-	bool btn4 = 0;	//Gacehtte droite
-	float x = 0;	//Joystick axe X
-	int y = 0;		//Joystick axe y
-	float acc = 0;	//Angle acceleromètre
-	
 	bool fin = false;
+	bool dansLimite = true;
+	std::string raw_msg;
 
 
 	//Pour contrôle clavier seulement
@@ -214,12 +253,38 @@ void Controller_course::courseThread()
 	while (1) {
 
 		//TODO Lecture JSON Arduino et split dans les différentes variables
+		controller->j_msg_rcv.clear();
+		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
+			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+		}
+
+		// Impression du message de l'Arduino, si valide
+		if (raw_msg.size() > 0) {
+			controller->j_msg_rcv = json::parse(raw_msg); // Transfert du message en json
+			if (controller->j_msg_rcv.contains("A"))
+				controller->acc_Value = controller->j_msg_rcv["A"];
+			if (controller->j_msg_rcv.contains("X"))
+				controller->joyStickX = controller->j_msg_rcv["X"];
+			if (controller->j_msg_rcv.contains("Y"))
+				controller->joyStickY = controller->j_msg_rcv["Y"];
+			if (controller->j_msg_rcv.contains("1"))
+				controller->bouton1 = controller->j_msg_rcv["1"];
+			if (controller->j_msg_rcv.contains("2"))
+				controller->bouton2 = controller->j_msg_rcv["2"];
+			if (controller->j_msg_rcv.contains("3"))
+				controller->bouton3 = controller->j_msg_rcv["3"];
+			if (controller->j_msg_rcv.contains("4"))
+				controller->bouton4 = controller->j_msg_rcv["4"];
+		}
+
+
+
+
 
 		//Contôle au clavier
 		up = GetKeyState(VK_UP);
 		down = GetKeyState(VK_DOWN);
-
-
+		esc = GetKeyState(VK_ESCAPE);
 		if (up < 0)
 			up = 1;
 		else
@@ -232,36 +297,36 @@ void Controller_course::courseThread()
 			down = 0;
 
 
-		esc = GetKeyState(VK_ESCAPE);
 
 
 
-		if (btn1 == 1 || esc < 0) {		//Bouton pause
-			timer.stop();
 
-			std::thread menu(&Controller_course::menuThread, this);
+		if (controller->bouton2 == 1 || esc < 0) {		//Bouton pause
+			controller->timer.stop();
+
+			std::thread menu(&Controller_course::menuThread, controller);
 			menu.join();
 
 
 
-			switch (optionSelected)
+			switch (controller->optionSelected)
 			{
 			case 0:
-				optionSelected = 0;
+				controller->optionSelected = 0;
 				system("CLS");
-				std::cout << circuit << std::endl;
-				updateScreenConsole();
-				timer.start();
+				std::cout << controller->circuit << std::endl;
+				controller->updateScreenConsole();
+				controller->timer.start();
 				break;
 			case 1:
-				optionSelected = 0;
-				menuControleur->openSettings();
+				controller->optionSelected = 0;
+				controller->menuControleur->openSettings();
 				//TODO Coming back from settings
 				break;
 			case 2:
-				optionSelected = 0;
-				saveLeaderboard();
-				timer.reset();
+				controller->optionSelected = 0;
+				controller->saveLeaderboard();
+				controller->timer.reset();
 				system("CLS");
 				fin = true;
 				break;
@@ -274,26 +339,42 @@ void Controller_course::courseThread()
 
 		}
 
-
-		timer.get();
-		//TODO Envoyer time au Arduino
-
-
-		
-
-
-		if (sorteControle == true) {
-			//move(x, btn4 - btn3);
-			move(x, down - up);
-		}
+		if (controller->sorteControle == 0)
+			dansLimite = controller->move(controller->joyStickX, controller->bouton4 - controller->bouton3);
+		else if (controller->sorteControle == 1)
+			dansLimite = controller->move(controller->acc_Value, controller->bouton4 - controller->bouton3);
 		else
-			move(acc, btn4 - btn3);
+			dansLimite = controller->move(0, down - up);
+
+
+		//TODO Envoyer time au Arduino
+		controller->j_msg_send["S"] = controller->timer.get();
+		controller->j_msg_send["G"] = 0;      // Création du message à envoyer
+		
+		if (dansLimite) {
+			controller->j_msg_send["M"] = 0;
+			controller->j_msg_send["1"] = 0;
+			controller->j_msg_send["2"] = 0;
+			controller->j_msg_send["3"] = 0;
+		}
+		else {
+			controller->j_msg_send["M"] = 1;
+			controller->j_msg_send["1"] = 1;
+			controller->j_msg_send["2"] = 1;
+			controller->j_msg_send["3"] = 1;
+		}
+		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		}
+
+
+
+
 		
 
-		updateScreenConsole();
+		controller->updateScreenConsole();
 
 		Sleep(30);
 	}
-
 
 }

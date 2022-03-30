@@ -9,9 +9,14 @@
 #include "position.h"
 #include "timer.h"
 #include "best_time.h"
+#include "serial_communication.h"
+#include "SerialPort.hpp"
 #include <fstream>
 #include <filesystem>
 #include <vector>
+
+using json = nlohmann::json;
+#define BAUD 115200
 
 class Controller_course;
 
@@ -40,6 +45,7 @@ public:
 	static void menuThread(ControllerMenu* controller);
 
 
+	SerialPort* arduino;
 private:
 	BestTime leaderboard[5];
 	ModelAuto* carList[5];
@@ -48,6 +54,27 @@ private:
 	int currentCircuit;
 	int optionSelected;
 	Controller_course* controllerCourse;
+	
+
+
+
+	// Structure de donnees JSON pour reception
+	bool bouton1 = 0;
+	bool bouton2 = 0;
+	bool bouton3 = 0;
+	bool bouton4 = 0;
+	float joyStickX = 0;
+	int joyStickY = 0;
+	float acc_Value = 0;
+	// Structure de donnees pour Envoie JSON
+	int led_state_GREEN = 0;
+	int led_state_RED1 = 0;
+	int led_state_RED2 = 0;
+	int led_state_RED3 = 0;
+	long segment_Value = 0;
+	int moteur_vibrant = 0;
+
+	json j_msg_send, j_msg_rcv;
 
 
 
@@ -67,7 +94,7 @@ public:
 	ModelCircuit getCircuit();
 
 	void startRace();
-	void move(float pAngle, int pMovement);
+	bool move(float pAngle, int pMovement);
 
 	void updateScreenConsole();
 	void updateScreenGUI();
@@ -80,17 +107,39 @@ public:
 
 
 	static void menuThread(Controller_course* controller);
-	void courseThread();
+	static void courseThread(Controller_course* controller);
 
+	SerialPort* arduino;
 private:
 	ModelAuto car;
 	ModelCircuit circuit;
 	ControllerMenu* menuControleur;
 	int optionSelected;
-	bool sorteControle = true;
+	int sorteControle = 2; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 	unsigned long time;
 	int demo[1024][2];
 	Timer timer;
+	
+
+
+
+	// Structure de donnees JSON pour reception
+	bool bouton1 = 0;
+	bool bouton2 = 0;
+	bool bouton3 = 0;
+	bool bouton4 = 0;
+	float joyStickX = 0;
+	int joyStickY = 0;
+	float acc_Value = 0;
+	// Structure de donnees pour Envoie JSON
+	int led_state_GREEN = 0;
+	int led_state_RED1 = 0;
+	int led_state_RED2 = 0;
+	int led_state_RED3 = 0;
+	long segment_Value = 0;
+	int moteur_vibrant = 0;
+
+	json j_msg_send, j_msg_rcv;
 };
 
 #endif

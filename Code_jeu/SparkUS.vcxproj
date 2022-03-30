@@ -140,21 +140,26 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SerialPort.cpp" />
     <ClCompile Include="controller_course.cpp" />
     <ClCompile Include="controller_menu.cpp" />
     <ClCompile Include="course_record.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_auto.cpp" />
     <ClCompile Include="model_circuit.cpp" />
+    <ClCompile Include="serial_communication.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SerialPort.hpp" />
     <ClInclude Include="best_time.h" />
     <ClInclude Include="controllers.h" />
     <ClInclude Include="course_record.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="model_auto.h" />
     <ClInclude Include="model_circuit.h" />
     <ClInclude Include="position.h" />
+    <ClInclude Include="serial_communication.h" />
     <ClInclude Include="timer.h" />
   </ItemGroup>
   <ItemGroup>
