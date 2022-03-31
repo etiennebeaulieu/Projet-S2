@@ -1,4 +1,4 @@
-/* 
+    /* 
  * Auteurs: Jean-Samuel Lauzon    
  * Date: Fevrier 2022
  * Projet S2ei
@@ -12,8 +12,8 @@ using namespace std;
 /*-------------------------- Librairies externes ----------------------------*/
 //#include "include/serial/SerialPort.hpp"
 //#include "include/json.hpp"
-#include "C:/Users/Wbouc/Downloads/Code_Arduino_PC/Code_Arduino_PC/PC/include/serial/SerialPort.hpp"
-#include "C:/Users/Wbouc/Downloads/Code_Arduino_PC/Code_Arduino_PC/PC/include/json.hpp"
+#include "SerialPort.hpp"
+#include "json.hpp"
 using json = nlohmann::json;
 
 /*------------------------------ Constantes ---------------------------------*/

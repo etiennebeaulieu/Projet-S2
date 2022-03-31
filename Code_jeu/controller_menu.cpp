@@ -13,6 +13,8 @@ ControllerMenu::ControllerMenu()
 		exit(1);
 	}
 
+	
+
 	system("CLS");
 
 	updateData();
@@ -106,6 +108,7 @@ void ControllerMenu::printMenu()
 
 void ControllerMenu::openSettings()
 {
+	//TODO Changer la page de settings pour fonctionner avec la manette
 	int option;
 	std::cout << "Ceci sont les reglages" << std::endl;
 	std::cout << "Appuyer sur 9 pour retourner au menu" << std::endl;
@@ -115,7 +118,10 @@ void ControllerMenu::openSettings()
 		system("CLS");
 		printMenu();
 	}
-		
+	else {
+		system("CLS");
+		openSettings();
+	}
 }
 
 void ControllerMenu::startGame()
@@ -202,6 +208,12 @@ void ControllerMenu::gotoXY(int x, int y)
 
 void ControllerMenu::menuThread(ControllerMenu* controller)
 {
+	controller->j_msg_send["G"] = 1;      // Création du message à envoyer
+	controller->j_msg_send["1"] = 1;
+	controller->j_msg_send["2"] = 1;
+	controller->j_msg_send["3"] = 1;
+	controller->j_msg_send["S"] = 0;
+	
 	int optionSelected = 1;		//Bouton surligné dans le menu
 	//0 = Resume
 	//1 = Options
@@ -210,7 +222,6 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	int previousBtn1 = 0;
 	int previousBtn2 = 0;
 	int previousY = 0;
-	std::string raw_msg;
 
 
 	//Pour contrôle clavier seulement
@@ -220,6 +231,7 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	SHORT previousDown = 0;
 	SHORT enter = 0;
 
+	
 
 	controller->gotoXY(0, 15);
 
@@ -232,16 +244,22 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 		previousBtn1 = controller->bouton1;
 		previousBtn2 = controller->bouton2;
 
+		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		}
+
 		controller->j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
+		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
 			std::cerr << "Erreur lors de la réception du message. " << std::endl;
 		}
 		
+
+
 		
 
 		// Impression du message de l'Arduino, si valide
-		if (raw_msg.size() > 0) {
-			controller->j_msg_rcv = json::parse(raw_msg);       // Transfert du message en json
+		if (controller->raw_msg.size() > 0) {
+			controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
 			if (controller->j_msg_rcv.contains("Y"))
 				controller->joyStickY = controller->j_msg_rcv["Y"];
 			if (controller->j_msg_rcv.contains("1"))
@@ -249,6 +267,8 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 			if (controller->j_msg_rcv.contains("2"))
 				controller->bouton2 = controller->j_msg_rcv["2"];
 		}
+
+		//std::cout << controller->j_msg_rcv << std::endl;
 
 
 
@@ -263,7 +283,7 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 
 
 
-
+			
 			if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && optionSelected < 7) {
 				optionSelected++;
 				controller->gotoXY(0, optionSelected + 14);
@@ -276,6 +296,8 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 				controller->optionSelected = optionSelected;
 				break;
 			}
+			
+			
 
 
 

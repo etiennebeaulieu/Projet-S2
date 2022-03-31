@@ -28,10 +28,17 @@ bool SerialCommunication::RcvFromSerial(SerialPort* arduino, std::string& msg)
     std::string str_buffer;
     char char_buffer[MSG_MAX_SIZE];
     int buffer_size;
+    char last;
+
+
+    //buffer_size = arduino->readSerialPort(char_buffer, MSG_MAX_SIZE);
+    //str_buffer.assign(char_buffer, buffer_size);
+   // msg.append(str_buffer);
+
 
     msg.clear(); // clear string
     // Read serialport until '\n' character (Blocking)
-    while (msg.back() != '\n') {
+    do {
         if (msg.size() > MSG_MAX_SIZE) {
             return false;
         }
@@ -39,7 +46,13 @@ bool SerialCommunication::RcvFromSerial(SerialPort* arduino, std::string& msg)
         buffer_size = arduino->readSerialPort(char_buffer, MSG_MAX_SIZE);
         str_buffer.assign(char_buffer, buffer_size);
         msg.append(str_buffer);
-    }
+
+        if (msg.size() > 0)
+            last = msg.back();
+        else
+            last = NULL;
+
+    } while (last != '\n');
 
     msg.pop_back(); //remove '/n' from string
     return true;

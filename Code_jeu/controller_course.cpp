@@ -80,6 +80,11 @@ void Controller_course::startRace()
 		if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {    //Envoie au Arduino
 			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
 		}
+
+		j_msg_rcv.clear();
+		if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {
+			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+		}
 	}
 
 	timer.start();
@@ -153,6 +158,12 @@ void Controller_course::saveLeaderboard()
 
 void Controller_course::menuThread(Controller_course* controller)
 {
+	controller->j_msg_send["G"] = 1;      // Création du message à envoyer
+	controller->j_msg_send["1"] = 1;
+	controller->j_msg_send["2"] = 1;
+	controller->j_msg_send["3"] = 1;
+	controller->j_msg_send["S"] = 0;
+
 	int optionSelected = 1;		//Bouton surligné dans le menu
 	//0 = Resume
 	//1 = Options
@@ -185,6 +196,11 @@ void Controller_course::menuThread(Controller_course* controller)
 		previousBtn1 = controller->bouton1;
 		previousBtn2 = controller->bouton2;
 
+
+		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		}
+
 		controller->j_msg_rcv.clear();
 		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
 			std::cerr << "Erreur lors de la réception du message. " << std::endl;
@@ -203,7 +219,7 @@ void Controller_course::menuThread(Controller_course* controller)
 				controller->bouton2 = controller->j_msg_rcv["2"];
 		}
 
-
+		//std::cout << controller->j_msg_rcv << std::endl;
 
 		//Contôle au clavier seulement
 		previousUp = up;
@@ -213,7 +229,7 @@ void Controller_course::menuThread(Controller_course* controller)
 		down = GetKeyState(VK_DOWN);
 		enter = GetKeyState(VK_RETURN);
 
-
+		
 		if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && optionSelected < 3) {
 			optionSelected++;
 			controller->gotoXY(0, optionSelected);
@@ -223,7 +239,7 @@ void Controller_course::menuThread(Controller_course* controller)
 			controller->gotoXY(0, optionSelected);
 		}
 		else if ((controller->bouton1 == 1 && previousBtn1 == 0) || enter < 0) {
-			controller->optionSelected = optionSelected;
+			controller->optionSelected = optionSelected-1;
 			break;
 		}
 
@@ -239,9 +255,14 @@ void Controller_course::menuThread(Controller_course* controller)
 
 void Controller_course::courseThread(Controller_course* controller)
 {
+	controller->j_msg_send["G"] = 0;      // Création du message à envoyer
+	controller->j_msg_send["1"] = 0;
+	controller->j_msg_send["2"] = 0;
+	controller->j_msg_send["3"] = 0;
+	controller->j_msg_send["S"] = 0;
+
 	bool fin = false;
 	bool dansLimite = true;
-	std::string raw_msg;
 
 
 	//Pour contrôle clavier seulement
@@ -251,16 +272,21 @@ void Controller_course::courseThread(Controller_course* controller)
 
 
 	while (1) {
-
 		//TODO Lecture JSON Arduino et split dans les différentes variables
+
+		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		}
+
 		controller->j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
+		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
 			std::cerr << "Erreur lors de la réception du message. " << std::endl;
 		}
 
 		// Impression du message de l'Arduino, si valide
-		if (raw_msg.size() > 0) {
-			controller->j_msg_rcv = json::parse(raw_msg); // Transfert du message en json
+
+		if (controller->raw_msg.size() > 0) {
+			controller->j_msg_rcv = json::parse(controller->raw_msg); // Transfert du message en json
 			if (controller->j_msg_rcv.contains("A"))
 				controller->acc_Value = controller->j_msg_rcv["A"];
 			if (controller->j_msg_rcv.contains("X"))
@@ -278,6 +304,7 @@ void Controller_course::courseThread(Controller_course* controller)
 		}
 
 
+		std::cout << controller->j_msg_rcv << std::endl;
 
 
 
@@ -300,7 +327,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 
 
-
+		
 		if (controller->bouton2 == 1 || esc < 0) {		//Bouton pause
 			controller->timer.stop();
 
@@ -363,9 +390,7 @@ void Controller_course::courseThread(Controller_course* controller)
 			controller->j_msg_send["2"] = 1;
 			controller->j_msg_send["3"] = 1;
 		}
-		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
-			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
-		}
+		
 
 
 

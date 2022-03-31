@@ -36,9 +36,14 @@ int PAST_BTN4_val = 0;
 int PAST_BTN_TEST = 0;
 #define pinBTN_TEST 2*/
 
-int potValue = 0;
-int accVal = 0;
-int joyYVal = 0;
+float joyX = 0;
+int joyY = 0;
+float accVal = 0;
+
+float accX = 0;
+float accY = 0;
+float accZ = 0;
+
 
 #define pinLED_GREEN 7
 #define pinLED_RED1 8
@@ -50,9 +55,14 @@ int joyYVal = 0;
 #define pinBTN_3 5
 #define pinBTN_4 6 
 
-#define pinPOT A0
-#define pinpotY A1
+#define pinX A0
+#define pinY A1
 #define pinACC A2
+
+//#define pinACCX
+//#define pinACCY
+//#define pinACCZ
+//TODO : Ajouter les pin ACCX, ACCY et ACCZ
 
 unsigned long startMillis;
 
@@ -61,6 +71,7 @@ int lastSecondes = 0;
 /*------------------------- Prototypes de fonctions -------------------------*/
 void sendMsg(); 
 void readMsg();
+float traitementACC(float x, float y, float z);
 void serialEvent();
 void showTimeFromMs(unsigned long ms);
 void checkRising();
@@ -88,8 +99,8 @@ void setup() {
   pinMode(pinBTN_2, INPUT);
   pinMode(pinBTN_3, INPUT);
   pinMode(pinBTN_4, INPUT);
-  pinMode(pinPOT, INPUT);
-  pinMode(pinpotY, INPUT);
+  pinMode(pinX, INPUT);
+  pinMode(pinY, INPUT);
   pinMode(pinACC, INPUT);
 
   //pinMode(pinBTN_TEST,INPUT);
@@ -103,36 +114,62 @@ void loop() {
     sendMsg();
   }
 
-  potValue = analogRead(pinPOT);
-  joyYVal = analogRead(pinpotY);
+  joyX = analogRead(pinX);
+  joyY = analogRead(pinY);
+
+  //accX = (analogRead(pinACCX))*5/3.3;
+  //accY = (analogRead(pinACCY))*5/3.3;
+  //accZ = (analogRead(pinACCZ))*5/3.3;
+  //accVal = traitementAcc(accX, accY, accZ);
+
+  accVal = (analogRead(pinACC))*5/3.3;
+
+  
+
+  //Changement de la valeur analogique à un angle entre -90 et 90 degrés
+  if(joyX < 512)
+    joyX = (joyX/512)*-90;
+  else
+    joyX = ((joyX-512)/512)*90;
+
+
+  //1 quand par en haut
+  //0 quand dans la zone centrale
+  //-1 quand par en bas
+  if(joyY >= 900)
+    joyY = 1;
+  else if(joyY <= 100)
+    joyY = -1;
+  else
+    joyY = 0;
 
   /*BTN1_val = digitalRead(pinBTN_1);
   BTN2_val = digitalRead(pinBTN_2);
   BTN3_val = digitalRead(pinBTN_3);
   BTN4_val = digitalRead(pinBTN_4);*/
 
-  if(PAST_BTN1_val != digitalRead(pinBTN_1))
+  if(PAST_BTN1_val != (digitalRead(pinBTN_1)+1)%2)
   {
-    BTN1_val = digitalRead(pinBTN_1);
+    BTN1_val = (digitalRead(pinBTN_1)+1)%2;
   }
-  if(PAST_BTN2_val != digitalRead(pinBTN_2))
+  if(PAST_BTN2_val != (digitalRead(pinBTN_2)+1)%2)
   {
-    BTN2_val = digitalRead(pinBTN_2);
+    BTN2_val = (digitalRead(pinBTN_2)+1)%2;
   }
-  if(PAST_BTN3_val != digitalRead(pinBTN_3))
+  if(PAST_BTN3_val != (digitalRead(pinBTN_3)+1)%2)
   {
-    BTN3_val = digitalRead(pinBTN_3);
+    BTN3_val = (digitalRead(pinBTN_3)+1)%2;
   }
-  if(PAST_BTN4_val != digitalRead(pinBTN_4))
+  if(PAST_BTN4_val != (digitalRead(pinBTN_4)+1)%2)
   {
-    BTN4_val = digitalRead(pinBTN_4);
+    BTN4_val = (digitalRead(pinBTN_4)+1)%2;
   }
   /*if(PAST_BTN_TEST != digitalRead(pinBTN_TEST))
   {
     BTN_TEST = digitalRead(pinBTN_TEST);
   }*/
 
-  accVal = (analogRead(pinACC))*5/3.3;
+  
   //Serial.println(potValue);          // debug
   unsigned long time = (millis() - startMillis);
   //showTimeFromMs(time);
@@ -159,14 +196,15 @@ Traitement : Envoi du message
 void sendMsg() {
   StaticJsonDocument<500> doc;
   // Elements du message
-  doc["T"] = millis();
-  doc["X"] = potValue;
+  //doc["T"] = millis();
+  doc["X"] = joyX;
   doc["A"] = accVal;
-  /*doc["1"] = BTN1_val;
+  doc["Y"] = joyY;
+  doc["1"] = BTN1_val;
   doc["2"] = BTN2_val;
   doc["3"] = BTN3_val;
-  doc["4"] = BTN4_val;*/
-  doc["Y"] = joyYVal;
+  doc["4"] = BTN4_val;
+  
   /*if(BTN_TEST!=PAST_BTN_TEST)
   {
     PAST_BTN_TEST=BTN_TEST;
@@ -255,11 +293,20 @@ void readMsg(){
     // mettre la led a la valeur doc["led"]
     digitalWrite(pinLED_RED3,doc["3"].as<bool>());
   }
-  parse_msg = doc["7"];
+  parse_msg = doc["S"];
   if (!parse_msg.isNull()) {
     // mettre la led a la valeur doc["led"]
     //digitalWrite(pinLED_RED3,doc["7seg"].as<bool>());
-    display.showNumberDecEx(doc["7"], 0/*0b01100000*/);
+    display.showNumberDecEx(doc["S"], 0/*0b01100000*/);
   }
   
+}
+
+
+float traitementAcc(float x, float y, float z){
+
+    //TODO : faire les maths pour avoir un angle en degrés entre -90 et 90 à partir de des données de l'accéléromètre
+    return x;
+
+
 }

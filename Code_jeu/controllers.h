@@ -45,7 +45,9 @@ public:
 	static void menuThread(ControllerMenu* controller);
 
 
+
 	SerialPort* arduino;
+	std::string raw_msg;
 private:
 	BestTime leaderboard[5];
 	ModelAuto* carList[5];
@@ -59,10 +61,10 @@ private:
 
 
 	// Structure de donnees JSON pour reception
-	bool bouton1 = 0;
-	bool bouton2 = 0;
-	bool bouton3 = 0;
-	bool bouton4 = 0;
+	int bouton1 = 0;
+	int bouton2 = 0;
+	int bouton3 = 0;
+	int bouton4 = 0;
 	float joyStickX = 0;
 	int joyStickY = 0;
 	float acc_Value = 0;
@@ -110,6 +112,8 @@ public:
 	static void courseThread(Controller_course* controller);
 
 	SerialPort* arduino;
+	std::string raw_msg;
+	
 private:
 	ModelAuto car;
 	ModelCircuit circuit;
@@ -124,10 +128,10 @@ private:
 
 
 	// Structure de donnees JSON pour reception
-	bool bouton1 = 0;
-	bool bouton2 = 0;
-	bool bouton3 = 0;
-	bool bouton4 = 0;
+	int bouton1 = 0;
+	int bouton2 = 0;
+	int bouton3 = 0;
+	int bouton4 = 0;
 	float joyStickX = 0;
 	int joyStickY = 0;
 	float acc_Value = 0;
