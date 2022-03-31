@@ -55,7 +55,7 @@ float accZ = 0;
 #define pinBTN_3 5
 #define pinBTN_4 6 
 
-#define pinX A0
+#define pinX A5
 #define pinY A1
 #define pinACC A2
 
@@ -127,10 +127,7 @@ void loop() {
   
 
   //Changement de la valeur analogique à un angle entre -90 et 90 degrés
-  if(joyX < 512)
-    joyX = (joyX/512)*-90;
-  else
-    joyX = ((joyX-512)/512)*90;
+  joyX = ((joyX-512)/512)*90;
 
 
   //1 quand par en haut

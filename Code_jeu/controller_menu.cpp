@@ -219,8 +219,8 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	//1 = Options
 	//2 = Quit
 
-	int previousBtn1 = 0;
-	int previousBtn2 = 0;
+	int previousBtn3 = 0;
+	int previousBtn4 = 0;
 	int previousY = 0;
 
 
@@ -241,8 +241,8 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 		//TODO Lire JSON Arduino
 
 		previousY = controller->joyStickY;
-		previousBtn1 = controller->bouton1;
-		previousBtn2 = controller->bouton2;
+		previousBtn3 = controller->bouton3;
+		previousBtn4 = controller->bouton4;
 
 		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
 			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
@@ -262,10 +262,10 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 			controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
 			if (controller->j_msg_rcv.contains("Y"))
 				controller->joyStickY = controller->j_msg_rcv["Y"];
-			if (controller->j_msg_rcv.contains("1"))
-				controller->bouton1 = controller->j_msg_rcv["1"];
-			if (controller->j_msg_rcv.contains("2"))
-				controller->bouton2 = controller->j_msg_rcv["2"];
+			if (controller->j_msg_rcv.contains("3"))
+				controller->bouton3 = controller->j_msg_rcv["3"];
+			if (controller->j_msg_rcv.contains("4"))
+				controller->bouton4 = controller->j_msg_rcv["4"];
 		}
 
 		//std::cout << controller->j_msg_rcv << std::endl;
@@ -292,7 +292,7 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 				optionSelected--;
 				controller->gotoXY(0, optionSelected + 14);
 			}
-			else if ((controller->bouton1 == 1 && previousBtn1 == 0) || enter < 0) {
+			else if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter < 0) {
 				controller->optionSelected = optionSelected;
 				break;
 			}

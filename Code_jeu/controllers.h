@@ -119,7 +119,7 @@ private:
 	ModelCircuit circuit;
 	ControllerMenu* menuControleur;
 	int optionSelected;
-	int sorteControle = 2; //0 pour joystick, 1 pour accéléromère, autre pour clavier
+	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 	unsigned long time;
 	int demo[1024][2];
 	Timer timer;
