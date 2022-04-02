@@ -1,14 +1,6 @@
 #include "controllers.h"
 
 
-Controller_course::Controller_course()
-{
-	ModelAuto* car = new ModelAuto();
-	ModelCircuit* circuit = new ModelCircuit();
-	ControllerMenu* menu = new ControllerMenu();
-	Controller_course(car, circuit, menu);
-}
-
 Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, ControllerMenu* pControllerMenu)
 {
 	car = *pCar;
@@ -17,20 +9,11 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	arduino = menuControleur->arduino;
 
 	circuit.generateBorders();
-
-	
-
-	std::ifstream sDemo;
-	sDemo.open("demo.txt");
-	//lire fichier demo et mettre dans le tableau
-	for (int i = 0; i < 170; i++)
-	{
-		sDemo >> demo[i][0] >> demo[i][1];
-	}
 }
 
 Controller_course::~Controller_course()
 {
+	//TODO Destructeur Controller_course
 }
 
 void Controller_course::setAuto(ModelAuto pCar)
@@ -53,6 +36,9 @@ ModelCircuit Controller_course::getCircuit()
 	return circuit;
 }
 
+/*
+* Affiche le circuit et fait la séquence de lumières sur la manette et commence le thread de la course
+*/
 void Controller_course::startRace()
 {
 	Position start =  circuit.getStart();
@@ -66,7 +52,6 @@ void Controller_course::startRace()
 	int sequenceR3[5] = { 0, 0, 0, 1, 1 };
 	int sequenceMoteur[5] = { 0, 0, 0, 0, 1 };
 
-	//TODO Lights sequence on controller
 	for (int i = 0; i < 5; i++) {
 		
 		Sleep(500);
@@ -77,12 +62,12 @@ void Controller_course::startRace()
 		j_msg_send["3"] = sequenceR3[i];
 		j_msg_send["M"] = sequenceMoteur[i];
 
-		if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {    //Envoie au Arduino
+		if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {		//Envoie au Arduino
 			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
 		}
 
 		j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {
+		if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {		//Reçoit du Arduino
 			std::cerr << "Erreur lors de la réception du message. " << std::endl;
 		}
 	}
@@ -91,11 +76,16 @@ void Controller_course::startRace()
 	std::thread course(&Controller_course::courseThread, this);
 	course.join();
 
+	//Affiche le menu en fin de course
 	menuControleur->printMenu();
 
 	//demoConsole();
 }
 
+/*
+* Vérifie que la nouvelle position est valide et change la position
+* Retourne vrai si la déplacement se fait, faux sinon
+*/
 bool Controller_course::move(float pAngle, int pMovement)
 {
 	Position temp = car.move(pAngle, pMovement);
@@ -113,6 +103,10 @@ bool Controller_course::move(float pAngle, int pMovement)
 	return true;
 }
 
+/*
+* Update la console après un déplacement
+* Deprecated une fois qu'on a un GUI
+*/
 void Controller_course::updateScreenConsole()
 {
 	gotoXY(round(car.getPosition().x), round(car.getPosition().y));
@@ -123,11 +117,17 @@ void Controller_course::updateScreenConsole()
 	std::cout << temps / 60000 << ":" << std::setw(2) << std::setfill('0') << (temps / 1000) % 60 << ":" << (temps / 10) % 100;
 }
 
+/*
+* Fait les appels pour update le GUI
+*/
 void Controller_course::updateScreenGUI()
 {
-	//TODO once we have GUI
+	//TODO Faire les calls à l'interface. Se baser sur updateScreenConsole
 }
 
+/*
+* Helper method pour deplacer le curseur sur le command prompt
+*/
 void Controller_course::gotoXY(int x, int y)
 {
 	COORD scrn;
@@ -137,38 +137,32 @@ void Controller_course::gotoXY(int x, int y)
 	SetConsoleCursorPosition(houtput, scrn);
 }
 
-void Controller_course::demoConsole()
-{
-	time = 0;
-	for (int i = 0; i < 170; i++) {
-		time += 100;
-		move(demo[i][0], demo[i][1]);
-
-		gotoXY(50, 50);
-		std::cout << time / 1000 << ":" << (time/10)%100;
-		Sleep(100);
-	}
-	Sleep(5000);
-}
-
+/*
+* Sauvegarde le temps dans le leaderboard
+*/
 void Controller_course::saveLeaderboard()
 {
 	//TODO Save current time, car and circuit in the appropriate leaderboard file
 }
 
+
+/*
+* Thread du menu pause
+*/
 void Controller_course::menuThread(Controller_course* controller)
 {
-	controller->j_msg_send["G"] = 1;      // Création du message à envoyer
+	controller->j_msg_send["G"] = 1;		// Création du message à envoyer
 	controller->j_msg_send["1"] = 1;
 	controller->j_msg_send["2"] = 1;
 	controller->j_msg_send["3"] = 1;
 	controller->j_msg_send["S"] = 0;
 
-	int optionSelected = 1;		//Bouton surligné dans le menu
+	int optionSelected = 1;					//Bouton surligné dans le menu
 	//0 = Resume
 	//1 = Options
 	//2 = Quit
 
+	//Pour contrôle manette
 	int previousBtn3 = 0;
 	int previousBtn4 = 0;
 	int previousY = 0;
@@ -191,7 +185,6 @@ void Controller_course::menuThread(Controller_course* controller)
 	Sleep(100);
 
 	while (1) {
-		//TODO Lire JSON Arduino
 		previousY = controller->joyStickY;
 		previousBtn3 = controller->bouton3;
 		previousBtn4 = controller->bouton4;
@@ -208,9 +201,9 @@ void Controller_course::menuThread(Controller_course* controller)
 
 
 
-		// Impression du message de l'Arduino, si valide
+		
 		if (raw_msg.size() > 0) {
-			controller->j_msg_rcv = json::parse(raw_msg);       // Transfert du message en json
+			controller->j_msg_rcv = json::parse(raw_msg);			// Transfert du message en json
 			if (controller->j_msg_rcv.contains("Y"))
 				controller->joyStickY = controller->j_msg_rcv["Y"];
 			if (controller->j_msg_rcv.contains("3"))
@@ -219,12 +212,14 @@ void Controller_course::menuThread(Controller_course* controller)
 				controller->bouton4 = controller->j_msg_rcv["4"];
 		}
 
+
+		//Pour débogage pour afficher la lecture du JSON
 		//std::cout << controller->j_msg_rcv << std::endl;
+
 
 		//Contôle au clavier seulement
 		previousUp = up;
 		previousDown = down;
-
 		up = GetKeyState(VK_UP);
 		down = GetKeyState(VK_DOWN);
 		enter = GetKeyState(VK_RETURN);
@@ -252,7 +247,9 @@ void Controller_course::menuThread(Controller_course* controller)
 
 
 
-
+/*
+* Thread de la course, lit en permanance la manette pour gérer les déplacement de l'auto
+*/
 void Controller_course::courseThread(Controller_course* controller)
 {
 	controller->j_msg_send["G"] = 0;      // Création du message à envoyer
@@ -272,8 +269,6 @@ void Controller_course::courseThread(Controller_course* controller)
 
 
 	while (1) {
-		//TODO Lecture JSON Arduino et split dans les différentes variables
-
 		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
 			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
 		}
@@ -283,7 +278,7 @@ void Controller_course::courseThread(Controller_course* controller)
 			std::cerr << "Erreur lors de la réception du message. " << std::endl;
 		}
 
-		// Impression du message de l'Arduino, si valide
+		
 
 		if (controller->raw_msg.size() > 0) {
 			controller->j_msg_rcv = json::parse(controller->raw_msg); // Transfert du message en json
@@ -304,11 +299,12 @@ void Controller_course::courseThread(Controller_course* controller)
 		}
 
 
-		std::cout << controller->j_msg_rcv << std::endl;
+		//Pour débogage affiche les valeurs du JSON
+		//std::cout << controller->j_msg_rcv << std::endl;
 
 
 
-		//Contôle au clavier
+		//Contôle au clavier pour débogage, permet seulement d'avancer en ligne droite et contrôle du menu
 		up = GetKeyState(VK_UP);
 		down = GetKeyState(VK_DOWN);
 		esc = GetKeyState(VK_ESCAPE);
@@ -365,16 +361,16 @@ void Controller_course::courseThread(Controller_course* controller)
 				break;
 
 		}
+		if (controller->bouton1 == 1 || controller->bouton2 == 1) {
+			if (controller->sorteControle == 0)
+				dansLimite = controller->move(controller->joyStickX, controller->bouton2 - controller->bouton1);
+			else if (controller->sorteControle == 1)
+				dansLimite = controller->move(controller->acc_Value, controller->bouton2 - controller->bouton1);
+			else
+				dansLimite = controller->move(0, down - up);
+		}
 
-		if (controller->sorteControle == 0)
-			dansLimite = controller->move(controller->joyStickX, controller->bouton2 - controller->bouton1);
-		else if (controller->sorteControle == 1)
-			dansLimite = controller->move(controller->acc_Value, controller->bouton2 - controller->bouton1);
-		else
-			dansLimite = controller->move(0, down - up);
 
-
-		//TODO Envoyer time au Arduino
 		controller->j_msg_send["S"] = controller->timer.get();
 		controller->j_msg_send["G"] = 0;      // Création du message à envoyer
 		
@@ -390,11 +386,6 @@ void Controller_course::courseThread(Controller_course* controller)
 			controller->j_msg_send["2"] = 1;
 			controller->j_msg_send["3"] = 1;
 		}
-		
-
-
-
-
 		
 
 		controller->updateScreenConsole();

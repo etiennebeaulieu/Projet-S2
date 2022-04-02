@@ -86,7 +86,6 @@ private:
 class Controller_course {
 
 public:
-	Controller_course();
 	Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, ControllerMenu* pControllerMenu);
 	~Controller_course();
 
@@ -121,7 +120,6 @@ private:
 	int optionSelected;
 	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 	unsigned long time;
-	int demo[1024][2];
 	Timer timer;
 	
 

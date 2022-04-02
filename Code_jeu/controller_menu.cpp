@@ -38,16 +38,17 @@ ControllerMenu::~ControllerMenu(){
 	delete controllerCourse;
 }
 
+/*
+* Affiche le menu et gère les options séléctionnées
+*/
 void ControllerMenu::printMenu()
 {
-	//int option;
 	std::cout << "Bienvenue sur SparkUS racing" << std::endl;
 	std::cout << "CLASSEMENT\n" << printLeaderboard() << std::endl;
 	std::cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << std::endl;
 	std::cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit]->getName() << std::endl;
 	std::cout << "1. Play\n2. Reglages\n3. Prochaine voiture\n4. Voiture precedente\n5. Prochain circuit\n6. Circuit precedent\n7. Quitter" << std::endl;
-	//std::cout << "Entrez le chiffre de l'option choisie" << std::endl;
-	//std::cin >> option;
+	
 
 
 	
@@ -106,9 +107,12 @@ void ControllerMenu::printMenu()
 	
 }
 
+/*
+* Ouvre la fenêtre des options
+*/
 void ControllerMenu::openSettings()
 {
-	//TODO Changer la page de settings pour fonctionner avec la manette
+	//TODO Changer la page de settings pour fonctionner avec un thread et avec la manette
 	int option;
 	std::cout << "Ceci sont les reglages" << std::endl;
 	std::cout << "Appuyer sur 9 pour retourner au menu" << std::endl;
@@ -124,6 +128,9 @@ void ControllerMenu::openSettings()
 	}
 }
 
+/*
+* Crée l'objet controller_course et commencer la course
+*/
 void ControllerMenu::startGame()
 {
 	system("CLS");
@@ -151,6 +158,9 @@ void ControllerMenu::previousCircuit()
 	currentCircuit = ((currentCircuit - 1) % circuitList.size() + circuitList.size()) % circuitList.size();
 }
 
+/*
+* Lit les différents fichier de leaderboard, car et map et stock les données
+*/
 void ControllerMenu::updateData()
 {
 	std::ifstream sLeaderboard;
@@ -187,6 +197,10 @@ void ControllerMenu::updateData()
 	currentCircuit = 0;
 }
 
+/*
+* Affiche le leaderboard
+* Deprecated une fois qu'on a un GUI
+*/
 std::string ControllerMenu::printLeaderboard()
 {
 	std::string retour;
@@ -197,6 +211,9 @@ std::string ControllerMenu::printLeaderboard()
 	return retour;
 }
 
+/*
+* Helper method pour déplacer le curseur sur le command prompt
+*/
 void ControllerMenu::gotoXY(int x, int y)
 {
 	COORD scrn;
@@ -206,6 +223,9 @@ void ControllerMenu::gotoXY(int x, int y)
 	SetConsoleCursorPosition(houtput, scrn);
 }
 
+/*
+* Thread du menu, lit en permanance la manette et gère la sélection des options
+*/
 void ControllerMenu::menuThread(ControllerMenu* controller)
 {
 	controller->j_msg_send["G"] = 1;      // Création du message à envoyer
@@ -219,6 +239,7 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	//1 = Options
 	//2 = Quit
 
+	//Pour contrôle manette
 	int previousBtn3 = 0;
 	int previousBtn4 = 0;
 	int previousY = 0;
@@ -238,8 +259,6 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	Sleep(100);
 
 	while (1) {
-		//TODO Lire JSON Arduino
-
 		previousY = controller->joyStickY;
 		previousBtn3 = controller->bouton3;
 		previousBtn4 = controller->bouton4;
@@ -255,9 +274,6 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 		
 
 
-		
-
-		// Impression du message de l'Arduino, si valide
 		if (controller->raw_msg.size() > 0) {
 			controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
 			if (controller->j_msg_rcv.contains("Y"))
@@ -268,6 +284,8 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 				controller->bouton4 = controller->j_msg_rcv["4"];
 		}
 
+
+		//Pour débogage, afficher les valeurs du JSON
 		//std::cout << controller->j_msg_rcv << std::endl;
 
 
@@ -275,7 +293,6 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 			//Contôle au clavier
 			previousUp = up;
 			previousDown = down;
-
 			up = GetKeyState(VK_UP);
 			down = GetKeyState(VK_DOWN);
 			enter = GetKeyState(VK_RETURN);

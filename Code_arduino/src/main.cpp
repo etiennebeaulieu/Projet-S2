@@ -32,10 +32,6 @@ int PAST_BTN2_val = 0;
 int PAST_BTN3_val = 0;
 int PAST_BTN4_val = 0;
 
-/*int BTN_TEST = 0;
-int PAST_BTN_TEST = 0;
-#define pinBTN_TEST 2*/
-
 float joyX = 0;
 int joyY = 0;
 float accVal = 0;
@@ -103,7 +99,6 @@ void setup() {
   pinMode(pinY, INPUT);
   pinMode(pinACC, INPUT);
 
-  //pinMode(pinBTN_TEST,INPUT);
 }
 
 /* Boucle principale (infinie) */
@@ -122,6 +117,8 @@ void loop() {
   //accZ = (analogRead(pinACCZ))*5/3.3;
   //accVal = traitementAcc(accX, accY, accZ);
 
+
+  //À retirer une fois que traitement ACC est fait
   accVal = (analogRead(pinACC))*5/3.3;
 
   
@@ -140,11 +137,8 @@ void loop() {
   else
     joyY = 0;
 
-  /*BTN1_val = digitalRead(pinBTN_1);
-  BTN2_val = digitalRead(pinBTN_2);
-  BTN3_val = digitalRead(pinBTN_3);
-  BTN4_val = digitalRead(pinBTN_4);*/
 
+  //+1%2 pour inverser les bouton vu que normaly close
   if(PAST_BTN1_val != (digitalRead(pinBTN_1)+1)%2)
   {
     BTN1_val = (digitalRead(pinBTN_1)+1)%2;
@@ -161,16 +155,12 @@ void loop() {
   {
     BTN4_val = (digitalRead(pinBTN_4)+1)%2;
   }
-  /*if(PAST_BTN_TEST != digitalRead(pinBTN_TEST))
-  {
-    BTN_TEST = digitalRead(pinBTN_TEST);
-  }*/
+  
 
   
-  //Serial.println(potValue);          // debug
+  
   unsigned long time = (millis() - startMillis);
-  //showTimeFromMs(time);
-  //checkRising();
+ 
   delay(1);  // delais de 10 ms
 }
 
@@ -178,11 +168,6 @@ void loop() {
 
 void serialEvent() { shouldRead_ = true; }
 
-
-/*void checkRising()
-{
-
-}*/
 
 /*---------------------------Definition de fonctions ------------------------
 Fonction d'envoi
@@ -192,8 +177,7 @@ Traitement : Envoi du message
 -----------------------------------------------------------------------------*/
 void sendMsg() {
   StaticJsonDocument<500> doc;
-  // Elements du message
-  //doc["T"] = millis();
+  
   doc["X"] = joyX;
   doc["A"] = accVal;
   doc["Y"] = joyY;
@@ -202,12 +186,7 @@ void sendMsg() {
   doc["3"] = BTN3_val;
   doc["4"] = BTN4_val;
   
-  /*if(BTN_TEST!=PAST_BTN_TEST)
-  {
-    PAST_BTN_TEST=BTN_TEST;
-    doc["TEST"] = BTN_TEST;
-    
-  }*/
+ 
   if(BTN1_val!=PAST_BTN1_val)
   {
     PAST_BTN1_val=BTN1_val;
@@ -255,7 +234,7 @@ void readMsg(){
   StaticJsonDocument<500> doc;
   JsonVariant parse_msg;
 
-  // Lecture sur le port Seriel
+  // Lecture sur le port Serial
   DeserializationError error = deserializeJson(doc, Serial);
   shouldRead_ = false;
 
