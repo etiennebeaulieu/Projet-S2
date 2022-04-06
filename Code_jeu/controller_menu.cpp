@@ -204,9 +204,9 @@ void ControllerMenu::updateData()
 std::string ControllerMenu::printLeaderboard()
 {
 	std::string retour;
-	for (BestTime entry : leaderboard)
-	{
-		retour += entry.name + "..............." + entry.time + "\n";
+
+	for (int i = 0; i < leaderboard.getLength(); i++) {
+		retour += leaderboard.getTime(i).name + "..............." + leaderboard.getTime(i).time + "\n";
 	}
 	return retour;
 }

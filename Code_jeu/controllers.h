@@ -8,12 +8,13 @@
 #include "model_circuit.h"
 #include "position.h"
 #include "timer.h"
-#include "best_time.h"
+#include "leaderboard.h"
 #include "serial_communication.h"
 #include "SerialPort.hpp"
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include "course_record.h"
 
 using json = nlohmann::json;
 #define BAUD 115200
@@ -49,7 +50,7 @@ public:
 	SerialPort* arduino;
 	std::string raw_msg;
 private:
-	BestTime leaderboard[5];
+	Leaderboard leaderboard;
 	ModelAuto* carList[5];
 	std::vector<ModelCircuit*> circuitList;
 	int currentCar;
@@ -121,6 +122,10 @@ private:
 	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 	unsigned long time;
 	Timer timer;
+
+	Leaderboard leaderboard;
+	CourseRecord ghostCourseRecord;
+	CourseRecord currentCourseRecord;
 	
 
 

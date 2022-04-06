@@ -140,6 +140,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="leaderboard.cpp" />
     <ClCompile Include="SerialPort.cpp" />
     <ClCompile Include="controller_course.cpp" />
     <ClCompile Include="controller_menu.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="leaderboard.h" />
     <ClInclude Include="SerialPort.hpp" />
     <ClInclude Include="best_time.h" />
     <ClInclude Include="controllers.h" />

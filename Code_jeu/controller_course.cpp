@@ -8,6 +8,10 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	menuControleur = pControllerMenu;
 	arduino = menuControleur->arduino;
 
+	leaderboard.loadFromMap(pCircuit->getName());
+	ghostCourseRecord.loadFromMap(pCircuit->getName());
+	currentCourseRecord.setMapName(pCircuit->getName());
+
 	circuit.generateBorders();
 }
 
@@ -72,9 +76,25 @@ void Controller_course::startRace()
 		}
 	}
 
-	timer.start();
+	timer.resetAndStart();
+
+	//Course record
+	currentCourseRecord.clear();
+	currentCourseRecord.recordTimeAndPosition(start, timer.get());
+
 	std::thread course(&Controller_course::courseThread, this);
 	course.join();
+
+	timer.stop();
+
+	saveLeaderboard();
+
+	//Course record en fin de course
+	if (leaderboard.isBestTime(timer.get())) {
+		//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
+		currentCourseRecord.save();
+	}
+
 
 	//Affiche le menu en fin de course
 	menuControleur->printMenu();
@@ -94,6 +114,10 @@ bool Controller_course::move(float pAngle, int pMovement)
 			gotoXY(round(car.getPosition().x), round(car.getPosition().y));
 			std::cout << " ";
 			car.setPostion(temp);
+
+			//Course record
+			currentCourseRecord.recordTimeAndPosition(temp, timer.get());
+
 		}
 		else
 			return false;
@@ -140,9 +164,12 @@ void Controller_course::gotoXY(int x, int y)
 /*
 * Sauvegarde le temps dans le leaderboard
 */
-void Controller_course::saveLeaderboard()
-{
-	//TODO Save current time, car and circuit in the appropriate leaderboard file
+void Controller_course::saveLeaderboard(){
+	BestTime bt;
+	bt.name = "Player1"; //TODO remplacer ça par le nom du player
+	bt.time = timer.get();
+	leaderboard.newTime(bt);
+	leaderboard.save();
 }
 
 

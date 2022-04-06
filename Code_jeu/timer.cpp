@@ -23,7 +23,8 @@ void Timer::start() {
 }
 
 void Timer::stop() {
-	stopTime = current_time_ms;
+	if (isStarted())
+		stopTime = current_time_ms;
 }
 
 void Timer::reset() {
