@@ -13,9 +13,18 @@ ControllerMenu::ControllerMenu()
 		exit(1);
 	}
 
+	if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {				//Lecture pour purger
+		std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+	}
+	j_msg_rcv.clear();
+	if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {
+		std::cerr << "Erreur lors de la réception du message. " << std::endl;
+	}
+
 	
 
 	system("CLS");
+
 
 	updateData();
 
@@ -169,10 +178,8 @@ void ControllerMenu::updateData()
 	std::ifstream sCar;
 	sCar.open("carList.car");
 	//lire fichier leaderboard et mettre dans le tableau
-	for (int i = 0; i < 5; i++)
-	{
-		sLeaderboard >> leaderboard[i];
-	}
+	sLeaderboard >> leaderboard;
+	
 
 	for (int i = 0; i < 5; i++) {
 		carList[i] = new ModelAuto();
@@ -206,7 +213,7 @@ std::string ControllerMenu::printLeaderboard()
 	std::string retour;
 
 	for (int i = 0; i < leaderboard.getLength(); i++) {
-		retour += leaderboard.getTime(i).name + "..............." + leaderboard.getTime(i).time + "\n";
+		retour += leaderboard.getTime(i).name + "..............." + to_string(leaderboard.getTime(i).time) + "\n";
 	}
 	return retour;
 }
