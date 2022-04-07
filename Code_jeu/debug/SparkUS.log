@@ -1,2 +1,10 @@
-﻿  Generate moc_predefs.h
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(238,5): error MSB8066: Custom build for 'debug\moc_predefs.h.cbt' exited with code 2.
+﻿  main.cpp
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x970 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x976 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_auto.h(16,32): warning C4305: 'initialisation' : troncation de 'double' à 'float'
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x22d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x400 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x4b9 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\course_record.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x32c et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\main.cpp(14,18): warning C4189: 'controllerMenu' : variable locale initialisée mais non référencée
+  SparkUS.vcxproj -> C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\debug\SparkUS.exe
