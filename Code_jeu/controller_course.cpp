@@ -85,15 +85,9 @@ void Controller_course::startRace()
 	std::thread course(&Controller_course::courseThread, this);
 	course.join();
 
-	timer.stop();
 
-	saveLeaderboard();
 
-	//Course record en fin de course
-	if (leaderboard.isBestTime(timer.get())) {
-		//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
-		currentCourseRecord.save();
-	}
+	
 
 
 	//Affiche le menu en fin de course
@@ -109,7 +103,7 @@ void Controller_course::startRace()
 bool Controller_course::move(float pAngle, int pMovement)
 {
 	Position temp = car.move(pAngle, pMovement);
-	if (temp.x <= circuit.getWidth() && temp.y <= circuit.getHeight()) {
+	if (temp.y <= circuit.getWidth() && temp.x <= circuit.getHeight()) {
 		if (circuit.positionIsActive(temp)) {
 			gotoXY(round(car.getPosition().x), round(car.getPosition().y));
 			std::cout << " ";
@@ -135,6 +129,14 @@ void Controller_course::updateScreenConsole()
 {
 	gotoXY(round(car.getPosition().x), round(car.getPosition().y));
 	std::cout << "*";
+
+
+	gotoXY(round(ghostPos.x), round(ghostPos.y));
+	std::cout << " ";
+	Sleep(10);
+	ghostPos = ghostCourseRecord.getPositionAtTime(timer.get());
+	gotoXY(round(ghostPos.x), round(ghostPos.y));
+	std::cout << "#";
 
 	gotoXY(50, 50);
 	unsigned long temps = timer.get();
@@ -170,6 +172,12 @@ void Controller_course::saveLeaderboard(){
 	bt.time = timer.get();
 	leaderboard.newTime(bt);
 	leaderboard.save();
+
+	//Course record en fin de course
+	if (leaderboard.isBestTime(timer.get())) {
+		//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
+		currentCourseRecord.save();
+	}
 }
 
 
@@ -327,7 +335,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 
 		//Pour débogage affiche les valeurs du JSON
-		//std::cout << controller->j_msg_rcv << std::endl;
+		std::cout << controller->j_msg_rcv << std::endl;
 
 
 
@@ -356,7 +364,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 			std::thread menu(&Controller_course::menuThread, controller);
 			menu.join();
-
+			BestTime bt;
 
 
 			switch (controller->optionSelected)
@@ -375,7 +383,20 @@ void Controller_course::courseThread(Controller_course* controller)
 				break;
 			case 2:
 				controller->optionSelected = 0;
-				controller->saveLeaderboard();
+				//controller->saveLeaderboard();
+
+				
+				bt.name = "Player1"; //TODO remplacer ça par le nom du player
+				bt.time = controller->timer.get();
+				controller->leaderboard.newTime(bt);
+				controller->leaderboard.save();
+
+				//Course record en fin de course
+				if (controller->leaderboard.isBestTime(controller->timer.get())) {
+					//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
+					controller->currentCourseRecord.save();
+				}
+
 				controller->timer.reset();
 				system("CLS");
 				fin = true;
@@ -414,7 +435,7 @@ void Controller_course::courseThread(Controller_course* controller)
 			controller->j_msg_send["3"] = 1;
 		}
 		
-
+		
 		controller->updateScreenConsole();
 
 		Sleep(30);

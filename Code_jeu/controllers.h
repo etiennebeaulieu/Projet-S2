@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <thread>
 #include <iostream>
+#include <sstream>
 #include <future>
 #include "model_auto.h"
 #include "model_circuit.h"
@@ -121,6 +122,7 @@ private:
 	int optionSelected;
 	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 	unsigned long time;
+	Position ghostPos;
 	Timer timer;
 
 	Leaderboard leaderboard;

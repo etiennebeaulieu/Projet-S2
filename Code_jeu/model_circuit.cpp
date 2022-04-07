@@ -5,11 +5,6 @@
 ModelCircuit::ModelCircuit(){
     startingPoint = Position{ 0, 0, 0 };
     name = "Circuit par défaut";
-
-    std::ifstream is;
-    is.open(".\\maps\\map1.gamemap");
-
-    is >> *this;
 }
 
 ModelCircuit::ModelCircuit(std::string name) : ModelCircuit() {

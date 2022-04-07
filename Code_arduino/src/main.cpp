@@ -51,17 +51,15 @@ float accZ = 0;
 #define pinBTN_3 5
 #define pinBTN_4 6 
 
-#define pinX A5
+#define pinX A0
 #define pinY A1
-#define pinACC A2
 
-#define accelerometerMinAxisOutput 0
-#define accelerometerMaxAxisOutput 1023
+#define accelerometerMinAxisOutput 400
+#define accelerometerMaxAxisOutput 600
 
-//#define pinACCX
-//#define pinACCY
-//#define pinACCZ
-//TODO : Ajouter les pin ACCX, ACCY et ACCZ
+#define pinACCX A5
+#define pinACCY A6
+#define pinACCZ A7
 
 unsigned long startMillis;
 
@@ -100,7 +98,9 @@ void setup() {
   pinMode(pinBTN_4, INPUT);
   pinMode(pinX, INPUT);
   pinMode(pinY, INPUT);
-  pinMode(pinACC, INPUT);
+  pinMode(pinACCX, INPUT);
+  pinMode(pinACCY, INPUT);
+  pinMode(pinACCZ, INPUT);
 
 }
 
@@ -115,14 +115,11 @@ void loop() {
   joyX = analogRead(pinX);
   joyY = analogRead(pinY);
 
-  //accX = (analogRead(pinACCX))*5/3.3;
-  //accY = (analogRead(pinACCY))*5/3.3;
-  //accZ = (analogRead(pinACCZ))*5/3.3;
-  //accVal = traitementAcc(accX, accY, accZ);
+  accX = (analogRead(pinACCX))*5/3.3;
+  accY = (analogRead(pinACCY))*5/3.3;
+  accZ = (analogRead(pinACCZ))*5/3.3;
+  accVal = traitementACC(accX, accY, accZ);
 
-
-  //À retirer une fois que traitement ACC est fait
-  accVal = (analogRead(pinACC))*5/3.3;
 
   
 
@@ -184,10 +181,10 @@ void sendMsg() {
   doc["X"] = joyX;
   doc["A"] = accVal;
   doc["Y"] = joyY;
-  doc["1"] = BTN1_val;
-  doc["2"] = BTN2_val;
-  doc["3"] = BTN3_val;
-  doc["4"] = BTN4_val;
+  //doc["1"] = BTN1_val;
+  //doc["2"] = BTN2_val;
+  //doc["3"] = BTN3_val;
+  //doc["4"] = BTN4_val;
   
  
   if(BTN1_val!=PAST_BTN1_val)
@@ -282,25 +279,28 @@ void readMsg(){
 }
 
 
-float traitementAcc(float x, float y, float z){
+float traitementACC(float x, float y, float z){
   //Documentation: https://www.digikey.com/en/articles/using-an-accelerometer-for-inclination-sensing
 
   //Les valeurs -3000 à 3000 ne sont PAS arbitraire. Le sensor retourne une valeur entre -3G et 3G. Donc on se le map pour nous donner une valeur entre -3000 mG et 3000 mG. G est la constante de gravité.
-  long x_mG = map(x, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, -3000, 3000);
-  long y_mG = map(y, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, -3000, 3000);
-  long z_mG = map(z, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, -3000, 3000);
+  long x_mG = map(x, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, 1000, -1000);
+  long y_mG = map(y, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, 1000, -1000);
+  long z_mG = map(z, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, -1000, 1000);
 
   float x_G = x_mG / 1000.0;
   float y_G = y_mG / 1000.0;
   float z_G = z_mG / 1000.0;
 
-  double result = abs((radians(atan2(abs(z_G), sqrt(pow(x_G, 2) + pow(y_G, 2))))*180/PI)-90);
+  double result = abs((degrees(atan2(abs(z_G), sqrt(pow(x_G, 2) + pow(y_G, 2)))))-90);
 
-  if (x_mG > 0) {
+  
+  
+  if (x_mG < 0) {
+    //Serial.println((String)x_G + " " + y_G + " " + z_G + " " + result*-1);
     return result * -1;
   }
+  //Serial.println((String)x_G + " " + y_G + " " + z_G + " " + result);
   
-
   return result;
 
 

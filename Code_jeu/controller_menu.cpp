@@ -172,13 +172,9 @@ void ControllerMenu::previousCircuit()
 */
 void ControllerMenu::updateData()
 {
-	std::ifstream sLeaderboard;
-	sLeaderboard.open("leaderboard.lb");
-
 	std::ifstream sCar;
 	sCar.open("carList.car");
-	//lire fichier leaderboard et mettre dans le tableau
-	sLeaderboard >> leaderboard;
+	
 	
 
 	for (int i = 0; i < 5; i++) {
@@ -209,11 +205,19 @@ void ControllerMenu::updateData()
 */
 std::string ControllerMenu::printLeaderboard()
 {
+	Leaderboard leaderboard(circuitList[currentCircuit]->getName());
 	std::string retour;
+	unsigned long temps = 0;
+
+
 
 	for (int i = 0; i < leaderboard.getLength(); i++) {
-		retour += leaderboard.getTime(i).name + "..............." + to_string(leaderboard.getTime(i).time) + "\n";
+		temps = leaderboard.getTime(i).time;
+		std::stringstream buffer;
+		buffer << temps / 60000 << ":" << std::setw(2) << std::setfill('0') << (temps / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (temps / 10) % 100;
+		retour += leaderboard.getTime(i).name + "..............." + buffer.str() + "\n";
 	}
+
 	return retour;
 }
 

@@ -19,7 +19,7 @@ std::istream& operator>>(std::istream& i, CourseRecord& courseRecord) {
 std::ostream& operator<<(std::ostream& o, const CourseRecord& courseRecord) {
 	for (int i = 0; i < courseRecord.size(); i++) {
 		const CourseRecordEntry* cre = &courseRecord.at(i);
-		o << cre->time << " " << cre->position.x << " " << cre->position.y << " " << cre->position.angle;
+		o << cre->time << " " << cre->position.x << " " << cre->position.y << " " << cre->position.angle << std::endl;
 	}
 	return o;
 }
