@@ -192,10 +192,9 @@ void ControllerMenu::updateData()
     std::string ext(".gamemap");
     for (auto &p : fs::recursive_directory_iterator(path)) {
         if (p.path().extension() == ext){
-			circuitList.push_back(new ModelCircuit(p.path().filename().string()));
+			circuitList.push_back(new ModelCircuit(p.path().parent_path().filename().string()));
 			std::ifstream sCircuit;
 			sCircuit.open(p.path().string());
-			circuitList[circuitList.size() - 1] = new ModelCircuit();
 			sCircuit >> *circuitList[circuitList.size() - 1];
 		}
     }
