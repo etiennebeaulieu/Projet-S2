@@ -55,6 +55,9 @@ float accZ = 0;
 #define pinY A1
 #define pinACC A2
 
+#define accelerometerMinAxisOutput 0
+#define accelerometerMaxAxisOutput 1023
+
 //#define pinACCX
 //#define pinACCY
 //#define pinACCZ
@@ -280,9 +283,25 @@ void readMsg(){
 
 
 float traitementAcc(float x, float y, float z){
+  //Documentation: https://www.digikey.com/en/articles/using-an-accelerometer-for-inclination-sensing
 
-    //TODO : faire les maths pour avoir un angle en degrés entre -90 et 90 à partir de des données de l'accéléromètre
-    return x;
+  //Les valeurs -3000 à 3000 ne sont PAS arbitraire. Le sensor retourne une valeur entre -3G et 3G. Donc on se le map pour nous donner une valeur entre -3000 mG et 3000 mG. G est la constante de gravité.
+  long x_mG = map(x, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, -3000, 3000);
+  long y_mG = map(y, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, -3000, 3000);
+  long z_mG = map(z, accelerometerMinAxisOutput, accelerometerMaxAxisOutput, -3000, 3000);
+
+  float x_G = x_mG / 1000.0;
+  float y_G = y_mG / 1000.0;
+  float z_G = z_mG / 1000.0;
+
+  double result = abs((radians(atan2(abs(z_G), sqrt(pow(x_G, 2) + pow(y_G, 2))))*180/PI)-90);
+
+  if (x_mG > 0) {
+    return result * -1;
+  }
+  
+
+  return result;
 
 
 }
