@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <future>
+#include <qapplication.h>
 #include "model_auto.h"
 #include "model_circuit.h"
 #include "position.h"
@@ -15,7 +16,11 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include <qthread.h>
+#include <qmutex.h>
+#include <qobject.h>
 #include "course_record.h"
+#include "GUI/mainMenu.h"
 
 using json = nlohmann::json;
 #define BAUD 115200
@@ -30,6 +35,8 @@ class ControllerMenu {
 public:
 	ControllerMenu();
 	~ControllerMenu();
+
+	void startApp(int argc, char** argv);
 
 	void printMenu();
 
@@ -50,6 +57,9 @@ public:
 
 	SerialPort* arduino;
 	std::string raw_msg;
+	QApplication* app;
+	MainMenu* menuWindow;
+	QMutex* mutex;
 private:
 	Leaderboard leaderboard;
 	ModelAuto* carList[5];

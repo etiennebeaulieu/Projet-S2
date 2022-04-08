@@ -7,14 +7,15 @@
 #include <qgridlayout.h>
 #include <qmainwindow.h>
 
+
 class MainMenu : public QWidget
 {
 	Q_OBJECT
 
 public:
 	MainMenu(QWidget* parent = nullptr);
+	QPushButton*  buttons[6];
 
-private:
 	QGridLayout* layout;
 
 	QPushButton* playBtn;
@@ -32,6 +33,7 @@ private:
 	QLabel* carNameLabel;
 	QLabel* carLabel;
 
+	void setColor(int indice, const char* color);
 };
 
 
