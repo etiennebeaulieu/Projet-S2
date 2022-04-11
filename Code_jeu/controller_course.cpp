@@ -170,14 +170,10 @@ void Controller_course::updateScreenConsole()
 */
 void Controller_course::updateScreenGUI()
 {
-<<<<<<< Updated upstream
-	//TODO Faire les calls ï¿½ l'interface. Se baser sur updateScreenConsole
-=======
 	//TODO Faire les calls à l'interface. Se baser sur updateScreenConsole
-	QMetaObject::invokeMethod(menuControleur->mainWindow, "moveCar", Q_ARG(Position, car.getPosition()));
-	QMetaObject::invokeMethod(menuControleur->mainWindow, "moveGhost", Q_ARG(Position, ghostPos));
-	QMetaObject::invokeMethod(menuControleur->mainWindow, "moveGhost", Q_ARG(unsigned long, timer.get(), unsigned long, leaderboard.getTime(0), unsigned long, lastTime));
->>>>>>> Stashed changes
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveCar", Q_ARG(Position, car.getPosition()));
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(Position, ghostPos));
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "updateTimer", Q_ARG(unsigned long, timer.get(), unsigned long, leaderboard.getTime(0), unsigned long, lastTime));
 }
 
 /*
