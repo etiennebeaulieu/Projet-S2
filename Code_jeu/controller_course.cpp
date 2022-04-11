@@ -457,7 +457,7 @@ void Controller_course::courseThread(Controller_course* controller)
 			}
 
 			controller->timer.reset();
-			break;
+			
 		}
 
 
