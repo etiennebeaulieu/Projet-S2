@@ -1,18 +1,20 @@
 #include "controllers.h"
-#include "GUI/mainMenu.h"
-#include <qapplication.h>
+#include <qthread.h>
 
-int main(int argc, char** argv) {
 
-	//QApplication app(argc, argv);
-	//QWidget* window = app.activeWindow();
-	//window = new MainMenu();
-	
-	
-	
-
+int main(int argc, char** argv) {	
 	ControllerMenu* controllerMenu = new ControllerMenu();
-	//window->show();
-	//return app.exec();
+
+	controllerMenu->startApp(argc, argv);
+
+	//std::thread mainThread(&ControllerMenu::startApp, argc, argv);
+
+	//QThread* thread = QThread::create(&ControllerMenu::startApp, argc, argv);
+	//thread->start();
+	
+	
 	return 0;
+	
 }
+
+

@@ -4,8 +4,8 @@
 #include <string>
 #include <iostream>
 struct BestTime {
-	std::string name;
-	unsigned long time;
+	std::string name = "Default";
+	unsigned long time = 0;
 
 	friend std::istream& operator>>(std::istream& is, BestTime& bestTime) {
 		std::string pName;

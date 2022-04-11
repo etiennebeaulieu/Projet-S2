@@ -41,7 +41,7 @@ ModelCircuit Controller_course::getCircuit()
 }
 
 /*
-* Affiche le circuit et fait la séquence de lumières sur la manette et commence le thread de la course
+* Affiche le circuit et fait la sï¿½quence de lumiï¿½res sur la manette et commence le thread de la course
 */
 void Controller_course::startRace()
 {
@@ -60,7 +60,7 @@ void Controller_course::startRace()
 		
 		Sleep(500);
 		
-		j_msg_send["G"] = sequenceGreen[i];      // Création du message à envoyer
+		j_msg_send["G"] = sequenceGreen[i];      // Crï¿½ation du message ï¿½ envoyer
 		j_msg_send["1"] = sequenceR1[i];
 		j_msg_send["2"] = sequenceR2[i];
 		j_msg_send["3"] = sequenceR3[i];
@@ -71,8 +71,8 @@ void Controller_course::startRace()
 		}
 
 		j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {		//Reçoit du Arduino
-			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+		if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {		//Reï¿½oit du Arduino
+			std::cerr << "Erreur lors de la rï¿½ception du message. " << std::endl;
 		}
 	}
 
@@ -85,15 +85,9 @@ void Controller_course::startRace()
 	std::thread course(&Controller_course::courseThread, this);
 	course.join();
 
-	timer.stop();
 
-	saveLeaderboard();
 
-	//Course record en fin de course
-	if (leaderboard.isBestTime(timer.get())) {
-		//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
-		currentCourseRecord.save();
-	}
+	
 
 
 	//Affiche le menu en fin de course
@@ -103,13 +97,13 @@ void Controller_course::startRace()
 }
 
 /*
-* Vérifie que la nouvelle position est valide et change la position
-* Retourne vrai si la déplacement se fait, faux sinon
+* Vï¿½rifie que la nouvelle position est valide et change la position
+* Retourne vrai si la dï¿½placement se fait, faux sinon
 */
 bool Controller_course::move(float pAngle, int pMovement)
 {
 	Position temp = car.move(pAngle, pMovement);
-	if (temp.x <= circuit.getWidth() && temp.y <= circuit.getHeight()) {
+	if (temp.y <= circuit.getWidth() && temp.x <= circuit.getHeight()) {
 		if (circuit.positionIsActive(temp)) {
 			gotoXY(round(car.getPosition().x), round(car.getPosition().y));
 			std::cout << " ";
@@ -128,13 +122,21 @@ bool Controller_course::move(float pAngle, int pMovement)
 }
 
 /*
-* Update la console après un déplacement
+* Update la console aprï¿½s un dï¿½placement
 * Deprecated une fois qu'on a un GUI
 */
 void Controller_course::updateScreenConsole()
 {
 	gotoXY(round(car.getPosition().x), round(car.getPosition().y));
 	std::cout << "*";
+
+
+	gotoXY(round(ghostPos.x), round(ghostPos.y));
+	std::cout << " ";
+	Sleep(10);
+	ghostPos = ghostCourseRecord.getPositionAtTime(timer.get());
+	gotoXY(round(ghostPos.x), round(ghostPos.y));
+	std::cout << "#";
 
 	gotoXY(50, 50);
 	unsigned long temps = timer.get();
@@ -146,7 +148,7 @@ void Controller_course::updateScreenConsole()
 */
 void Controller_course::updateScreenGUI()
 {
-	//TODO Faire les calls à l'interface. Se baser sur updateScreenConsole
+	//TODO Faire les calls ï¿½ l'interface. Se baser sur updateScreenConsole
 }
 
 /*
@@ -166,18 +168,23 @@ void Controller_course::gotoXY(int x, int y)
 */
 void Controller_course::saveLeaderboard(){
 	BestTime bt;
-	bt.name = "Player1"; //TODO remplacer ça par le nom du player
+	bt.name = "Player1"; //TODO remplacer ï¿½a par le nom du player
 	bt.time = timer.get();
 	leaderboard.newTime(bt);
 	leaderboard.save();
+
+	//Course record en fin de course
+	if (leaderboard.isBestTime(timer.get())) {
+		//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
+		currentCourseRecord.save();
+	}
 }
 
 /**
 * Termine la course
 */
 void Controller_course::endRace() {
-	saveLeaderboard();
-	timer.reset();
+	
 }
 
 
@@ -186,24 +193,24 @@ void Controller_course::endRace() {
 */
 void Controller_course::menuThread(Controller_course* controller)
 {
-	controller->j_msg_send["G"] = 1;		// Création du message à envoyer
+	controller->j_msg_send["G"] = 1;		// Crï¿½ation du message ï¿½ envoyer
 	controller->j_msg_send["1"] = 1;
 	controller->j_msg_send["2"] = 1;
 	controller->j_msg_send["3"] = 1;
 	controller->j_msg_send["S"] = 0;
 
-	int optionSelected = 1;					//Bouton surligné dans le menu
+	int optionSelected = 1;					//Bouton surlignï¿½ dans le menu
 	//0 = Resume
 	//1 = Options
 	//2 = Quit
 
-	//Pour contrôle manette
+	//Pour contrï¿½le manette
 	int previousBtn3 = 0;
 	int previousBtn4 = 0;
 	int previousY = 0;
 	std::string raw_msg;
 
-	//Pour contrôle clavier seulement
+	//Pour contrï¿½le clavier seulement
 	SHORT up = 0;
 	SHORT down = 0;
 	SHORT previousUp = 0;
@@ -231,7 +238,7 @@ void Controller_course::menuThread(Controller_course* controller)
 
 		controller->j_msg_rcv.clear();
 		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
-			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+			std::cerr << "Erreur lors de la rï¿½ception du message. " << std::endl;
 		}
 
 
@@ -248,11 +255,11 @@ void Controller_course::menuThread(Controller_course* controller)
 		}
 
 
-		//Pour débogage pour afficher la lecture du JSON
+		//Pour dï¿½bogage pour afficher la lecture du JSON
 		//std::cout << controller->j_msg_rcv << std::endl;
 
 
-		//Contôle au clavier seulement
+		//Contï¿½le au clavier seulement
 		previousUp = up;
 		previousDown = down;
 		up = GetKeyState(VK_UP);
@@ -283,11 +290,11 @@ void Controller_course::menuThread(Controller_course* controller)
 
 
 /*
-* Thread de la course, lit en permanance la manette pour gérer les déplacement de l'auto
+* Thread de la course, lit en permanance la manette pour gï¿½rer les dï¿½placement de l'auto
 */
 void Controller_course::courseThread(Controller_course* controller)
 {
-	controller->j_msg_send["G"] = 0;      // Création du message à envoyer
+	controller->j_msg_send["G"] = 0;      // Crï¿½ation du message ï¿½ envoyer
 	controller->j_msg_send["1"] = 0;
 	controller->j_msg_send["2"] = 0;
 	controller->j_msg_send["3"] = 0;
@@ -297,7 +304,7 @@ void Controller_course::courseThread(Controller_course* controller)
 	bool dansLimite = true;
 
 
-	//Pour contrôle clavier seulement
+	//Pour contrï¿½le clavier seulement
 	SHORT up = 0;
 	SHORT down = 0;
 	SHORT esc = 0;
@@ -310,7 +317,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 		controller->j_msg_rcv.clear();
 		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
-			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+			std::cerr << "Erreur lors de la rï¿½ception du message. " << std::endl;
 		}
 		
 
@@ -333,12 +340,12 @@ void Controller_course::courseThread(Controller_course* controller)
 		}
 
 
-		//Pour débogage affiche les valeurs du JSON
-		//std::cout << controller->j_msg_rcv << std::endl;
+		//Pour dï¿½bogage affiche les valeurs du JSON
+		std::cout << controller->j_msg_rcv << std::endl;
 
 
 
-		//Contôle au clavier pour débogage, permet seulement d'avancer en ligne droite et contrôle du menu
+		//Contï¿½le au clavier pour dï¿½bogage, permet seulement d'avancer en ligne droite et contrï¿½le du menu
 		up = GetKeyState(VK_UP);
 		down = GetKeyState(VK_DOWN);
 		esc = GetKeyState(VK_ESCAPE);
@@ -363,7 +370,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 			std::thread menu(&Controller_course::menuThread, controller);
 			menu.join();
-
+			BestTime bt;
 
 
 			switch (controller->optionSelected)
@@ -382,7 +389,21 @@ void Controller_course::courseThread(Controller_course* controller)
 				break;
 			case 2:
 				controller->optionSelected = 0;
-				controller->endRace();
+				//controller->saveLeaderboard();
+
+				
+				bt.name = "Player1"; //TODO remplacer ï¿½a par le nom du player
+				bt.time = controller->timer.get();
+				controller->leaderboard.newTime(bt);
+				controller->leaderboard.save();
+
+				//Course record en fin de course
+				if (controller->leaderboard.isBestTime(controller->timer.get())) {
+					//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
+					controller->currentCourseRecord.save();
+				}
+
+				controller->timer.reset();
 				system("CLS");
 				fin = true;
 				break;
@@ -405,7 +426,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 
 		controller->j_msg_send["S"] = controller->timer.get();
-		controller->j_msg_send["G"] = 0;      // Création du message à envoyer
+		controller->j_msg_send["G"] = 0;      // Crï¿½ation du message ï¿½ envoyer
 		
 		if (dansLimite) {
 			controller->j_msg_send["M"] = 0;
@@ -421,9 +442,20 @@ void Controller_course::courseThread(Controller_course* controller)
 		}
 		
 
-		//Regarde si on  est rendu à la ligne d'arrivée et que ça fait plus que x secondes qu'on race
+		//Regarde si on  est rendu ï¿½ la ligne d'arrivï¿½e et que ï¿½a fait plus que x secondes qu'on race
 		if (controller->circuit.positionIsOnFinishLine(controller->car.getPosition()) && (controller->timer.get() >= 5000)) {
-			controller->endRace();
+			bt.name = "Player1"; //TODO remplacer ï¿½a par le nom du player
+			bt.time = controller->timer.get();
+			controller->leaderboard.newTime(bt);
+			controller->leaderboard.save();
+
+			//Course record en fin de course
+			if (controller->leaderboard.isBestTime(controller->timer.get())) {
+				//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
+				controller->currentCourseRecord.save();
+			}
+
+			controller->timer.reset();
 			break;
 		}
 

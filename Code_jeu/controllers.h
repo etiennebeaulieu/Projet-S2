@@ -3,7 +3,9 @@
 #include <Windows.h>
 #include <thread>
 #include <iostream>
+#include <sstream>
 #include <future>
+#include <qapplication.h>
 #include "model_auto.h"
 #include "model_circuit.h"
 #include "position.h"
@@ -14,7 +16,11 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include <qthread.h>
+#include <qmutex.h>
+#include <qobject.h>
 #include "course_record.h"
+#include "GUI/mainMenu.h"
 
 using json = nlohmann::json;
 #define BAUD 115200
@@ -29,6 +35,8 @@ class ControllerMenu {
 public:
 	ControllerMenu();
 	~ControllerMenu();
+
+	void startApp(int argc, char** argv);
 
 	void printMenu();
 
@@ -49,6 +57,9 @@ public:
 
 	SerialPort* arduino;
 	std::string raw_msg;
+	QApplication* app;
+	MainMenu* menuWindow;
+	QMutex* mutex;
 private:
 	Leaderboard leaderboard;
 	ModelAuto* carList[5];
@@ -122,6 +133,7 @@ private:
 	int optionSelected;
 	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 	unsigned long time;
+	Position ghostPos;
 	Timer timer;
 
 	Leaderboard leaderboard;

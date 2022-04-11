@@ -21,15 +21,10 @@ ControllerMenu::ControllerMenu()
 		std::cerr << "Erreur lors de la réception du message. " << std::endl;
 	}
 
-	
+	mutex = new QMutex();
 
 	system("CLS");
-
-
-	updateData();
-
-	
-	printMenu();
+	optionSelected = 1;
 }
 
 /**
@@ -47,19 +42,58 @@ ControllerMenu::~ControllerMenu(){
 	delete controllerCourse;
 }
 
+void ControllerMenu::startApp(int argc, char** argv)
+{
+	updateData();
+	app = new QApplication(argc, argv);
+	menuWindow = (MainMenu*)app->activeWindow();
+	menuWindow = new MainMenu();
+	
+	//menuWindow->playBtn->setStyleSheet("background-color: red");
+	
+	QPalette p = QPalette();
+	p.setBrush(QPalette::Button, Qt::red);
+	for (QPushButton* btn : menuWindow->buttons) {
+		btn->setPalette(p);
+		btn->setAutoFillBackground(true);
+	}
+	
+	QThread* thread = QThread::create([this]() {printMenu(); });
+	thread->start();
+
+	menuWindow->show();
+	app->exec();
+}
+
 /*
 * Affiche le menu et gère les options séléctionnées
 */
 void ControllerMenu::printMenu()
 {
-	std::cout << "Bienvenue sur SparkUS racing" << std::endl;
-	std::cout << "CLASSEMENT\n" << printLeaderboard() << std::endl;
-	std::cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << std::endl;
-	std::cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit]->getName() << std::endl;
-	std::cout << "1. Play\n2. Reglages\n3. Prochaine voiture\n4. Voiture precedente\n5. Prochain circuit\n6. Circuit precedent\n7. Quitter" << std::endl;
+	//std::cout << "Bienvenue sur SparkUS racing" << std::endl;
+	//std::cout << "CLASSEMENT\n" << printLeaderboard() << std::endl;
+	//std::cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << std::endl;
+	//std::cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit]->getName() << std::endl;
+	//std::cout << "1. Play\n2. Reglages\n3. Prochaine voiture\n4. Voiture precedente\n5. Prochain circuit\n6. Circuit precedent\n7. Quitter" << std::endl;
 	
+	mutex->lock();
 
+	menuWindow->leaderboardLabel->setText(QString::fromStdString(printLeaderboard()));
+	menuWindow->carNameLabel->setText(QString::fromStdString(carList[currentCar]->getName()));
+	
+	std::stringstream buffer;
+	buffer << "Vitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling();
+	menuWindow->carStatsLabel->setText(QString::fromStdString(buffer.str()));
+	menuWindow->circuitNameLabel->setText(QString::fromStdString(circuitList[currentCircuit]->getName()));
+	QPixmap circuitImage = QPixmap(QString::fromStdString((string)"image/" + circuitList[currentCircuit]->getName() + ".png")).scaled(300, 300);
+	menuWindow->circuitLabel->setPixmap(circuitImage);
+	
+	QPixmap carImage = QPixmap(QString::fromStdString((string)"image/" + carList[currentCar]->getName() + ".png")).scaled(300, 300);
+	menuWindow->carLabel->setPixmap(carImage);
 
+	menuWindow->buttons[optionSelected - 1]->setFlat(true);
+	
+	mutex->unlock();
 	
 	std::thread menu(&ControllerMenu::menuThread, this);
 	menu.join();
@@ -67,46 +101,42 @@ void ControllerMenu::printMenu()
 
 	switch (optionSelected) {
 	case 1:
-		optionSelected = 0;
+		optionSelected = 1;
 		startGame();
 		system("CLS");
 		printMenu();
 		break;
 	case 2:
-		optionSelected = 0;
+		optionSelected = 1;
 		system("CLS");
 		openSettings();
 		break;
 	case 3:
-		optionSelected = 0;
 		nextCar();
 		system("CLS");
 		printMenu();
 		break;
 	case 4:
-		optionSelected = 0;
 		previousCar();
 		system("CLS");
 		printMenu();
 		break;
 	case 5:
-		optionSelected = 0;
 		nextCircuit();
 		system("CLS");
 		printMenu();
 		break;
 	case 6:
-		optionSelected = 0;
 		previousCircuit();
 		system("CLS");
 		printMenu();
 		break;
 	case 7:
-		optionSelected = 0;
+		optionSelected = 1;
 		exit(1);
 		break;
 	default:
-		optionSelected = 0;
+		optionSelected = 1;
 		system("CLS");
 		printMenu();
 		break;
@@ -172,13 +202,9 @@ void ControllerMenu::previousCircuit()
 */
 void ControllerMenu::updateData()
 {
-	std::ifstream sLeaderboard;
-	sLeaderboard.open("leaderboard.lb");
-
 	std::ifstream sCar;
 	sCar.open("carList.car");
-	//lire fichier leaderboard et mettre dans le tableau
-	sLeaderboard >> leaderboard;
+	
 	
 
 	for (int i = 0; i < 5; i++) {
@@ -209,11 +235,19 @@ void ControllerMenu::updateData()
 */
 std::string ControllerMenu::printLeaderboard()
 {
+	Leaderboard leaderboard(circuitList[currentCircuit]->getName());
 	std::string retour;
+	unsigned long temps = 0;
+
+
 
 	for (int i = 0; i < leaderboard.getLength(); i++) {
-		retour += leaderboard.getTime(i).name + "..............." + to_string(leaderboard.getTime(i).time) + "\n";
+		temps = leaderboard.getTime(i).time;
+		std::stringstream buffer;
+		buffer << temps / 60000 << ":" << std::setw(2) << std::setfill('0') << (temps / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (temps / 10) % 100;
+		retour += leaderboard.getTime(i).name + "..............." + buffer.str() + "\n";
 	}
+
 	return retour;
 }
 
@@ -240,10 +274,6 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	controller->j_msg_send["3"] = 1;
 	controller->j_msg_send["S"] = 0;
 	
-	int optionSelected = 1;		//Bouton surligné dans le menu
-	//0 = Resume
-	//1 = Options
-	//2 = Quit
 
 	//Pour contrôle manette
 	int previousBtn3 = 0;
@@ -307,16 +337,29 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 
 
 			
-			if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && optionSelected < 7) {
-				optionSelected++;
-				controller->gotoXY(0, optionSelected + 14);
+			if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && controller->optionSelected < 7) {
+				controller->optionSelected++;
+				controller->gotoXY(0, controller->optionSelected + 14);
+				
+				for (QPushButton* btn : controller->menuWindow->buttons) {
+					btn->setFlat(false);
+				}
+				controller->menuWindow->buttons[controller->optionSelected-1]->setFlat(true);
+				
 			}
-			else if (((controller->joyStickY == 1 && previousY != 1) || (up < 0 && previousUp >= 0)) && optionSelected > 1) {
-				optionSelected--;
-				controller->gotoXY(0, optionSelected + 14);
+			else if (((controller->joyStickY == 1 && previousY != 1) || (up < 0 && previousUp >= 0)) && controller->optionSelected > 1) {
+				controller->optionSelected--;
+				controller->gotoXY(0, controller->optionSelected + 14);
+				for (QPushButton* btn : controller->menuWindow->buttons) {
+					btn->setFlat(false);
+				}
+				controller->menuWindow->buttons[controller->optionSelected - 1]->setFlat(true);
 			}
 			else if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter < 0) {
-				controller->optionSelected = optionSelected;
+				
+				for (QPushButton* btn : controller->menuWindow->buttons) {
+					btn->setFlat(false);
+				}
 				break;
 			}
 			

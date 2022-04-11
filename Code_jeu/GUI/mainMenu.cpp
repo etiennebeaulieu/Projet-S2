@@ -11,13 +11,26 @@ MainMenu::MainMenu(QWidget* parent) {
 	nextCarBtn = new QPushButton(tr(">"));
 	previousCarBtn = new QPushButton(tr("<"));
 
+	buttons[0] = playBtn;
+	buttons[1] = settingsBtn;
+	buttons[2] = nextCarBtn;
+	buttons[3] = previousCarBtn;
+	buttons[4] = nextCircuitBtn;
+	buttons[5] = previousCircuitBtn;
+
+
 	leaderboardTitleLabel = new QLabel(tr("Classement"));
+	leaderboardTitleLabel->setAlignment(Qt::AlignHCenter);
 	leaderboardLabel = new QLabel();
 	carStatsLabel = new QLabel();
+	carStatsLabel->setAlignment(Qt::AlignHCenter);
 	carNameLabel = new QLabel();
+	carNameLabel->setAlignment(Qt::AlignHCenter);
 	carLabel = new QLabel();
 	circuitNameLabel = new QLabel();
+	circuitNameLabel->setAlignment(Qt::AlignHCenter);
 	circuitLabel = new QLabel();
+	circuitLabel->setAlignment(Qt::AlignCenter);
 
 	layout->addWidget(playBtn, 2, 3, 1, 1);
 	layout->addWidget(settingsBtn, 3, 3, 1, 1);
@@ -38,4 +51,9 @@ MainMenu::MainMenu(QWidget* parent) {
 
 	setLayout(layout);
 	setWindowTitle(tr("Menu principal"));
+}
+
+void MainMenu::setColor(int indice, const char* color)
+{
+	buttons[indice]->setStyleSheet(color);
 }

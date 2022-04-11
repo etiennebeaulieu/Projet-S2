@@ -19,11 +19,11 @@ BestTime Leaderboard::getTime(int index) {
 //Sauvegarde un nouveau temps si il est meilleur qu'un autre
 void Leaderboard::newTime(BestTime time) {
 	for (int i = 0; i < 5; i++) {
-		if (time > bestTimes[i]) {
+		if (time < bestTimes[i] || bestTimes[i].time == 0) {
 			BestTime temp = bestTimes[i];
 			bestTimes[i] = time;
 			for (int j = i+1; j < 5; j++) {
-				BestTime temp2 = bestTimes[i];
+				BestTime temp2 = bestTimes[j];
 				bestTimes[j] = temp;
 				temp = temp2;
 			}
@@ -34,7 +34,7 @@ void Leaderboard::newTime(BestTime time) {
 
 //Retourne vrai si le temps en paramètre est plus grand ou égal au temps le plus haut dans le leaderboard
 bool Leaderboard::isBestTime(unsigned long time) {
-	return time >= bestTimes[0].time;
+	return time <= bestTimes[0].time;
 }
 
 //Load le leaderboard d'une map en prenant en paramètre le nom de la map (nom du dossier). Retourne false si la map n'existe pas
