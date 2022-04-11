@@ -46,10 +46,12 @@ void ControllerMenu::startApp(int argc, char** argv)
 {
 	updateData();
 	app = new QApplication(argc, argv);
-	menuWindow = (MainMenu*)app->activeWindow();
-	menuWindow = new MainMenu();
+	mainWindow = (MainWindow*)app->activeWindow();
+
+	mainWindow = new MainWindow();
+	menuWindow = mainWindow->menuWindow;
 	
-	//menuWindow->playBtn->setStyleSheet("background-color: red");
+	
 	
 	QPalette p = QPalette();
 	p.setBrush(QPalette::Button, Qt::red);
@@ -58,10 +60,11 @@ void ControllerMenu::startApp(int argc, char** argv)
 		btn->setAutoFillBackground(true);
 	}
 	
+
 	QThread* thread = QThread::create([this]() {printMenu(); });
 	thread->start();
 
-	menuWindow->show();
+	mainWindow->show();
 	app->exec();
 }
 
@@ -70,12 +73,15 @@ void ControllerMenu::startApp(int argc, char** argv)
 */
 void ControllerMenu::printMenu()
 {
-	//std::cout << "Bienvenue sur SparkUS racing" << std::endl;
-	//std::cout << "CLASSEMENT\n" << printLeaderboard() << std::endl;
-	//std::cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << std::endl;
-	//std::cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit]->getName() << std::endl;
-	//std::cout << "1. Play\n2. Reglages\n3. Prochaine voiture\n4. Voiture precedente\n5. Prochain circuit\n6. Circuit precedent\n7. Quitter" << std::endl;
+	std::cout << "Bienvenue sur SparkUS racing" << std::endl;
+	std::cout << "CLASSEMENT\n" << printLeaderboard() << std::endl;
+	std::cout << "VOITURE\nNom : "<<carList[currentCar]->getName()<< "\nVitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling() << std::endl;
+	std::cout << "\nCIRCUIT\nNom : " << circuitList[currentCircuit]->getName() << std::endl;
+	std::cout << "1. Play\n2. Reglages\n3. Prochaine voiture\n4. Voiture precedente\n5. Prochain circuit\n6. Circuit precedent\n7. Quitter" << std::endl;
 	
+
+	QMetaObject::invokeMethod(mainWindow, "showMenu");
+
 	mutex->lock();
 
 	menuWindow->leaderboardLabel->setText(QString::fromStdString(printLeaderboard()));

@@ -5,7 +5,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qgridlayout.h>
-#include <qmainwindow.h>
+
 
 
 class MainMenu : public QWidget
