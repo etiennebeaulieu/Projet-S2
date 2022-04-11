@@ -144,6 +144,7 @@ private:
 	unsigned long time;
 	Position ghostPos;
 	Timer timer;
+	unsigned long lastTime;
 
 	Leaderboard leaderboard;
 	CourseRecord ghostCourseRecord;
