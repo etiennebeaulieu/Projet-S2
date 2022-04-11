@@ -9,10 +9,11 @@
 
 
 
-#define VIDE = 0;
-#define PARCOUR = 1;
-#define BORDURE = 2;
-#define STARTPOSITION = 3;
+#define VIDE 0
+#define PARCOUR 1
+#define BORDURE 2
+#define STARTPOSITION 3
+#define LIGNEARRIVE 4
   
 
 class ModelCircuit {
@@ -23,6 +24,7 @@ public:
     Position getStart();
 
     bool positionIsActive(Position);
+    bool positionIsOnFinishLine(Position);
 
     void generateBorders();
 

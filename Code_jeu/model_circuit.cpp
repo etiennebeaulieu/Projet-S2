@@ -1,7 +1,5 @@
 #include "model_circuit.h"
 
-
-
 ModelCircuit::ModelCircuit(){
     startingPoint = Position{ 0, 0, 0 };
     name = "Circuit par défaut";
@@ -23,8 +21,15 @@ Position ModelCircuit::getStart() {
 /**
  * Retourne vrai si la position est sur la route
  */
-bool ModelCircuit::positionIsActive(Position position){
-    return (positions[position.y][position.x] == 1);
+bool ModelCircuit::positionIsActive(Position position) {
+    return (positions[position.y][position.x] == PARCOUR);
+}
+
+/**
+ * Retourne vrai si la position est sur la ligne d'arrivé  
+ */
+bool ModelCircuit::positionIsOnFinishLine(Position position) {
+    return (positions[position.y][position.x] == LIGNEARRIVE);
 }
 
 
@@ -36,11 +41,11 @@ void ModelCircuit::generateBorders(){
     
     for (int x = 1; x < (positions.size() - 1); x++) {
         for (int y = 1; y < (positions[x].size() - 1); y++) {
-            if (positions[x][y] == 1) {
+            if (positions[x][y] == PARCOUR) {
                 for (int dx = -1; dx <= 1; dx++) {
                     for (int dy = -1; dy <= 1; dy++) {
-                        if (positions[x + dx][y + dy] == 0) {
-                            positions[x + dx][y + dy] = 2;
+                        if (positions[x + dx][y + dy] == VIDE) {
+                            positions[x + dx][y + dy] = BORDURE;
                         }
                     }
                 }
@@ -80,7 +85,7 @@ int ModelCircuit::getHeight()
 /**
  * Lit une map à partir d'un fichier
  * 
- * 0 = hors piste, 1 = piste, 2 = bordure, 3 = point de départ
+ * 0 = hors piste, 1 = piste, 2 = bordure, 3 = point de départ, 4 = ligne d'arrivé
  */
 std::istream& operator>>(std::istream& i, ModelCircuit& c) {
     int width;
@@ -98,9 +103,9 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
         c.positions[x].resize(height);
         for (float y = 0; y < height; y++) {
             i >> c.positions[x][y];
-            if (c.positions[x][y] == 3) { //Si la case est la starting position
+            if (c.positions[x][y] == STARTPOSITION) { //Si la case est la starting position
                 c.startingPoint = Position{y, x, 0};
-                c.positions[x][y] = 1;
+                c.positions[x][y] = PARCOUR;
             }
         }
     }
@@ -117,7 +122,7 @@ std::ostream& operator<<(std::ostream& o, const ModelCircuit& c) {
 
     for (int x = 0; x < c.positions.size(); x++) {
         for (int y = 0; y < c.positions[x].size(); y++) {
-            if (c.positions[x][y] == 2) {
+            if (c.positions[x][y] == BORDURE) {
                 o << "x ";
             } else {
                 o << "  ";

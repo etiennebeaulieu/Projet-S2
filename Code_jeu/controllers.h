@@ -104,8 +104,9 @@ public:
 	void gotoXY(int x, int y);
 	void demoConsole();
 
-
 	void saveLeaderboard();
+
+	void endRace();
 
 
 	static void menuThread(Controller_course* controller);

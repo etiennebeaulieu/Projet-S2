@@ -172,6 +172,14 @@ void Controller_course::saveLeaderboard(){
 	leaderboard.save();
 }
 
+/**
+* Termine la course
+*/
+void Controller_course::endRace() {
+	saveLeaderboard();
+	timer.reset();
+}
+
 
 /*
 * Thread du menu pause
@@ -304,7 +312,6 @@ void Controller_course::courseThread(Controller_course* controller)
 		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
 			std::cerr << "Erreur lors de la réception du message. " << std::endl;
 		}
-
 		
 
 		if (controller->raw_msg.size() > 0) {
@@ -375,8 +382,7 @@ void Controller_course::courseThread(Controller_course* controller)
 				break;
 			case 2:
 				controller->optionSelected = 0;
-				controller->saveLeaderboard();
-				controller->timer.reset();
+				controller->endRace();
 				system("CLS");
 				fin = true;
 				break;
@@ -414,6 +420,13 @@ void Controller_course::courseThread(Controller_course* controller)
 			controller->j_msg_send["3"] = 1;
 		}
 		
+
+		//Regarde si on  est rendu à la ligne d'arrivée et que ça fait plus que x secondes qu'on race
+		if (controller->circuit.positionIsOnFinishLine(controller->car.getPosition()) && (controller->timer.get() >= 5000)) {
+			controller->endRace();
+			break;
+		}
+
 
 		controller->updateScreenConsole();
 
