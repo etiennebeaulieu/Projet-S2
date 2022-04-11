@@ -13,11 +13,33 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	currentCourseRecord.setMapName(pCircuit->getName());
 
 	circuit.generateBorders();
+
+	courseWindow = menuControleur->mainWindow->courseWindow;
+	initiateGUI();
+	
+	QMetaObject::invokeMethod(menuControleur->mainWindow, "showCourse");
+	
+
+	
+	
+	
+
 }
 
 Controller_course::~Controller_course()
 {
 	//TODO Destructeur Controller_course
+}
+
+void Controller_course::initiateGUI()
+{
+	courseWindow->backgroundCourse->setPixmap(QPixmap(QString::fromStdString((string)"image/" + circuit.getName() + ".png")));
+
+	courseWindow->car->setPixmap(QPixmap(QString::fromStdString((string)"image/" + this->car.getName() + ".png")));
+	courseWindow->car->setScale(0.25);
+
+	courseWindow->ghost->setPixmap(QPixmap(QString::fromStdString((string)"image/ghostCar.png")));
+	courseWindow->ghost->setScale(0.25);
 }
 
 void Controller_course::setAuto(ModelAuto pCar)
@@ -148,7 +170,14 @@ void Controller_course::updateScreenConsole()
 */
 void Controller_course::updateScreenGUI()
 {
+<<<<<<< Updated upstream
 	//TODO Faire les calls ï¿½ l'interface. Se baser sur updateScreenConsole
+=======
+	//TODO Faire les calls à l'interface. Se baser sur updateScreenConsole
+	QMetaObject::invokeMethod(menuControleur->mainWindow, "moveCar", Q_ARG(Position, car.getPosition()));
+	QMetaObject::invokeMethod(menuControleur->mainWindow, "moveGhost", Q_ARG(Position, ghostPos));
+	QMetaObject::invokeMethod(menuControleur->mainWindow, "moveGhost", Q_ARG(unsigned long, timer.get(), unsigned long, leaderboard.getTime(0), unsigned long, lastTime));
+>>>>>>> Stashed changes
 }
 
 /*
@@ -462,6 +491,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 
 		controller->updateScreenConsole();
+		controller->updateScreenGUI();
 
 		Sleep(30);
 	}

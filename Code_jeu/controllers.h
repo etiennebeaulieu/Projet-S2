@@ -21,6 +21,8 @@
 #include <qobject.h>
 #include "course_record.h"
 #include "GUI/mainMenu.h"
+#include "GUI/course.h"
+#include "GUI/mainWindow.h"
 
 using json = nlohmann::json;
 #define BAUD 115200
@@ -58,8 +60,13 @@ public:
 	SerialPort* arduino;
 	std::string raw_msg;
 	QApplication* app;
+	MainWindow* mainWindow;
 	MainMenu* menuWindow;
+	Course* courseWindow;
 	QMutex* mutex;
+	int argc;
+	char** argv;
+
 private:
 	Leaderboard leaderboard;
 	ModelAuto* carList[5];
@@ -101,6 +108,8 @@ public:
 	Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, ControllerMenu* pControllerMenu);
 	~Controller_course();
 
+
+	void initiateGUI();
 	void setAuto(ModelAuto pCar);
 	ModelAuto getAuto();
 	void setCircuit(ModelCircuit pCircuit);
@@ -125,7 +134,7 @@ public:
 
 	SerialPort* arduino;
 	std::string raw_msg;
-	
+	Course* courseWindow;
 private:
 	ModelAuto car;
 	ModelCircuit circuit;

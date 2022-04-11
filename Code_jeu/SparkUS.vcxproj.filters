@@ -36,6 +36,9 @@
     <ClCompile Include="controller_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\course.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="course_record.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -46,6 +49,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI\mainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\mainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="model_auto.cpp">
@@ -71,6 +77,9 @@
     <ClInclude Include="controllers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <CustomBuild Include="GUI\course.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <ClInclude Include="course_record.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="GUI\mainMenu.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GUI\mainWindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <ClInclude Include="model_auto.h">
@@ -100,10 +112,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="debug\moc_course.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_course.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
     <ClCompile Include="debug\moc_mainMenu.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="release\moc_mainMenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\moc_mainWindow.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_mainWindow.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
