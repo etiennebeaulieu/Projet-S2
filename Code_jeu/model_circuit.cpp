@@ -34,13 +34,13 @@ bool ModelCircuit::positionIsOnFinishLine(Position position) {
  */
 void ModelCircuit::generateBorders(){
     
-    for (int x = 1; x < (positions.size() - 1); x++) {
-        for (int y = 1; y < (positions[x].size() - 1); y++) {
-            if (positions[x][y] == PARCOUR) {
-                for (int dx = -1; dx <= 1; dx++) {
-                    for (int dy = -1; dy <= 1; dy++) {
-                        if (positions[x + dx][y + dy] == VIDE) {
-                            positions[x + dx][y + dy] = BORDURE;
+    for (int y = 1; y < (positions.size() - 1); y++) {
+        for (int x = 1; x < (positions[y].size() - 1); x++) {
+            if (positionIsActive(Position{ x, y, 0 })) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    for (int dx = -1; dx <= 1; dx++) {
+                        if (positions[y + dy][x + dx] == VIDE) {
+                            positions[y + dy][x + dx] = BORDURE;
                         }
                     }
                 }
@@ -93,14 +93,14 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
     c.positions.clear();
     c.bordersGenerated = false;
 
-    for (float x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
         c.positions.push_back(std::vector<int>());
-        c.positions[x].resize(height);
-        for (float y = 0; y < height; y++) {
-            i >> c.positions[x][y];
-            if (c.positions[x][y] == STARTPOSITION) { //Si la case est la starting position
-                c.startingPoint = Position{y, x, 0};
-                c.positions[x][y] = PARCOUR;
+        c.positions[y].resize(width);
+        for (int x = 0; x < width; x++) {
+            i >> c.positions[y][x];
+            if (c.positions[y][x] == STARTPOSITION) { //Si la case est la starting position
+                c.startingPoint = Position{x, y, 0};
+                c.positions[y][x] = PARCOUR;
             }
         }
     }
@@ -115,9 +115,9 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
  */
 std::ostream& operator<<(std::ostream& o, const ModelCircuit& c) {
 
-    for (int x = 0; x < c.positions.size(); x++) {
-        for (int y = 0; y < c.positions[x].size(); y++) {
-            if (c.positions[x][y] == BORDURE) {
+    for (int y = 0; y < c.positions.size(); y++) {
+        for (int x = 0; y < c.positions[y].size(); x++) {
+            if (c.positions[y][x] == BORDURE) {
                 o << "x ";
             } else {
                 o << "  ";
