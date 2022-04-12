@@ -17,7 +17,7 @@ Position ModelCircuit::getStart() {
  * Retourne vrai si la position est sur la route
  */
 bool ModelCircuit::positionIsActive(Position position) {
-    return (positions[position.y][position.x] == PARCOUR);
+    return (positions[position.y][position.x] == PARCOUR || positions[position.y][position.x] == LIGNEARRIVE || positions[position.y][position.x] == STARTPOSITION);
 }
 
 /**

@@ -14,12 +14,22 @@ int main()
     bitmap_image image("circuit.bmp");
 
 	ofstream outputFile;
-	outputFile.open("testmap3.gamemap");
+	outputFile.open("map.gamemap");
 
 	rgb_t couleurCircuit;
 	couleurCircuit.red = 90;
 	couleurCircuit.green = 90;
 	couleurCircuit.blue = 90;
+
+	rgb_t couleurDepart;
+	couleurDepart.red = 90;
+	couleurDepart.green = 40;
+	couleurDepart.blue = 130;
+
+	rgb_t couleurLigneArrive;
+	couleurLigneArrive.red = 0;
+	couleurLigneArrive.green = 255;
+	couleurLigneArrive.blue = 0;
 
 	outputFile << image.width() << " " << image.height();
 
@@ -29,6 +39,10 @@ int main()
 
 			if (image.get_pixel(x,y) == couleurCircuit) {
 				outputFile << "1 ";
+			}else if (image.get_pixel(x, y) == couleurDepart) {
+				outputFile << "3 ";
+			} else if (image.get_pixel(x, y) == couleurLigneArrive) {
+				outputFile << "4 ";
 			}
 			else {
 				outputFile << "0 ";
