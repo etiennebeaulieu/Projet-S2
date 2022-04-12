@@ -15,8 +15,8 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	circuit.generateBorders();
 	lastTime = 0;
 
-	Position start = circuit.getStart();
-
+	
+	
 	courseWindow = menuControleur->mainWindow->courseWindow;
 	initiateGUI();
 	
@@ -24,7 +24,16 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	
 
 	
-	
+	std::thread course(&Controller_course::courseThread, this);
+	course.join();
+
+
+
+
+
+	QMetaObject::invokeMethod(menuControleur->mainWindow, "showMenu");
+	//Affiche le menu en fin de course
+	menuControleur->printMenu();
 	
 
 }
@@ -39,10 +48,10 @@ void Controller_course::initiateGUI()
 	courseWindow->backgroundCourse->setPixmap(QPixmap(QString::fromStdString((string)"image/" + circuit.getName() + ".png")));
 
 	courseWindow->car->setPixmap(QPixmap(QString::fromStdString((string)"image/" + this->car.getName() + ".png")));
-	courseWindow->car->setScale(0.1);
-
 	courseWindow->ghost->setPixmap(QPixmap(QString::fromStdString((string)"image/ghostCar.png")));
-	courseWindow->ghost->setScale(0.1);
+
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveCar", Q_ARG(float, circuit.getStart().x), Q_ARG(float, circuit.getStart().y), Q_ARG(float, circuit.getStart().angle));
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(float, circuit.getStart().x), Q_ARG(float, circuit.getStart().y), Q_ARG(float, circuit.getStart().angle));
 }
 
 void Controller_course::setAuto(ModelAuto pCar)
@@ -82,7 +91,7 @@ void Controller_course::startRace()
 	int sequenceMoteur[5] = { 0, 0, 0, 0, 1 };
 
 	for (int i = 0; i < 5; i++) {
-		
+
 		Sleep(500);
 		
 		j_msg_send["G"] = sequenceGreen[i];      // Cr�ation du message � envoyer
@@ -106,16 +115,7 @@ void Controller_course::startRace()
 	//Course record
 	currentCourseRecord.clear();
 	currentCourseRecord.recordTimeAndPosition(start, timer.get());
-	std::thread course(&Controller_course::courseThread, this);
-	course.join();
-
-
-
 	
-
-
-	//Affiche le menu en fin de course
-	menuControleur->printMenu();
 
 	//demoConsole();
 }
@@ -127,7 +127,7 @@ void Controller_course::startRace()
 bool Controller_course::move(float pAngle, int pMovement)
 {
 	Position temp = car.move(pAngle, pMovement);
-	if (temp.y <= circuit.getWidth() && temp.x <= circuit.getHeight()) {
+	if (temp.x <= circuit.getWidth() && temp.y <= circuit.getHeight()) {
 		if (circuit.positionIsActive(temp)) {
 			gotoXY(round(car.getPosition().x), round(car.getPosition().y));
 			std::cout << " ";
@@ -321,6 +321,8 @@ void Controller_course::menuThread(Controller_course* controller)
 */
 void Controller_course::courseThread(Controller_course* controller)
 {
+	
+	controller->startRace();
 	controller->j_msg_send["G"] = 0;      // Cr�ation du message � envoyer
 	controller->j_msg_send["1"] = 0;
 	controller->j_msg_send["2"] = 0;
@@ -335,6 +337,7 @@ void Controller_course::courseThread(Controller_course* controller)
 	SHORT up = 0;
 	SHORT down = 0;
 	SHORT esc = 0;
+
 
 
 	while (1) {
@@ -395,6 +398,8 @@ void Controller_course::courseThread(Controller_course* controller)
 		if (controller->bouton4 == 1 || esc < 0) {		//Bouton pause
 			controller->timer.stop();
 
+			QMetaObject::invokeMethod(controller->menuControleur->mainWindow, "showPause");
+
 			std::thread menu(&Controller_course::menuThread, controller);
 			menu.join();
 
@@ -404,6 +409,7 @@ void Controller_course::courseThread(Controller_course* controller)
 			case 0:
 				controller->optionSelected = 0;
 				system("CLS");
+				QMetaObject::invokeMethod(controller->menuControleur->mainWindow, "showCourse");
 				std::cout << controller->circuit << std::endl;
 				controller->updateScreenConsole();
 				controller->timer.start();

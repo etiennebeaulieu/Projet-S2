@@ -157,6 +157,7 @@ void ControllerMenu::printMenu()
 */
 void ControllerMenu::openSettings()
 {
+	QMetaObject::invokeMethod(mainWindow, "showSettings");
 	//TODO Changer la page de settings pour fonctionner avec un thread et avec la manette
 	int option;
 	std::cout << "Ceci sont les reglages" << std::endl;
@@ -180,7 +181,7 @@ void ControllerMenu::startGame()
 {
 	system("CLS");
 	controllerCourse = new Controller_course(carList[currentCar], circuitList[currentCircuit], this);
-	controllerCourse->startRace();
+	//controllerCourse->startRace();
 }
 
 void ControllerMenu::nextCar()

@@ -5,6 +5,8 @@
 #include <qwidget.h>
 #include "mainMenu.h"
 #include "course.h"
+#include "pauseMenu.h"
+#include "settingsMenu.h"
 
 class MainWindow : public QMainWindow
 {
@@ -14,10 +16,15 @@ public:
 
 	MainMenu* menuWindow;
 	Course* courseWindow;
+	PauseMenu* pauseWindow;
+	SettingsMenu* settingsWindow;
+
 
 public slots:
 	void showMenu();
 	void showCourse();
+	void showPause();
+	void showSettings();
 
 
 };

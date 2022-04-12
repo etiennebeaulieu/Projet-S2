@@ -1,4 +1,5 @@
 #include "course.h"
+#include <QRectF>
 
 
 Course::Course(QWidget* parent) {
@@ -8,40 +9,39 @@ Course::Course(QWidget* parent) {
 
 	
 	viewRace = new QGraphicsView(&sceneRace);
-	viewSpeed = new QGraphicsView(&sceneSpeed);
-
-	viewSpeed->setMaximumWidth(300);
-	times->setMaximumWidth(300);
-	
-	layout->addWidget(times, 0, 0, Qt::AlignTop);
-	layout->addWidget(viewRace, 0, 1, Qt::AlignCenter);
-	layout->addWidget(viewSpeed, 0, 2, Qt::AlignBottom | Qt::AlignRight);
 
 	backgroundCourse = new QGraphicsPixmapItem();
 	sceneRace.addItem(backgroundCourse);
 	backgroundCourse->setPos(0, 0);
 	backgroundCourse->setZValue(-0.1);
 
-	
+
 	car = new QGraphicsPixmapItem();
 	sceneRace.addItem(car);
-	car->setPos(800, 0);
+	car->setPos(0, 0);
 
 	ghost = new QGraphicsPixmapItem();
 	sceneRace.addItem(ghost);
-	ghost->setPos(200, 200);
+	ghost->setPos(0, 0);
+
+	
+	layout->addWidget(times, 0, 0, Qt::AlignTop);
+	layout->addWidget(viewRace, 0, 1);
 
 
-	backgroundSpeed = new QGraphicsPixmapItem(QPixmap("image/speedo.png"));
-	sceneSpeed.addItem(backgroundSpeed);
-	backgroundSpeed->setPos(0, 0);
-	backgroundSpeed->setScale(0.5);
-	backgroundSpeed->setZValue(-0.1);
+	
 
-	speed = new QGraphicsPixmapItem(QPixmap("image/speedHand.png"));
-	sceneSpeed.addItem(speed);
-	speed->setPos(115, 20);
-	speed->setScale(0.25);
+
+	layout->setVerticalSpacing(0);
+	layout->setHorizontalSpacing(0);
+	layout->setContentsMargins(QMargins(0, 0, 0, 0));
+
+	viewRace->setContentsMargins(QMargins(0, 0, 0, 0));
+
+	layout->setColumnStretch(1, 2);
+
+
+	
 	
 
 
@@ -53,18 +53,24 @@ void Course::moveCar(float x, float y, float angle)
 {
 	QPixmap carImage = car->pixmap();
 	car->setTransformOriginPoint((carImage.width()) / 2, (carImage.height()) / 2);
-	car->setPos(x, y);
-	car->setRotation(angle);
+	car->setRotation(-angle+90);
 
+	
+	QPointF center = car->boundingRect().center();
+	car->setPos(x-center.x(), y-center.y());
+	
+	
 }
 
 void Course::moveGhost(float x, float y, float angle)
 {
 	QPixmap carImage = ghost->pixmap();
 	ghost->setTransformOriginPoint((carImage.width()) / 2, (carImage.height()) / 2);
-	ghost->setPos(x, y);
-	ghost->setRotation(angle);
+	ghost->setRotation(-angle+90);
 
+
+	QPointF center = ghost->boundingRect().center();
+	ghost->setPos(x - center.x(), y - center.y());
 	
 }
 

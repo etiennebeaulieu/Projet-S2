@@ -26,14 +26,10 @@ public:
 	QGraphicsPixmapItem* car;
 	QGraphicsPixmapItem* ghost;
 	QLabel* times;
-	QGraphicsScene sceneSpeed;
-	QGraphicsPixmapItem* backgroundSpeed;
-	QGraphicsPixmapItem* speed;
 
 	
 
 	QGraphicsView* viewRace;
-	QGraphicsView* viewSpeed;
 
 public slots:
 	void moveCar(float x, float y, float angle);

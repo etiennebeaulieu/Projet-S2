@@ -34,8 +34,8 @@ bool ModelCircuit::positionIsOnFinishLine(Position position) {
  */
 void ModelCircuit::generateBorders(){
     
-    for (int y = 1; y < (positions.size() - 1); y++) {
-        for (int x = 1; x < (positions[y].size() - 1); x++) {
+    for (float y = 1; y < (positions.size() - 1); y++) {
+        for (float x = 1; x < (positions[y].size() - 1); x++) {
             if (positionIsActive(Position{ x, y, 0 })) {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dx = -1; dx <= 1; dx++) {
@@ -93,10 +93,10 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
     c.positions.clear();
     c.bordersGenerated = false;
 
-    for (int y = 0; y < height; y++) {
+    for (float y = 0; y < height; y++) {
         c.positions.push_back(std::vector<int>());
         c.positions[y].resize(width);
-        for (int x = 0; x < width; x++) {
+        for (float x = 0; x < width; x++) {
             i >> c.positions[y][x];
             if (c.positions[y][x] == STARTPOSITION) { //Si la case est la starting position
                 c.startingPoint = Position{x, y, 0};
@@ -114,10 +114,10 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
  * Bien s'assurer de généré les borders avant
  */
 std::ostream& operator<<(std::ostream& o, const ModelCircuit& c) {
-
-    for (int y = 0; y < c.positions.size(); y++) {
-        for (int x = 0; y < c.positions[y].size(); x++) {
-            if (c.positions[y][x] == BORDURE) {
+    return o;
+    for (int x = 0; x < c.positions.size(); x++) {
+        for (int y = 0; y < c.positions[y].size(); y++) {
+            if (c.positions[x][y] == BORDURE) {
                 o << "x ";
             } else {
                 o << "  ";

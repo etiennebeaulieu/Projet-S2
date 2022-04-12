@@ -14,7 +14,7 @@ const int DEFAULT_HANDLING = 1;
 const std::string DEFAULT_NAME = "auto_base";
 
 const float TURNING_RATIO = 0.1;
-const float MOVEMENT_RATIO = 1;
+const float MOVEMENT_RATIO = 10;
 
 class ModelAuto {
 
