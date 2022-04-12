@@ -217,10 +217,10 @@ void sendMsg() {
 
 void showTimeFromMs(unsigned long ms){
 
-  uint8_t centaines = ms % 100;
-  int secondes = (ms/1000)%100;
+  uint8_t centaines = ms/10 % 100;
+  int secondes = (ms/1000);
 
-  display.showNumberDecEx((secondes * 100) + centaines, 0/*0b01100000*/);
+  display.showNumberDecEx(secondes*100 + centaines, 0b01000000);
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -273,7 +273,7 @@ void readMsg(){
   if (!parse_msg.isNull()) {
     // mettre la led a la valeur doc["led"]
     //digitalWrite(pinLED_RED3,doc["7seg"].as<bool>());
-    display.showNumberDecEx(doc["S"], 0/*0b01100000*/);
+    showTimeFromMs((unsigned long)doc["S"]);
   }
   
 }
