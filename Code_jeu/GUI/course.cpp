@@ -51,22 +51,22 @@ Course::Course(QWidget* parent) {
 	setWindowTitle(tr("Course en cours"));
 }
 
-void Course::moveCar(Position newPos)
+void Course::moveCar(float x, float y, float angle)
 {
 	QPixmap carImage = car->pixmap();
 	car->setTransformOriginPoint((carImage.width()) / 2, (carImage.height()) / 2);
-	car->setRotation(newPos.angle);
+	car->setRotation(angle);
 
-	car->setPos(newPos.x, newPos.y);
+	car->setPos(x, y);
 }
 
-void Course::moveGhost(Position newPos)
+void Course::moveGhost(float x, float y, float angle)
 {
 	QPixmap carImage = ghost->pixmap();
 	ghost->setTransformOriginPoint((carImage.width()) / 2, (carImage.height()) / 2);
-	ghost->setRotation(newPos.angle);
+	ghost->setRotation(angle);
 
-	ghost->setPos(newPos.x, newPos.y);
+	ghost->setPos(x, y);
 }
 
 void Course::updateTimer(unsigned long current, unsigned long best, unsigned long last)
@@ -74,18 +74,18 @@ void Course::updateTimer(unsigned long current, unsigned long best, unsigned lon
 	QString currentTime;
 	QString bestTime;
 	QString lastTime;
-	std::stringstream buffer;
-	buffer << current / 60000 << ":" << std::setw(2) << std::setfill('0') << (current / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (current / 10) % 100;
-	currentTime = QString::fromStdString(buffer.str());
-	buffer.clear();
+	std::stringstream bufferCurrent;
+	std::stringstream bufferBest;
+	std::stringstream bufferLast;
+	
+	bufferCurrent << current / 60000 << ":" << std::setw(2) << std::setfill('0') << (current / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (current / 10) % 100;
+	currentTime = QString::fromStdString(bufferCurrent.str());
 
-	buffer << best / 60000 << ":" << std::setw(2) << std::setfill('0') << (best / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (best / 10) % 100;
-	bestTime = QString::fromStdString(buffer.str());
-	buffer.clear();
+	bufferBest << best / 60000 << ":" << std::setw(2) << std::setfill('0') << (best / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (best / 10) % 100;
+	bestTime = QString::fromStdString(bufferBest.str());
 
-	buffer << last / 60000 << ":" << std::setw(2) << std::setfill('0') << (last / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (last / 10) % 100;
-	lastTime = QString::fromStdString(buffer.str());
-	buffer.clear();
+	bufferLast << last / 60000 << ":" << std::setw(2) << std::setfill('0') << (last / 1000) % 60 << ":" << std::setw(2) << std::setfill('0') << (last / 10) % 100;
+	lastTime = QString::fromStdString(bufferLast.str());
 
 	times->setText("Chrono\nTour:" + currentTime + "\nDernier:" + lastTime + "\nMeilleur:" + bestTime);
 

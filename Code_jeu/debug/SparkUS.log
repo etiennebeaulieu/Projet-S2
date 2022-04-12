@@ -1,14 +1,5 @@
-﻿  Generate moc_predefs.h
-  MOC GUI/course.h
-  MOC GUI/mainMenu.h
-  MOC GUI/mainWindow.h
-  course.cpp
-  mainMenu.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\GUI\mainMenu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xba et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  mainWindow.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\GUI\mainWindow.cpp(5,33): warning C4100: 'parent' : paramètre formel non référencé
-  controller_course.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x10d4 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+﻿  controller_course.cpp
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x10e4 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
 C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xb27 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
 C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xb2d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
 C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_auto.h(16,32): warning C4305: 'initialisation' : troncation de 'double' à 'float'
@@ -16,57 +7,4 @@ C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_je
 C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x410 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
 C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x4c9 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
 C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\course_record.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x32c et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_course.cpp(176,69): warning C4002: trop d'arguments pour l'appel de macro de type fonction 'Q_ARG'
-  controller_menu.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2c8 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x682 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x693 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x69c et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xfe3 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1193 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1442 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x147d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x19cb et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1af0 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1af8 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1b7e et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1b90 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1c39 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1c9c et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1f30 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2131 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x219d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xb27 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xb2d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_auto.h(16,32): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x23d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x410 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x4c9 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\course_record.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x32c et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controller_menu.cpp(203,104): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
-  moc_course.cpp
-  moc_mainMenu.cpp
-  moc_mainWindow.cpp
-  main.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xb27 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\controllers.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xb2d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_auto.h(16,32): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x23d et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x410 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\best_time.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x4c9 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\course_record.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x32c et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  model_circuit.cpp
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,31): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,43): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(27,31): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(27,43): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(98,21): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(100,30): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(100,33): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(101,29): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(101,32): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(103,29): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(103,32): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
-  Génération de code en cours...
   SparkUS.vcxproj -> C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\debug\SparkUS.exe
-

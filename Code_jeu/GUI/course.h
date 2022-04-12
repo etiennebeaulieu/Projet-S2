@@ -36,8 +36,8 @@ public:
 	QGraphicsView* viewSpeed;
 
 public slots:
-	void moveCar(Position newPos);
-	void moveGhost(Position newPos);
+	void moveCar(float x, float y, float angle);
+	void moveGhost(float x, float y, float angle);
 	void updateTimer(unsigned long current, unsigned long best, unsigned long last);
 };
 

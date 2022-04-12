@@ -7,4 +7,5 @@ struct Position {
 	float angle;
 };
 
+
 #endif

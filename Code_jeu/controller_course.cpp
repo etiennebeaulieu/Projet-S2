@@ -13,6 +13,7 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	currentCourseRecord.setMapName(pCircuit->getName());
 
 	circuit.generateBorders();
+	lastTime = 0;
 
 	courseWindow = menuControleur->mainWindow->courseWindow;
 	initiateGUI();
@@ -171,9 +172,9 @@ void Controller_course::updateScreenConsole()
 void Controller_course::updateScreenGUI()
 {
 	//TODO Faire les calls à l'interface. Se baser sur updateScreenConsole
-	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveCar", Q_ARG(Position, car.getPosition()));
-	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(Position, ghostPos));
-	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "updateTimer", Q_ARG(unsigned long, timer.get(), unsigned long, leaderboard.getTime(0), unsigned long, lastTime));
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveCar", Q_ARG(float, car.getPosition().x), Q_ARG(float, car.getPosition().y), Q_ARG(float, car.getPosition().angle));
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(float, ghostPos.x), Q_ARG(float, ghostPos.y), Q_ARG(float,ghostPos.angle));
+	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "updateTimer", Q_ARG(unsigned long, timer.get()), Q_ARG(unsigned long, leaderboard.getTime(0).time),Q_ARG(unsigned long, lastTime));
 }
 
 /*
@@ -481,7 +482,9 @@ void Controller_course::courseThread(Controller_course* controller)
 				controller->currentCourseRecord.save();
 			}
 
-			controller->timer.reset();
+
+			controller->lastTime = controller->timer.get();
+			controller->timer.resetAndStart();
 			
 		}
 
