@@ -15,6 +15,8 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 	circuit.generateBorders();
 	lastTime = 0;
 
+	Position start = circuit.getStart();
+
 	courseWindow = menuControleur->mainWindow->courseWindow;
 	initiateGUI();
 	
@@ -37,10 +39,10 @@ void Controller_course::initiateGUI()
 	courseWindow->backgroundCourse->setPixmap(QPixmap(QString::fromStdString((string)"image/" + circuit.getName() + ".png")));
 
 	courseWindow->car->setPixmap(QPixmap(QString::fromStdString((string)"image/" + this->car.getName() + ".png")));
-	courseWindow->car->setScale(0.25);
+	courseWindow->car->setScale(0.1);
 
 	courseWindow->ghost->setPixmap(QPixmap(QString::fromStdString((string)"image/ghostCar.png")));
-	courseWindow->ghost->setScale(0.25);
+	courseWindow->ghost->setScale(0.1);
 }
 
 void Controller_course::setAuto(ModelAuto pCar)
@@ -104,7 +106,6 @@ void Controller_course::startRace()
 	//Course record
 	currentCourseRecord.clear();
 	currentCourseRecord.recordTimeAndPosition(start, timer.get());
-
 	std::thread course(&Controller_course::courseThread, this);
 	course.join();
 
@@ -482,6 +483,7 @@ void Controller_course::courseThread(Controller_course* controller)
 				controller->currentCourseRecord.save();
 			}
 
+			
 
 			controller->lastTime = controller->timer.get();
 			controller->timer.resetAndStart();
