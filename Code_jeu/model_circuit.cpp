@@ -99,7 +99,7 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
         for (float y = 0; y < height; y++) {
             i >> c.positions[x][y];
             if (c.positions[x][y] == STARTPOSITION) { //Si la case est la starting position
-                c.startingPoint = Position{y, x, 0};
+                c.startingPoint = Position{x, y, 0};
                 c.positions[x][y] = PARCOUR;
             }
         }
@@ -115,6 +115,7 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
  */
 std::ostream& operator<<(std::ostream& o, const ModelCircuit& c) {
 
+    return o;
     for (int x = 0; x < c.positions.size(); x++) {
         for (int y = 0; y < c.positions[x].size(); y++) {
             if (c.positions[x][y] == BORDURE) {

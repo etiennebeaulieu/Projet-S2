@@ -25,7 +25,7 @@ Course::Course(QWidget* parent) {
 	
 	car = new QGraphicsPixmapItem();
 	sceneRace.addItem(car);
-	car->setPos(500, 500);
+	car->setPos(800, 0);
 
 	ghost = new QGraphicsPixmapItem();
 	sceneRace.addItem(ghost);
@@ -43,8 +43,6 @@ Course::Course(QWidget* parent) {
 	speed->setPos(115, 20);
 	speed->setScale(0.25);
 	
-	viewSpeed->fitInView(backgroundSpeed);
-	viewSpeed->scale(0.8, 0.8);
 
 
 	setLayout(layout);
@@ -55,18 +53,19 @@ void Course::moveCar(float x, float y, float angle)
 {
 	QPixmap carImage = car->pixmap();
 	car->setTransformOriginPoint((carImage.width()) / 2, (carImage.height()) / 2);
+	car->setPos(x, y);
 	car->setRotation(angle);
 
-	car->setPos(x, y);
 }
 
 void Course::moveGhost(float x, float y, float angle)
 {
 	QPixmap carImage = ghost->pixmap();
 	ghost->setTransformOriginPoint((carImage.width()) / 2, (carImage.height()) / 2);
+	ghost->setPos(x, y);
 	ghost->setRotation(angle);
 
-	ghost->setPos(x, y);
+	
 }
 
 void Course::updateTimer(unsigned long current, unsigned long best, unsigned long last)
