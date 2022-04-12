@@ -72,6 +72,19 @@ bool CourseRecord::save() {
 	return true;
 }
 
+//Reset le record
+void CourseRecord::reset() {
+	lastCheckedPositionIndex = 0;
+	lastCheckedPositionTime = 0;
+	clear();
+}
+
+//Reset le record et load la map à partir du fichier
+void CourseRecord::resetAndLoadFromFile() {
+	clear();
+	loadFromMap(mapName);
+}
+
 //Retourne la position qu'on était à un temps. Essaie d'être le plus efficace possible
 Position CourseRecord::getPositionAtTime(unsigned long time) {
 	if (lastCheckedPositionTime > time) {

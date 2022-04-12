@@ -397,7 +397,6 @@ void Controller_course::courseThread(Controller_course* controller)
 
 			std::thread menu(&Controller_course::menuThread, controller);
 			menu.join();
-			BestTime bt;
 
 
 			switch (controller->optionSelected)
@@ -417,18 +416,6 @@ void Controller_course::courseThread(Controller_course* controller)
 			case 2:
 				controller->optionSelected = 0;
 				//controller->saveLeaderboard();
-
-				
-				bt.name = "Player1"; //TODO remplacer �a par le nom du player
-				bt.time = controller->timer.get();
-				controller->leaderboard.newTime(bt);
-				controller->leaderboard.save();
-
-				//Course record en fin de course
-				if (controller->leaderboard.isBestTime(controller->timer.get())) {
-					//Si on vient de faire le meilleur temps, on va update le courseRecord qui est save pour celui qu'on vient de faire.
-					controller->currentCourseRecord.save();
-				}
 
 				controller->timer.reset();
 				system("CLS");
@@ -483,10 +470,12 @@ void Controller_course::courseThread(Controller_course* controller)
 				controller->currentCourseRecord.save();
 			}
 
-			
+			controller->currentCourseRecord.reset();
 
 			controller->lastTime = controller->timer.get();
 			controller->timer.resetAndStart();
+
+			controller->ghostCourseRecord.resetAndLoadFromFile();
 			
 		}
 

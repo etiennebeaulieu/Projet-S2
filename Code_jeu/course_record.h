@@ -29,6 +29,10 @@ public:
 
 	bool save();
 
+	void reset();
+
+	void resetAndLoadFromFile();
+
 	Position getPositionAtTime(unsigned long time);
 
 	friend std::istream& operator>>(std::istream&, CourseRecord&);
