@@ -38,6 +38,7 @@ SettingsMenu::SettingsMenu(QWidget* parent)
 
 void SettingsMenu::highlight(int indice)
 {
+	if (indice == 2) { indice = 0; }
 	for (QPushButton* btn : buttons) {
 		btn->setFlat(false);
 	}

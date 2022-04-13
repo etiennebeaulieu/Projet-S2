@@ -68,6 +68,7 @@ public:
 	int argc;
 	char** argv;
 	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
+	bool isConnected;
 
 private:
 	Leaderboard leaderboard;

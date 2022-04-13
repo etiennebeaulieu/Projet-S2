@@ -86,29 +86,31 @@ void Controller_course::startRace()
 	car.setPostion(start);
 	updateScreenConsole();
 
-	int sequenceGreen[5] = { 0, 0, 0, 0, 1 };
-	int sequenceR1[5] = { 0, 1, 1, 1, 1 };
-	int sequenceR3[5] = { 0, 0, 1, 1, 1 };
-	int sequenceR2[5] = { 0, 0, 0, 1, 1 };
-	int sequenceMoteur[5] = { 0, 0, 0, 0, 1 };
+	if (menuControleur->isConnected) {
+		int sequenceGreen[5] = { 0, 0, 0, 0, 1 };
+		int sequenceR1[5] = { 0, 1, 1, 1, 1 };
+		int sequenceR3[5] = { 0, 0, 1, 1, 1 };
+		int sequenceR2[5] = { 0, 0, 0, 1, 1 };
+		int sequenceMoteur[5] = { 0, 0, 0, 0, 1 };
 
-	for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 
-		Sleep(500);
-		
-		j_msg_send["G"] = sequenceGreen[i];      // Cr�ation du message � envoyer
-		j_msg_send["1"] = sequenceR1[i];
-		j_msg_send["2"] = sequenceR2[i];
-		j_msg_send["3"] = sequenceR3[i];
-		j_msg_send["M"] = sequenceMoteur[i];
+			Sleep(500);
 
-		if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {		//Envoie au Arduino
-			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
-		}
+			j_msg_send["G"] = sequenceGreen[i];      // Cr�ation du message � envoyer
+			j_msg_send["1"] = sequenceR1[i];
+			j_msg_send["2"] = sequenceR2[i];
+			j_msg_send["3"] = sequenceR3[i];
+			j_msg_send["M"] = sequenceMoteur[i];
 
-		j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {		//Re�oit du Arduino
-			std::cerr << "Erreur lors de la r�ception du message. " << std::endl;
+			if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {		//Envoie au Arduino
+				std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			}
+
+			j_msg_rcv.clear();
+			if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {		//Re�oit du Arduino
+				std::cerr << "Erreur lors de la r�ception du message. " << std::endl;
+			}
 		}
 	}
 
@@ -231,12 +233,14 @@ void Controller_course::endRace() {
 */
 void Controller_course::menuThread(Controller_course* controller)
 {
-	controller->j_msg_send["G"] = 1;		// Cr�ation du message � envoyer
-	controller->j_msg_send["1"] = 1;
-	controller->j_msg_send["2"] = 1;
-	controller->j_msg_send["3"] = 1;
-	controller->j_msg_send["S"] = controller->timer.get();
+	if (controller->menuControleur->isConnected) {
+		controller->j_msg_send["G"] = 1;		// Cr�ation du message � envoyer
+		controller->j_msg_send["1"] = 1;
+		controller->j_msg_send["2"] = 1;
+		controller->j_msg_send["3"] = 1;
+		controller->j_msg_send["S"] = controller->timer.get();
 
+	}
 	int optionSelected = 1;					//Bouton surlign� dans le menu
 	//0 = Resume
 	//1 = Options
@@ -267,33 +271,34 @@ void Controller_course::menuThread(Controller_course* controller)
 	Sleep(100);
 
 	while (1) {
-		previousY = controller->joyStickY;
-		previousBtn3 = controller->bouton3;
-		previousBtn4 = controller->bouton4;
+		if (controller->menuControleur->isConnected) {
+			previousY = controller->joyStickY;
+			previousBtn3 = controller->bouton3;
+			previousBtn4 = controller->bouton4;
 
 
-		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
-			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+				std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			}
+
+			controller->j_msg_rcv.clear();
+			if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
+				std::cerr << "Erreur lors de la r�ception du message. " << std::endl;
+			}
+
+
+
+
+			if (raw_msg.size() > 0) {
+				controller->j_msg_rcv = json::parse(raw_msg);			// Transfert du message en json
+				if (controller->j_msg_rcv.contains("Y"))
+					controller->joyStickY = controller->j_msg_rcv["Y"];
+				if (controller->j_msg_rcv.contains("3"))
+					controller->bouton3 = controller->j_msg_rcv["3"];
+				if (controller->j_msg_rcv.contains("4"))
+					controller->bouton4 = controller->j_msg_rcv["4"];
+			}
 		}
-
-		controller->j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(controller->arduino, raw_msg)) {
-			std::cerr << "Erreur lors de la r�ception du message. " << std::endl;
-		}
-
-
-
-		
-		if (raw_msg.size() > 0) {
-			controller->j_msg_rcv = json::parse(raw_msg);			// Transfert du message en json
-			if (controller->j_msg_rcv.contains("Y"))
-				controller->joyStickY = controller->j_msg_rcv["Y"];
-			if (controller->j_msg_rcv.contains("3"))
-				controller->bouton3 = controller->j_msg_rcv["3"];
-			if (controller->j_msg_rcv.contains("4"))
-				controller->bouton4 = controller->j_msg_rcv["4"];
-		}
-
 
 		//Pour d�bogage pour afficher la lecture du JSON
 		//std::cout << controller->j_msg_rcv << std::endl;
@@ -339,13 +344,15 @@ void Controller_course::menuThread(Controller_course* controller)
 void Controller_course::courseThread(Controller_course* controller)
 {
 	
-	controller->startRace();
-	controller->j_msg_send["G"] = 1;      // Cr�ation du message � envoyer
-	controller->j_msg_send["1"] = 0;
-	controller->j_msg_send["2"] = 0;
-	controller->j_msg_send["3"] = 0;
-	controller->j_msg_send["S"] = 0;
+		controller->startRace();
+	if (controller->menuControleur->isConnected) {
+		controller->j_msg_send["G"] = 1;      // Cr�ation du message � envoyer
+		controller->j_msg_send["1"] = 0;
+		controller->j_msg_send["2"] = 0;
+		controller->j_msg_send["3"] = 0;
+		controller->j_msg_send["S"] = 0;
 
+	}
 	bool fin = false;
 	bool dansLimite = true;
 
@@ -353,39 +360,42 @@ void Controller_course::courseThread(Controller_course* controller)
 	//Pour contr�le clavier seulement
 	SHORT up = 0;
 	SHORT down = 0;
+	SHORT left = 0;
+	SHORT right = 0;
 	SHORT esc = 0;
 
 
 
 	while (1) {
-		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
-			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
-		}
+		if (controller->menuControleur->isConnected) {
+			if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+				std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			}
 
-		controller->j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
-			std::cerr << "Erreur lors de la r�ception du message. " << std::endl;
-		}
-		
+			controller->j_msg_rcv.clear();
+			if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
+				std::cerr << "Erreur lors de la r�ception du message. " << std::endl;
+			}
 
-		if (controller->raw_msg.size() > 0) {
-			controller->j_msg_rcv = json::parse(controller->raw_msg); // Transfert du message en json
-			if (controller->j_msg_rcv.contains("A"))
-				controller->acc_Value = controller->j_msg_rcv["A"];
-			if (controller->j_msg_rcv.contains("X"))
-				controller->joyStickX = controller->j_msg_rcv["X"];
-			if (controller->j_msg_rcv.contains("Y"))
-				controller->joyStickY = controller->j_msg_rcv["Y"];
-			if (controller->j_msg_rcv.contains("1"))
-				controller->bouton1 = controller->j_msg_rcv["1"];
-			if (controller->j_msg_rcv.contains("2"))
-				controller->bouton2 = controller->j_msg_rcv["2"];
-			if (controller->j_msg_rcv.contains("3"))
-				controller->bouton3 = controller->j_msg_rcv["3"];
-			if (controller->j_msg_rcv.contains("4"))
-				controller->bouton4 = controller->j_msg_rcv["4"];
-		}
 
+			if (controller->raw_msg.size() > 0) {
+				controller->j_msg_rcv = json::parse(controller->raw_msg); // Transfert du message en json
+				if (controller->j_msg_rcv.contains("A"))
+					controller->acc_Value = controller->j_msg_rcv["A"];
+				if (controller->j_msg_rcv.contains("X"))
+					controller->joyStickX = controller->j_msg_rcv["X"];
+				if (controller->j_msg_rcv.contains("Y"))
+					controller->joyStickY = controller->j_msg_rcv["Y"];
+				if (controller->j_msg_rcv.contains("1"))
+					controller->bouton1 = controller->j_msg_rcv["1"];
+				if (controller->j_msg_rcv.contains("2"))
+					controller->bouton2 = controller->j_msg_rcv["2"];
+				if (controller->j_msg_rcv.contains("3"))
+					controller->bouton3 = controller->j_msg_rcv["3"];
+				if (controller->j_msg_rcv.contains("4"))
+					controller->bouton4 = controller->j_msg_rcv["4"];
+			}
+		}
 
 		//Pour d�bogage affiche les valeurs du JSON
 		std::cout << controller->j_msg_rcv << std::endl;
@@ -395,6 +405,8 @@ void Controller_course::courseThread(Controller_course* controller)
 		//Cont�le au clavier pour d�bogage, permet seulement d'avancer en ligne droite et contr�le du menu
 		up = GetKeyState(VK_UP);
 		down = GetKeyState(VK_DOWN);
+		left = GetKeyState(VK_LEFT);
+		right = GetKeyState(VK_RIGHT);
 		esc = GetKeyState(VK_ESCAPE);
 		if (up < 0)
 			up = 1;
@@ -406,6 +418,16 @@ void Controller_course::courseThread(Controller_course* controller)
 			down = 1;
 		else
 			down = 0;
+
+		if (left < 0)
+			left = 90;
+		else
+			left = 0;
+
+		if (right < 0)
+			right = -90;
+		else
+			right = 0;
 
 
 
@@ -447,37 +469,37 @@ void Controller_course::courseThread(Controller_course* controller)
 				break;
 
 		}
-		if (controller->bouton1 == 1 || controller->bouton2 == 1) {
+		if (controller->bouton1 == 1 || controller->bouton2 == 1 || up == 1 || down == 1) {
 			if (controller->menuControleur->sorteControle == 0)
 				dansLimite = controller->move(controller->joyStickX, controller->bouton2 - controller->bouton1);
 			else if (controller->menuControleur->sorteControle == 1)
 				dansLimite = controller->move(controller->acc_Value, controller->bouton2 - controller->bouton1);
 			else
-				dansLimite = controller->move(0, down - up);
+				dansLimite = controller->move(left+right, up - down);
 		}
 
+		if (controller->menuControleur->isConnected) {
+			controller->j_msg_send["S"] = controller->timer.get();
 
-		controller->j_msg_send["S"] = controller->timer.get();
-		
-		
-		if (controller->lastTime == 0 && controller->timer.get() <= 2000)
-			controller->j_msg_send["G"] = 1;
-		else
-			controller->j_msg_send["G"] = 0;
-		
-		if (dansLimite) {
-			controller->j_msg_send["M"] = 0;
-			controller->j_msg_send["1"] = 0;
-			controller->j_msg_send["2"] = 0;
-			controller->j_msg_send["3"] = 0;
+
+			if (controller->lastTime == 0 && controller->timer.get() <= 2000)
+				controller->j_msg_send["G"] = 1;
+			else
+				controller->j_msg_send["G"] = 0;
+
+			if (dansLimite) {
+				controller->j_msg_send["M"] = 0;
+				controller->j_msg_send["1"] = 0;
+				controller->j_msg_send["2"] = 0;
+				controller->j_msg_send["3"] = 0;
+			}
+			else {
+				controller->j_msg_send["M"] = 1;
+				controller->j_msg_send["1"] = 1;
+				controller->j_msg_send["2"] = 1;
+				controller->j_msg_send["3"] = 1;
+			}
 		}
-		else {
-			controller->j_msg_send["M"] = 1;
-			controller->j_msg_send["1"] = 1;
-			controller->j_msg_send["2"] = 1;
-			controller->j_msg_send["3"] = 1;
-		}
-		
 
 		//Regarde si on  est rendu � la ligne d'arriv�e et que �a fait plus que x secondes qu'on race
 		if (controller->circuit.positionIsOnFinishLine(controller->car.getPosition()) && (controller->timer.get() >= 5000)) {

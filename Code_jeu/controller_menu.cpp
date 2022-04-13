@@ -4,21 +4,29 @@ ControllerMenu::ControllerMenu()
 {
 	// Initialisation du port de communication
 	std::string com;
-	std::cout << "Entrer le port de communication du Arduino: ";
+	std::cout << "Entrer le port de communication du Arduino (-1 si pas de Arduino): ";
 	std::cin >> com;
-	arduino = new SerialPort(com.c_str(), BAUD);
+	
+	if (strcmp(com.c_str(), "-1") != 0) {
+		arduino = new SerialPort(com.c_str(), BAUD);
 
-	if (!arduino->isConnected()) {
-		std::cerr << "Impossible de se connecter au port " << std::string(com) << ". Fermeture du programme!" << std::endl;
-		exit(1);
-	}
+		if (!arduino->isConnected()) {
+			std::cerr << "Impossible de se connecter au port " << std::string(com) << ". Fermeture du programme!" << std::endl;
+			exit(1);
+		}
 
-	if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {				//Lecture pour purger
-		std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		if (!SerialCommunication::SendToSerial(arduino, j_msg_send)) {				//Lecture pour purger
+			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		}
+		j_msg_rcv.clear();
+		if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {
+			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+		}
+		isConnected = true;
 	}
-	j_msg_rcv.clear();
-	if (!SerialCommunication::RcvFromSerial(arduino, raw_msg)) {
-		std::cerr << "Erreur lors de la réception du message. " << std::endl;
+	else {
+		isConnected = false;
+		sorteControle = 2;
 	}
 
 	mutex = new QMutex();
@@ -153,25 +161,29 @@ void ControllerMenu::openSettings()
 	QMetaObject::invokeMethod(mainWindow, "showSettings");
 
 	int option = optionSelected;
-	optionSelected = sorteControle+1;
+	if (!isConnected)
+		optionSelected = 1;
+	else
+		optionSelected = sorteControle+1;
 
 	QMetaObject::invokeMethod(mainWindow->settingsWindow, "highlight", Q_ARG(int, sorteControle));
 
 	std::thread settings(&ControllerMenu::settingsThread, this);
 	settings.join();
 
-
-	switch (optionSelected) {
-	case 1:
-		optionSelected = 1;
-		sorteControle = 0;
-		break;
-	case 2:
-		optionSelected = 1;
-		sorteControle = 1;
-		break;
-	default:
-		break;
+	if (isConnected) {
+		switch (optionSelected) {
+		case 1:
+			optionSelected = 1;
+			sorteControle = 0;
+			break;
+		case 2:
+			optionSelected = 1;
+			sorteControle = 1;
+			break;
+		default:
+			break;
+		}
 	}
 
 	optionSelected = option;
@@ -282,12 +294,13 @@ void ControllerMenu::gotoXY(int x, int y)
 */
 void ControllerMenu::menuThread(ControllerMenu* controller)
 {
-	controller->j_msg_send["G"] = 1;      // Création du message à envoyer
-	controller->j_msg_send["1"] = 1;
-	controller->j_msg_send["2"] = 1;
-	controller->j_msg_send["3"] = 1;
-	controller->j_msg_send["S"] = 0;
-	
+	if (controller->isConnected) {
+		controller->j_msg_send["G"] = 1;      // Création du message à envoyer
+		controller->j_msg_send["1"] = 1;
+		controller->j_msg_send["2"] = 1;
+		controller->j_msg_send["3"] = 1;
+		controller->j_msg_send["S"] = 0;
+	}
 
 	//Pour contrôle manette
 	int previousBtn3 = 0;
@@ -315,45 +328,46 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	Sleep(100);
 
 	while (1) {
-		previousY = controller->joyStickY;
-		previousX = joyX;
-		previousBtn3 = controller->bouton3;
-		previousBtn4 = controller->bouton4;
+		if (controller->isConnected) {
+			previousY = controller->joyStickY;
+			previousX = joyX;
+			previousBtn3 = controller->bouton3;
+			previousBtn4 = controller->bouton4;
 
-		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
-			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+				std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			}
+
+			controller->j_msg_rcv.clear();
+			if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
+				std::cerr << "Erreur lors de la réception du message. " << std::endl;
+			}
+
+
+
+			if (controller->raw_msg.size() > 0) {
+				controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
+				if (controller->j_msg_rcv.contains("Y"))
+					controller->joyStickY = controller->j_msg_rcv["Y"];
+				if (controller->j_msg_rcv.contains("X"))
+					joyX = controller->j_msg_rcv["X"];
+				if (controller->j_msg_rcv.contains("3"))
+					controller->bouton3 = controller->j_msg_rcv["3"];
+				if (controller->j_msg_rcv.contains("4"))
+					controller->bouton4 = controller->j_msg_rcv["4"];
+			}
+
+
+			if (joyX > 65)
+				joyX = 1;
+			else if (joyX < -65)
+				joyX = -1;
+			else
+				joyX = 0;
+
+			//Pour débogage, afficher les valeurs du JSON
+			//std::cout << controller->j_msg_rcv << std::endl;
 		}
-
-		controller->j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
-			std::cerr << "Erreur lors de la réception du message. " << std::endl;
-		}
-		
-
-
-		if (controller->raw_msg.size() > 0) {
-			controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
-			if (controller->j_msg_rcv.contains("Y"))
-				controller->joyStickY = controller->j_msg_rcv["Y"];
-			if (controller->j_msg_rcv.contains("X"))
-				joyX = controller->j_msg_rcv["X"];
-			if (controller->j_msg_rcv.contains("3"))
-				controller->bouton3 = controller->j_msg_rcv["3"];
-			if (controller->j_msg_rcv.contains("4"))
-				controller->bouton4 = controller->j_msg_rcv["4"];
-		}
-
-		
-		if (joyX > 65)
-			joyX = 1;
-		else if (joyX < -65)
-			joyX = -1;
-		else
-			joyX = 0;
-
-		//Pour débogage, afficher les valeurs du JSON
-		//std::cout << controller->j_msg_rcv << std::endl;
-
 
 
 			//Contôle au clavier
@@ -431,19 +445,20 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 */
 void ControllerMenu::settingsThread(ControllerMenu* controller)
 {
-	controller->j_msg_send["G"] = 1;      // Création du message à envoyer
-	controller->j_msg_send["1"] = 1;
-	controller->j_msg_send["2"] = 1;
-	controller->j_msg_send["3"] = 1;
-	controller->j_msg_send["S"] = 0;
+	if (controller->isConnected) {
+		controller->j_msg_send["G"] = 1;      // Création du message à envoyer
+		controller->j_msg_send["1"] = 1;
+		controller->j_msg_send["2"] = 1;
+		controller->j_msg_send["3"] = 1;
+		controller->j_msg_send["S"] = 0;
 
-
-	//Pour contrôle manette
-	int previousBtn3 = 0;
-	int previousBtn4 = 0;
-	int previousX = 0;
-	int joyX = 0;
-
+	}
+		//Pour contrôle manette
+		int previousBtn3 = 0;
+		int previousBtn4 = 0;
+		int previousX = 0;
+		int joyX = 0;
+	
 
 	//Pour contrôle clavier seulement
 	SHORT l = 0;
@@ -459,38 +474,39 @@ void ControllerMenu::settingsThread(ControllerMenu* controller)
 	Sleep(100);
 
 	while (1) {
-		previousX = joyX;
-		previousBtn3 = controller->bouton3;
-		previousBtn4 = controller->bouton4;
+		if (controller->isConnected) {
+			previousX = joyX;
+			previousBtn3 = controller->bouton3;
+			previousBtn4 = controller->bouton4;
 
-		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
-			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+				std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+			}
+
+			controller->j_msg_rcv.clear();
+			if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
+				std::cerr << "Erreur lors de la réception du message. " << std::endl;
+			}
+
+
+
+			if (controller->raw_msg.size() > 0) {
+				controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
+				if (controller->j_msg_rcv.contains("X"))
+					joyX = controller->j_msg_rcv["X"];
+				if (controller->j_msg_rcv.contains("3"))
+					controller->bouton3 = controller->j_msg_rcv["3"];
+				if (controller->j_msg_rcv.contains("4"))
+					controller->bouton4 = controller->j_msg_rcv["4"];
+			}
+
+			if (joyX > 65)
+				joyX = 1;
+			else if (joyX < -65)
+				joyX = -1;
+			else
+				joyX = 0;
 		}
-
-		controller->j_msg_rcv.clear();
-		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
-			std::cerr << "Erreur lors de la réception du message. " << std::endl;
-		}
-
-
-
-		if (controller->raw_msg.size() > 0) {
-			controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
-			if (controller->j_msg_rcv.contains("X"))
-				joyX = controller->j_msg_rcv["X"];
-			if (controller->j_msg_rcv.contains("3"))
-				controller->bouton3 = controller->j_msg_rcv["3"];
-			if (controller->j_msg_rcv.contains("4"))
-				controller->bouton4 = controller->j_msg_rcv["4"];
-		}
-
-		if (joyX > 65)
-			joyX = 1;
-		else if (joyX < -65)
-			joyX = -1;
-		else
-			joyX = 0;
-
 
 		//Pour débogage, afficher les valeurs du JSON
 		//std::cout << controller->j_msg_rcv << std::endl;
@@ -504,11 +520,26 @@ void ControllerMenu::settingsThread(ControllerMenu* controller)
 		r = GetKeyState(VK_RIGHT);
 		enter = GetKeyState(VK_RETURN);
 
+		if (l < 0)
+			l = 1;
+		else
+			l = 0;
+
+		if (r < 0)
+			r = 1;
+		else
+			r = 0;
+
+		if (enter < 0)
+			enter = 1;
+		else
+			enter = 0;
 
 
 
 
-		if (((joyX == -1 && previousX != -1) || (r < 0 && previousR >= 0)) && controller->optionSelected < 2) {
+
+		if (((joyX == -1 && previousX != -1) || (r ==1 && previousR == 0)) && controller->optionSelected < 2) {
 			controller->optionSelected++;
 			//controller->gotoXY(0, controller->optionSelected + 14);
 
@@ -518,7 +549,7 @@ void ControllerMenu::settingsThread(ControllerMenu* controller)
 			controller->mainWindow->settingsWindow->buttons[controller->optionSelected - 1]->setFlat(true);
 
 		}
-		else if (((joyX == 1 && previousX != 1) || (l < 0 && previousL >= 0)) && controller->optionSelected > 1) {
+		else if (((joyX == 1 && previousX != 1) || (l ==1 && previousL == 0)) && controller->optionSelected > 1) {
 			controller->optionSelected--;
 			//controller->gotoXY(0, controller->optionSelected + 14);
 			
@@ -527,7 +558,7 @@ void ControllerMenu::settingsThread(ControllerMenu* controller)
 			}
 			controller->mainWindow->settingsWindow->buttons[controller->optionSelected - 1]->setFlat(true);
 		}
-		else if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter < 0) {
+		else if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter == 1) {
 
 			for (QPushButton* btn : controller->menuWindow->buttons) {
 				btn->setFlat(false);

@@ -32,6 +32,7 @@ public:
 	QLabel* carStatsLabel;
 	QLabel* carNameLabel;
 	QLabel* carLabel;
+	QLabel* hint;
 
 	void setColor(int indice, const char* color);
 };

@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <qboxlayout.h>
 
 
 class Course : public QWidget {
@@ -20,12 +21,14 @@ public:
 	Course(QWidget* parent = nullptr);
 
 	QGridLayout* layout;
+	QVBoxLayout* vBox;
 
 	QGraphicsScene sceneRace;
 	QGraphicsPixmapItem* backgroundCourse;
 	QGraphicsPixmapItem* car;
 	QGraphicsPixmapItem* ghost;
 	QLabel* times;
+	QLabel* hint;
 
 	
 

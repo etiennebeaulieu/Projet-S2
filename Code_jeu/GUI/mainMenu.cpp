@@ -39,6 +39,12 @@ MainMenu::MainMenu(QWidget* parent) {
 	circuitNameLabel = new QLabel();
 	circuitNameLabel->setAlignment(Qt::AlignCenter);
 	circuitLabel = new QLabel();
+
+	hint = new QLabel();
+	
+	QPixmap hintImage = QPixmap(QString::fromStdString("image/hint_menu.png"));
+	hintImage.scaledToHeight(400);
+	hint->setPixmap(hintImage);
 	
 
 
@@ -57,7 +63,7 @@ MainMenu::MainMenu(QWidget* parent) {
 	carLabel->setAlignment(Qt::AlignCenter);
 
 	layout->setAlignment(Qt::AlignCenter);
-	layout->setContentsMargins(QMargins(10, 10, 10, 100));
+	layout->setContentsMargins(QMargins(10, 10, 10, 30));
 
 
 
@@ -78,6 +84,7 @@ MainMenu::MainMenu(QWidget* parent) {
 	layout->addWidget(carLabel, 1, 4, 1, 3);
 	layout->addWidget(circuitNameLabel, 3, 1, 1, 1);
 	layout->addWidget(circuitLabel, 1, 0, 1, 3);
+	layout->addWidget(hint, 4, 6, 1, 1);
 
 	layout->setColumnMinimumWidth(3, 200);
 	layout->setRowStretch(1, 2);

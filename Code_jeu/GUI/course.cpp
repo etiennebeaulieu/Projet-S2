@@ -5,8 +5,21 @@
 Course::Course(QWidget* parent) {
 	layout = new QGridLayout(parent);
 
+	vBox = new QVBoxLayout();
+
 	times = new QLabel(tr("Chono:\nTour: 0:00:00\nDernier: 0:00:00\nMeilleur: 0:00:00"));
 
+	hint = new QLabel();
+	QPixmap hintImage = QPixmap(QString::fromStdString("image/hint_course.png"));
+	hintImage.scaledToHeight(100);
+	hint->setPixmap(hintImage);
+
+	
+
+	vBox->addWidget(times);
+	vBox->addWidget(hint);
+
+	vBox->setSpacing(80);
 	
 	viewRace = new QGraphicsView(&sceneRace);
 
@@ -25,7 +38,7 @@ Course::Course(QWidget* parent) {
 	ghost->setPos(0, 0);
 
 	
-	layout->addWidget(times, 0, 0, Qt::AlignCenter);
+	layout->addLayout(vBox, 0, 0, Qt::AlignCenter);
 	layout->addWidget(viewRace, 0, 1);
 
 
