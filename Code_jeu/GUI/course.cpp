@@ -5,7 +5,7 @@
 Course::Course(QWidget* parent) {
 	layout = new QGridLayout(parent);
 
-	times = new QLabel(tr("Chono:\nTour: 00:00:00\nDernier: 00:00:00\nMeilleur: 00:00:00"));
+	times = new QLabel(tr("Chono:\nTour: 0:00:00\nDernier: 0:00:00\nMeilleur: 0:00:00"));
 
 	
 	viewRace = new QGraphicsView(&sceneRace);
@@ -13,7 +13,7 @@ Course::Course(QWidget* parent) {
 	backgroundCourse = new QGraphicsPixmapItem();
 	sceneRace.addItem(backgroundCourse);
 	backgroundCourse->setPos(0, 0);
-	backgroundCourse->setZValue(-0.1);
+	//backgroundCourse->setZValue(-0.1);
 
 
 	car = new QGraphicsPixmapItem();
@@ -25,20 +25,19 @@ Course::Course(QWidget* parent) {
 	ghost->setPos(0, 0);
 
 	
-	layout->addWidget(times, 0, 0, Qt::AlignTop);
+	layout->addWidget(times, 0, 0, Qt::AlignCenter);
 	layout->addWidget(viewRace, 0, 1);
 
 
-	
+	viewRace->setStyleSheet("min-width: 950; max-width:950; min-height: 950; max-height: 950");
+	times->setStyleSheet("font-size: 28pt; font-weight: bold");
 
 
-	layout->setVerticalSpacing(0);
-	layout->setHorizontalSpacing(0);
-	layout->setContentsMargins(QMargins(0, 0, 0, 0));
 
-	viewRace->setContentsMargins(QMargins(0, 0, 0, 0));
+	viewRace->setContentsMargins(QMargins(20, 0, 0, 0));
 
-	layout->setColumnStretch(1, 2);
+	layout->setAlignment(Qt::AlignCenter);
+	layout->setContentsMargins(QMargins(100, 0, 100, 0));
 
 
 	

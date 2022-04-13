@@ -34,7 +34,7 @@ void Leaderboard::newTime(BestTime time) {
 
 //Retourne vrai si le temps en paramètre est plus grand ou égal au temps le plus haut dans le leaderboard
 bool Leaderboard::isBestTime(unsigned long time) {
-	return time <= bestTimes[0].time || bestTimes[0].time == 0;
+	return (time <= bestTimes[0].time) || (bestTimes[0].time == 0);
 }
 
 //Load le leaderboard d'une map en prenant en paramètre le nom de la map (nom du dossier). Retourne false si la map n'existe pas

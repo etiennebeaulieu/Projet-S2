@@ -52,14 +52,6 @@ void ControllerMenu::startApp(int argc, char** argv)
 	menuWindow = mainWindow->menuWindow;
 	
 	
-	
-	QPalette p = QPalette();
-	p.setBrush(QPalette::Button, Qt::red);
-	for (QPushButton* btn : menuWindow->buttons) {
-		btn->setPalette(p);
-		btn->setAutoFillBackground(true);
-	}
-	
 
 	QThread* thread = QThread::create([this]() {printMenu(); });
 	thread->start();
@@ -88,16 +80,17 @@ void ControllerMenu::printMenu()
 	menuWindow->carNameLabel->setText(QString::fromStdString(carList[currentCar]->getName()));
 	
 	std::stringstream buffer;
-	buffer << "Vitesse :" << carList[currentCar]->getSpeed() << "\nVirage : " << carList[currentCar]->getHandling();
+	buffer << "Vitesse : " << carList[currentCar]->getSpeed() << "\nManiabilite : " << carList[currentCar]->getHandling();
 	menuWindow->carStatsLabel->setText(QString::fromStdString(buffer.str()));
 	menuWindow->circuitNameLabel->setText(QString::fromStdString(circuitList[currentCircuit]->getName()));
-	QPixmap circuitImage = QPixmap(QString::fromStdString((string)"image/" + circuitList[currentCircuit]->getName() + ".png")).scaled(300, 300);
+	QPixmap circuitImage = QPixmap(QString::fromStdString((string)"image/" + circuitList[currentCircuit]->getName() + ".png")).scaled(500, 500);
 	menuWindow->circuitLabel->setPixmap(circuitImage);
 	
-	QPixmap carImage = QPixmap(QString::fromStdString((string)"image/" + carList[currentCar]->getName() + ".png")).scaled(300, 300);
+	QPixmap carImage = QPixmap(QString::fromStdString((string)"image/" + carList[currentCar]->getName() + ".png")).scaled(500, 500);
 	menuWindow->carLabel->setPixmap(carImage);
 
 	menuWindow->buttons[optionSelected - 1]->setFlat(true);
+
 	
 	mutex->unlock();
 	

@@ -7,6 +7,9 @@
 #include "course.h"
 #include "pauseMenu.h"
 #include "settingsMenu.h"
+#include <qguiapplication.h>
+#include <qscreen.h>
+
 
 class MainWindow : public QMainWindow
 {

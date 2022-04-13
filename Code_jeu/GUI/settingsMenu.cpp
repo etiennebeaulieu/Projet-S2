@@ -8,12 +8,18 @@ SettingsMenu::SettingsMenu(QWidget* parent)
 
 	joyBtn = new QPushButton(tr("Joystick"));
 	accBtn = new QPushButton(tr("Gyroscope"));
-	text = new QLabel(tr("Choix de contrôles"));
+	text = new QLabel(tr("Choix des controles"));
 
 	vLayout->addWidget(text);
 	vLayout->addLayout(hLayout);
 	hLayout->addWidget(joyBtn);
 	hLayout->addWidget(accBtn);
+
+	hLayout->setContentsMargins(QMargins(10, 20, 10, 20));
+	vLayout->setAlignment(Qt::AlignCenter);
+	text->setAlignment(Qt::AlignCenter);
+	text->setStyleSheet("font-size: 24pt; font-weight: bold");
+
 
 	buttons[0] = joyBtn;
 	buttons[1] = accBtn;
@@ -23,10 +29,11 @@ SettingsMenu::SettingsMenu(QWidget* parent)
 	for (QPushButton* btn : buttons) {
 		btn->setPalette(p);
 		btn->setAutoFillBackground(true);
+		btn->setStyleSheet("font-size: 18pt; font-weight: bold; text-align: center");
 	}
 
 	setLayout(vLayout);
-	setWindowTitle(tr("Paramètres"));
+	setWindowTitle(tr("Parametres"));
 }
 
 void SettingsMenu::highlight(int indice)

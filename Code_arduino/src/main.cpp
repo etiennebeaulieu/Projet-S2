@@ -126,6 +126,10 @@ void loop() {
   //Changement de la valeur analogique à un angle entre -90 et 90 degrés
   joyX = ((joyX-512)/512)*90;
 
+  if(joyX < 2 && joyX > -2){
+    joyX = 0;
+  }
+
 
   //1 quand par en haut
   //0 quand dans la zone centrale
@@ -297,11 +301,15 @@ float traitementACC(float x, float y, float z){
   
   if (x_mG < 0) {
     //Serial.println((String)x_G + " " + y_G + " " + z_G + " " + result*-1);
-    return result * -1;
+    result *= -1;
   }
   //Serial.println((String)x_G + " " + y_G + " " + z_G + " " + result);
   
-  return result;
+  if(result < 10 && result > -10){
+    result = 0;
+  }
+
+  return 2*result;
 
 
 }

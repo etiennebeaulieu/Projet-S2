@@ -40,7 +40,6 @@ Controller_course::Controller_course(ModelAuto* pCar, ModelCircuit* pCircuit, Co
 
 Controller_course::~Controller_course()
 {
-	//TODO Destructeur Controller_course
 }
 
 void Controller_course::initiateGUI()
@@ -49,6 +48,9 @@ void Controller_course::initiateGUI()
 
 	courseWindow->car->setPixmap(QPixmap(QString::fromStdString((string)"image/" + this->car.getName() + ".png")));
 	courseWindow->ghost->setPixmap(QPixmap(QString::fromStdString((string)"image/ghostCar.png")));
+
+	courseWindow->car->setScale(0.7);
+	courseWindow->ghost->setScale(0.7);
 
 	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveCar", Q_ARG(float, circuit.getStart().x), Q_ARG(float, circuit.getStart().y), Q_ARG(float, circuit.getStart().angle));
 	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(float, circuit.getStart().x), Q_ARG(float, circuit.getStart().y), Q_ARG(float, circuit.getStart().angle));
@@ -86,8 +88,8 @@ void Controller_course::startRace()
 
 	int sequenceGreen[5] = { 0, 0, 0, 0, 1 };
 	int sequenceR1[5] = { 0, 1, 1, 1, 1 };
-	int sequenceR2[5] = { 0, 0, 1, 1, 1 };
-	int sequenceR3[5] = { 0, 0, 0, 1, 1 };
+	int sequenceR3[5] = { 0, 0, 1, 1, 1 };
+	int sequenceR2[5] = { 0, 0, 0, 1, 1 };
 	int sequenceMoteur[5] = { 0, 0, 0, 0, 1 };
 
 	for (int i = 0; i < 5; i++) {
@@ -126,7 +128,12 @@ void Controller_course::startRace()
 */
 bool Controller_course::move(float pAngle, int pMovement)
 {
-	Position temp = car.move(pAngle, pMovement);
+	Position temp;
+	if(pMovement > 0)
+		temp = car.move(pAngle, pMovement);
+	else
+		temp = car.move(-pAngle, pMovement);
+
 	if (temp.x <= circuit.getWidth() && temp.y <= circuit.getHeight()) {
 		if (circuit.positionIsActive(temp)) {
 			gotoXY(round(car.getPosition().x), round(car.getPosition().y));
@@ -172,9 +179,13 @@ void Controller_course::updateScreenConsole()
 */
 void Controller_course::updateScreenGUI()
 {
-	//TODO Faire les calls à l'interface. Se baser sur updateScreenConsole
+	
 	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveCar", Q_ARG(float, car.getPosition().x), Q_ARG(float, car.getPosition().y), Q_ARG(float, car.getPosition().angle));
-	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(float, ghostPos.x), Q_ARG(float, ghostPos.y), Q_ARG(float,ghostPos.angle));
+	if(ghostPos.x == 0 && ghostPos.y == 0)
+		QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(float, circuit.getStart().x), Q_ARG(float, circuit.getStart().y), Q_ARG(float,circuit.getStart().angle));
+	else
+		QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "moveGhost", Q_ARG(float, ghostPos.x), Q_ARG(float, ghostPos.y), Q_ARG(float, ghostPos.angle));
+	
 	QMetaObject::invokeMethod(menuControleur->mainWindow->courseWindow, "updateTimer", Q_ARG(unsigned long, timer.get()), Q_ARG(unsigned long, leaderboard.getTime(0).time),Q_ARG(unsigned long, lastTime));
 }
 
@@ -224,7 +235,7 @@ void Controller_course::menuThread(Controller_course* controller)
 	controller->j_msg_send["1"] = 1;
 	controller->j_msg_send["2"] = 1;
 	controller->j_msg_send["3"] = 1;
-	controller->j_msg_send["S"] = 0;
+	controller->j_msg_send["S"] = controller->timer.get();
 
 	int optionSelected = 1;					//Bouton surlignï¿½ dans le menu
 	//0 = Resume
@@ -329,7 +340,7 @@ void Controller_course::courseThread(Controller_course* controller)
 {
 	
 	controller->startRace();
-	controller->j_msg_send["G"] = 0;      // Crï¿½ation du message ï¿½ envoyer
+	controller->j_msg_send["G"] = 1;      // Crï¿½ation du message ï¿½ envoyer
 	controller->j_msg_send["1"] = 0;
 	controller->j_msg_send["2"] = 0;
 	controller->j_msg_send["3"] = 0;
@@ -447,7 +458,12 @@ void Controller_course::courseThread(Controller_course* controller)
 
 
 		controller->j_msg_send["S"] = controller->timer.get();
-		controller->j_msg_send["G"] = 0;      // Crï¿½ation du message ï¿½ envoyer
+		
+		
+		if (controller->lastTime == 0 && controller->timer.get() <= 2000)
+			controller->j_msg_send["G"] = 1;
+		else
+			controller->j_msg_send["G"] = 0;
 		
 		if (dansLimite) {
 			controller->j_msg_send["M"] = 0;

@@ -14,6 +14,11 @@ PauseMenu::PauseMenu(QWidget* parent)
 	vLayout->addWidget(resumeBtn);
 	vLayout->addWidget(quitBtn);
 
+	text->setStyleSheet("font-size: 24pt; font-weight: bold");
+	vLayout->setContentsMargins(QMargins(10, 20, 10, 20));
+	vLayout->setAlignment(Qt::AlignCenter);
+	vLayout->setSpacing(20);
+
 	buttons[0] = resumeBtn;
 	buttons[1] = quitBtn;
 
@@ -22,6 +27,7 @@ PauseMenu::PauseMenu(QWidget* parent)
 	for (QPushButton* btn : buttons) {
 		btn->setPalette(p);
 		btn->setAutoFillBackground(true);
+		btn->setStyleSheet("font-size: 18pt; font-weight: bold; text-align: center");
 	}
 
 	setLayout(vLayout);
