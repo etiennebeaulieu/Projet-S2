@@ -16,7 +16,7 @@ struct CourseRecordEntry{
 	unsigned long time;
 };
 
-class CourseRecord : public vector<CourseRecordEntry> {
+class CourseRecord {
 public:
 	CourseRecord();
 	~CourseRecord();
@@ -31,6 +31,8 @@ public:
 
 	void reset();
 
+	void clear();
+
 	void resetAndLoadFromFile();
 
 	Position getPositionAtTime(unsigned long time);
@@ -39,6 +41,9 @@ public:
 	friend std::ostream& operator<<(std::ostream&, const CourseRecord&);
 
 private:
+
+	vector<CourseRecordEntry> entries;
+
 	string mapName;
 
 	//Permet de faire des check de position à des temps plus rapidement:

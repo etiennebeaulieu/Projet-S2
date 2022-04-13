@@ -10,15 +10,15 @@ std::istream& operator>>(std::istream& i, CourseRecord& courseRecord) {
 		i >> cre.position.x;
 		i >> cre.position.y;
 		i >> cre.position.angle;
-		courseRecord.push_back(cre);
+		courseRecord.entries.push_back(cre);
 	}
 
 	return i;
 }
 
 std::ostream& operator<<(std::ostream& o, const CourseRecord& courseRecord) {
-	for (int i = 0; i < courseRecord.size(); i++) {
-		const CourseRecordEntry* cre = &courseRecord.at(i);
+	for (int i = 0; i < courseRecord.entries.size(); i++) {
+		const CourseRecordEntry* cre = &courseRecord.entries.at(i);
 		o << cre->time << " " << cre->position.x << " " << cre->position.y << " " << cre->position.angle << std::endl;
 	}
 	return o;
@@ -38,7 +38,7 @@ void CourseRecord::recordTimeAndPosition(Position position, unsigned long time) 
 	CourseRecordEntry cre;
 	cre.position = position;
 	cre.time = time;
-	push_back(cre);
+	entries.push_back(cre);
 }
 
 //Load un record existant avec le nom de la map
@@ -76,12 +76,17 @@ bool CourseRecord::save() {
 void CourseRecord::reset() {
 	lastCheckedPositionIndex = 0;
 	lastCheckedPositionTime = 0;
-	clear();
+	entries.clear();
+}
+
+//Clear le vecteur de entries
+void CourseRecord::clear() {
+	entries.clear();
 }
 
 //Reset le record et load la map à partir du fichier
 void CourseRecord::resetAndLoadFromFile() {
-	clear();
+	entries.clear();
 	loadFromMap(mapName);
 }
 
@@ -92,11 +97,11 @@ Position CourseRecord::getPositionAtTime(unsigned long time) {
 		lastCheckedPositionIndex = 0;
 	}
 
-	for (int i = lastCheckedPositionIndex + 1; i < size(); i++) {
-		if (at(i).time > time) {
+	for (int i = lastCheckedPositionIndex + 1; i < entries.size(); i++) {
+		if (entries.at(i).time > time) {
 			lastCheckedPositionIndex = i - 1;
 			lastCheckedPositionTime = time;
-			return at(i - 1).position;
+			return entries.at(i - 1).position;
 		}
 	}
 
