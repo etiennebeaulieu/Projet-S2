@@ -465,6 +465,7 @@ void Controller_course::courseThread(Controller_course* controller)
 
 		//Regarde si on  est rendu � la ligne d'arriv�e et que �a fait plus que x secondes qu'on race
 		if (controller->circuit.positionIsOnFinishLine(controller->car.getPosition()) && (controller->timer.get() >= 5000)) {
+			controller->timer.stop();
 			BestTime bt;
 			bt.name = "Player1"; //TODO remplacer �a par le nom du player
 			bt.time = controller->timer.get();

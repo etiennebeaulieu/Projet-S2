@@ -86,7 +86,7 @@ void CourseRecord::clear() {
 
 //Reset le record et load la map à partir du fichier
 void CourseRecord::resetAndLoadFromFile() {
-	entries.clear();
+	reset();
 	loadFromMap(mapName);
 }
 
