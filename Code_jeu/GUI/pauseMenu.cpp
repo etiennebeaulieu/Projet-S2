@@ -17,6 +17,22 @@ PauseMenu::PauseMenu(QWidget* parent)
 	buttons[0] = resumeBtn;
 	buttons[1] = quitBtn;
 
+	QPalette p = QPalette();
+	p.setBrush(QPalette::Button, Qt::red);
+	for (QPushButton* btn : buttons) {
+		btn->setPalette(p);
+		btn->setAutoFillBackground(true);
+	}
+
 	setLayout(vLayout);
 	setWindowTitle(tr("Paramètres"));
+}
+
+void PauseMenu::highlight(int indice)
+{
+	for (QPushButton* btn : buttons) {
+		btn->setFlat(false);
+	}
+	buttons[indice]->setFlat(true);
+
 }

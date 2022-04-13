@@ -231,6 +231,8 @@ void Controller_course::menuThread(Controller_course* controller)
 	//1 = Options
 	//2 = Quit
 
+	QMetaObject::invokeMethod(controller->menuControleur->mainWindow->pauseWindow, "highlight", Q_ARG(int, optionSelected-1));
+
 	//Pour contr�le manette
 	int previousBtn3 = 0;
 	int previousBtn4 = 0;
@@ -294,13 +296,17 @@ void Controller_course::menuThread(Controller_course* controller)
 		enter = GetKeyState(VK_RETURN);
 
 		
-		if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && optionSelected < 3) {
+		if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && optionSelected < 2) {
 			optionSelected++;
 			controller->gotoXY(0, optionSelected);
+
+			QMetaObject::invokeMethod(controller->menuControleur->mainWindow->pauseWindow, "highlight", Q_ARG(int, optionSelected - 1));
+
 		}
 		else if (((controller->joyStickY == 1 && previousY != 1) || (up < 0 && previousUp >= 0)) && optionSelected > 1) {
 			optionSelected--;
 			controller->gotoXY(0, optionSelected);
+			QMetaObject::invokeMethod(controller->menuControleur->mainWindow->pauseWindow, "highlight", Q_ARG(int, optionSelected - 1));
 		}
 		else if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter < 0) {
 			controller->optionSelected = optionSelected-1;
@@ -416,11 +422,6 @@ void Controller_course::courseThread(Controller_course* controller)
 				break;
 			case 1:
 				controller->optionSelected = 0;
-				controller->menuControleur->openSettings();
-				//TODO Coming back from settings
-				break;
-			case 2:
-				controller->optionSelected = 0;
 				//controller->saveLeaderboard();
 
 				controller->timer.reset();
@@ -436,9 +437,9 @@ void Controller_course::courseThread(Controller_course* controller)
 
 		}
 		if (controller->bouton1 == 1 || controller->bouton2 == 1) {
-			if (controller->sorteControle == 0)
+			if (controller->menuControleur->sorteControle == 0)
 				dansLimite = controller->move(controller->joyStickX, controller->bouton2 - controller->bouton1);
-			else if (controller->sorteControle == 1)
+			else if (controller->menuControleur->sorteControle == 1)
 				dansLimite = controller->move(controller->acc_Value, controller->bouton2 - controller->bouton1);
 			else
 				dansLimite = controller->move(0, down - up);

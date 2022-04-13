@@ -18,6 +18,22 @@ SettingsMenu::SettingsMenu(QWidget* parent)
 	buttons[0] = joyBtn;
 	buttons[1] = accBtn;
 
+	QPalette p = QPalette();
+	p.setBrush(QPalette::Button, Qt::red);
+	for (QPushButton* btn : buttons) {
+		btn->setPalette(p);
+		btn->setAutoFillBackground(true);
+	}
+
 	setLayout(vLayout);
 	setWindowTitle(tr("Paramètres"));
+}
+
+void SettingsMenu::highlight(int indice)
+{
+	for (QPushButton* btn : buttons) {
+		btn->setFlat(false);
+	}
+	buttons[indice]->setFlat(true);
+
 }

@@ -11,7 +11,7 @@ int main()
 {
     std::cout << "Hello World!\n";
 
-    bitmap_image image("circuit.bmp");
+    bitmap_image image("sandbox.bmp");
 
 	ofstream outputFile;
 	outputFile.open("map.gamemap");

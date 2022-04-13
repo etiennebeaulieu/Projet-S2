@@ -158,20 +158,34 @@ void ControllerMenu::printMenu()
 void ControllerMenu::openSettings()
 {
 	QMetaObject::invokeMethod(mainWindow, "showSettings");
-	//TODO Changer la page de settings pour fonctionner avec un thread et avec la manette
-	int option;
-	std::cout << "Ceci sont les reglages" << std::endl;
-	std::cout << "Appuyer sur 9 pour retourner au menu" << std::endl;
-	std::cin >> option;
 
-	if (option == 9) {
-		system("CLS");
-		printMenu();
+	int option = optionSelected;
+	optionSelected = sorteControle+1;
+
+	QMetaObject::invokeMethod(mainWindow->settingsWindow, "highlight", Q_ARG(int, sorteControle));
+
+	std::thread settings(&ControllerMenu::settingsThread, this);
+	settings.join();
+
+
+	switch (optionSelected) {
+	case 1:
+		optionSelected = 1;
+		sorteControle = 0;
+		break;
+	case 2:
+		optionSelected = 1;
+		sorteControle = 1;
+		break;
+	default:
+		break;
 	}
-	else {
-		system("CLS");
-		openSettings();
-	}
+
+	optionSelected = option;
+
+	printMenu();
+
+	QMetaObject::invokeMethod(mainWindow, "showMenu");
 }
 
 /*
@@ -286,6 +300,8 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	int previousBtn3 = 0;
 	int previousBtn4 = 0;
 	int previousY = 0;
+	int previousX = 0;
+	int joyX = 0;
 
 
 	//Pour contrôle clavier seulement
@@ -293,6 +309,10 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 	SHORT down = 0;
 	SHORT previousUp = 0;
 	SHORT previousDown = 0;
+	SHORT l = 0;
+	SHORT r = 0;
+	SHORT previousL = 0;
+	SHORT previousR = 0;
 	SHORT enter = 0;
 
 	
@@ -303,6 +323,7 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 
 	while (1) {
 		previousY = controller->joyStickY;
+		previousX = joyX;
 		previousBtn3 = controller->bouton3;
 		previousBtn4 = controller->bouton4;
 
@@ -321,12 +342,21 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 			controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
 			if (controller->j_msg_rcv.contains("Y"))
 				controller->joyStickY = controller->j_msg_rcv["Y"];
+			if (controller->j_msg_rcv.contains("X"))
+				joyX = controller->j_msg_rcv["X"];
 			if (controller->j_msg_rcv.contains("3"))
 				controller->bouton3 = controller->j_msg_rcv["3"];
 			if (controller->j_msg_rcv.contains("4"))
 				controller->bouton4 = controller->j_msg_rcv["4"];
 		}
 
+		
+		if (joyX > 65)
+			joyX = 1;
+		else if (joyX < -65)
+			joyX = -1;
+		else
+			joyX = 0;
 
 		//Pour débogage, afficher les valeurs du JSON
 		//std::cout << controller->j_msg_rcv << std::endl;
@@ -336,45 +366,187 @@ void ControllerMenu::menuThread(ControllerMenu* controller)
 			//Contôle au clavier
 			previousUp = up;
 			previousDown = down;
+			previousL = l;
+			previousR = r;
 			up = GetKeyState(VK_UP);
 			down = GetKeyState(VK_DOWN);
+			l = GetKeyState(VK_LEFT);
+			r = GetKeyState(VK_RIGHT);
 			enter = GetKeyState(VK_RETURN);
 
 
 
+			if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter < 0) {
 
-			
-			if (((controller->joyStickY == -1 && previousY != -1) || (down < 0 && previousDown >= 0)) && controller->optionSelected < 7) {
-				controller->optionSelected++;
-				controller->gotoXY(0, controller->optionSelected + 14);
-				
-				for (QPushButton* btn : controller->menuWindow->buttons) {
-					btn->setFlat(false);
-				}
-				controller->menuWindow->buttons[controller->optionSelected-1]->setFlat(true);
-				
-			}
-			else if (((controller->joyStickY == 1 && previousY != 1) || (up < 0 && previousUp >= 0)) && controller->optionSelected > 1) {
-				controller->optionSelected--;
-				controller->gotoXY(0, controller->optionSelected + 14);
-				for (QPushButton* btn : controller->menuWindow->buttons) {
-					btn->setFlat(false);
-				}
-				controller->menuWindow->buttons[controller->optionSelected - 1]->setFlat(true);
-			}
-			else if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter < 0) {
-				
 				for (QPushButton* btn : controller->menuWindow->buttons) {
 					btn->setFlat(false);
 				}
 				break;
 			}
+			else if (controller->optionSelected == 1 && ((controller->joyStickY == -1 && previousY != -1) ||(down < 0 && previousDown >= 0))) {
+				controller->optionSelected++;
+			}
+			else if (controller->optionSelected == 2) {
+				if ((controller->joyStickY == 1 && previousY != 1) || (up < 0 && previousUp >= 0)) {
+					controller->optionSelected--;
+				}
+				else if ((joyX == 1 && previousX != 1) || (l < 0 && previousL >= 0)) {
+					controller->optionSelected = 5;
+				}
+				else if ((joyX == -1 && previousX != -1) || (r < 0 && previousR >= 0)) {
+					controller->optionSelected = 4;
+				}
+			}
+			else if (controller->optionSelected == 3 && ((joyX == 1 && previousX != 1) || (l < 0 && previousL >= 0))) {
+				controller->optionSelected = 4;
+			}
+			else if (controller->optionSelected == 4) {
+				if ((joyX == 1 && previousX != 1) || (l < 0 && previousL >= 0)) {
+					controller->optionSelected = 2;
+				}
+				else if ((joyX == -1 && previousX != -1) || (r < 0 && previousR >= 0)) {
+					controller->optionSelected = 3;
+				}
+			}
+			else if (controller->optionSelected == 5) {
+				if ((joyX == 1 && previousX != 1) || (l < 0 && previousL >= 0))
+					controller->optionSelected = 6;
+				else if ((joyX == -1 && previousX != -1) || (r < 0 && previousR >= 0))
+					controller->optionSelected = 2;
+			}
+			else if (controller->optionSelected == 6 && ((joyX == -1 && previousX != -1) || (r < 0 && previousR >= 0))) {
+				controller->optionSelected = 5;
+			}
 			
-			
+
+			controller->gotoXY(0, controller->optionSelected + 14);
+			for (QPushButton* btn : controller->menuWindow->buttons) {
+				btn->setFlat(false);
+			}
+			controller->menuWindow->buttons[controller->optionSelected - 1]->setFlat(true);
 
 
 
 			Sleep(30);
 	}
 	
+}
+
+
+/*
+* Thread du menu, lit en permanance la manette et gère la sélection des options
+*/
+void ControllerMenu::settingsThread(ControllerMenu* controller)
+{
+	controller->j_msg_send["G"] = 1;      // Création du message à envoyer
+	controller->j_msg_send["1"] = 1;
+	controller->j_msg_send["2"] = 1;
+	controller->j_msg_send["3"] = 1;
+	controller->j_msg_send["S"] = 0;
+
+
+	//Pour contrôle manette
+	int previousBtn3 = 0;
+	int previousBtn4 = 0;
+	int previousX = 0;
+	int joyX = 0;
+
+
+	//Pour contrôle clavier seulement
+	SHORT l = 0;
+	SHORT r = 0;
+	SHORT previousL = 0;
+	SHORT previousR = 0;
+	SHORT enter = 0;
+
+
+
+	//controller->gotoXY(0, 15);
+
+	Sleep(100);
+
+	while (1) {
+		previousX = joyX;
+		previousBtn3 = controller->bouton3;
+		previousBtn4 = controller->bouton4;
+
+		if (!SerialCommunication::SendToSerial(controller->arduino, controller->j_msg_send)) {    //Envoie au Arduino
+			std::cerr << "Erreur lors de l'envoie du message. " << std::endl;
+		}
+
+		controller->j_msg_rcv.clear();
+		if (!SerialCommunication::RcvFromSerial(controller->arduino, controller->raw_msg)) {
+			std::cerr << "Erreur lors de la réception du message. " << std::endl;
+		}
+
+
+
+		if (controller->raw_msg.size() > 0) {
+			controller->j_msg_rcv = json::parse(controller->raw_msg);       // Transfert du message en json
+			if (controller->j_msg_rcv.contains("X"))
+				joyX = controller->j_msg_rcv["X"];
+			if (controller->j_msg_rcv.contains("3"))
+				controller->bouton3 = controller->j_msg_rcv["3"];
+			if (controller->j_msg_rcv.contains("4"))
+				controller->bouton4 = controller->j_msg_rcv["4"];
+		}
+
+		if (joyX > 65)
+			joyX = 1;
+		else if (joyX < -65)
+			joyX = -1;
+		else
+			joyX = 0;
+
+
+		//Pour débogage, afficher les valeurs du JSON
+		//std::cout << controller->j_msg_rcv << std::endl;
+
+
+
+			//Contôle au clavier
+		previousL = l;
+		previousR = r;
+		l = GetKeyState(VK_LEFT);
+		r = GetKeyState(VK_RIGHT);
+		enter = GetKeyState(VK_RETURN);
+
+
+
+
+
+		if (((joyX == -1 && previousX != -1) || (r < 0 && previousR >= 0)) && controller->optionSelected < 2) {
+			controller->optionSelected++;
+			//controller->gotoXY(0, controller->optionSelected + 14);
+
+			for (QPushButton* btn : controller->mainWindow->settingsWindow->buttons) {
+				btn->setFlat(false);
+			}
+			controller->mainWindow->settingsWindow->buttons[controller->optionSelected - 1]->setFlat(true);
+
+		}
+		else if (((joyX == 1 && previousX != 1) || (l < 0 && previousL >= 0)) && controller->optionSelected > 1) {
+			controller->optionSelected--;
+			//controller->gotoXY(0, controller->optionSelected + 14);
+			
+			for (QPushButton* btn : controller->mainWindow->settingsWindow->buttons) {
+				btn->setFlat(false);
+			}
+			controller->mainWindow->settingsWindow->buttons[controller->optionSelected - 1]->setFlat(true);
+		}
+		else if ((controller->bouton3 == 1 && previousBtn3 == 0) || enter < 0) {
+
+			for (QPushButton* btn : controller->menuWindow->buttons) {
+				btn->setFlat(false);
+			}
+			break;
+		}
+
+
+
+
+
+		Sleep(30);
+	}
+
 }

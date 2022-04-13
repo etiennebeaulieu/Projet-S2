@@ -23,6 +23,9 @@ public:
 	QPushButton* accBtn;
 	QLabel* text;
 
+public slots:
+	void highlight(int indice);
+
 
 };
 

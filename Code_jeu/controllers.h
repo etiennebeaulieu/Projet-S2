@@ -54,6 +54,7 @@ public:
 	void gotoXY(int x, int y);
 
 	static void menuThread(ControllerMenu* controller);
+	static void settingsThread(ControllerMenu* controller);
 
 
 
@@ -66,6 +67,7 @@ public:
 	QMutex* mutex;
 	int argc;
 	char** argv;
+	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 
 private:
 	Leaderboard leaderboard;
@@ -140,7 +142,6 @@ private:
 	ModelCircuit circuit;
 	ControllerMenu* menuControleur;
 	int optionSelected;
-	int sorteControle = 0; //0 pour joystick, 1 pour accéléromère, autre pour clavier
 	unsigned long time;
 	Position ghostPos;
 	Timer timer;

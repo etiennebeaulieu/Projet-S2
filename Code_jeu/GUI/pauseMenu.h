@@ -21,6 +21,9 @@ public:
 	QPushButton* resumeBtn;
 	QPushButton* quitBtn;
 	QLabel* text;
+
+public slots:
+	void highlight(int indice);
 };
 
 
