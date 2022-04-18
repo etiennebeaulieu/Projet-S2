@@ -1,4 +1,6 @@
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\vc142.pdb
+c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_settingsmenu.obj
+c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_pausemenu.obj
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_mainwindow.obj
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_mainmenu.obj
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_course.obj
@@ -20,7 +22,11 @@ c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_je
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_course.cpp
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_mainmenu.cpp
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_mainwindow.cpp
+c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_pausemenu.cpp
+c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_settingsmenu.cpp
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\moc_predefs.h
+c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.exe
+c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.ilk
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.pdb
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\cl.command.1.tlog
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\cl.read.1.tlog
@@ -28,10 +34,6 @@ c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_je
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\custombuild.command.1.tlog
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\custombuild.read.1.tlog
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\custombuild.write.1.tlog
-c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\link-cvtres.read.1.tlog
-c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\link-cvtres.write.1.tlog
-c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\link-rc.read.1.tlog
-c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\link-rc.write.1.tlog
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\link.command.1.tlog
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\link.read.1.tlog
 c:\users\etien\onedrive - usherbrooke\2022hiv\.projet\code_jeu\projet-s2\code_jeu\debug\sparkus.tlog\link.write.1.tlog

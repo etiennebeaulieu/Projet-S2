@@ -1,2 +1,22 @@
-﻿  mainMenu.cpp
+﻿  model_circuit.cpp
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,31): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,43): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,79): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,91): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,131): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(20,143): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(27,31): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(27,43): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(38,42): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(42,41): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(42,49): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(43,41): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(43,49): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(98,21): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(100,30): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(100,33): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(101,29): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(101,32): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(103,29): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
+C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\model_circuit.cpp(103,32): warning C4244: 'argument' : conversion de 'float' en 'const unsigned __int64', perte possible de données
   SparkUS.vcxproj -> C:\Users\etien\OneDrive - USherbrooke\2022HIV\.Projet\Code_Jeu\Projet-S2\Code_jeu\debug\SparkUS.exe

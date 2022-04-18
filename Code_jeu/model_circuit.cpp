@@ -99,7 +99,7 @@ std::istream& operator>>(std::istream& i, ModelCircuit& c) {
         for (float x = 0; x < width; x++) {
             i >> c.positions[y][x];
             if (c.positions[y][x] == STARTPOSITION) { //Si la case est la starting position
-                c.startingPoint = Position{x, y, 0};
+                c.startingPoint = Position{x, y, 180};
                 c.positions[y][x] = PARCOUR;
             }
         }
